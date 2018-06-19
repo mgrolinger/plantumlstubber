@@ -57,7 +57,6 @@ public class ExportController {
         // Iterate over yaml files
         String basepath = "./target/";
         String path = "";
-        String commonPath="";
         Set<String> dirsCreate = new HashSet<>();
         for (Services services : servicesList) {
             Context context = new Context();
@@ -79,10 +78,12 @@ public class ExportController {
             for (Map.Entry entry : services.getServices().entrySet()) {
                 String serviceName = (String) entry.getKey();
                 if (serviceName.equalsIgnoreCase("EMPTY")) {
-                    serviceName = applicationName;
-                    context.setVariable("serviceName", serviceName);
+                    //serviceName = applicationName;
+                    //context.setVariable("serviceName", serviceName);
                     context.setVariable("commonPath","../");
+                    context.setVariable("isRootService",true);
                 } else {
+                    context.setVariable("isRootService",false);
                     context.setVariable("commonPath","../../");
                     if (!dirsCreate.contains(serviceName)) {
                         path = basepath + applicationName + "/" + serviceName + "/";

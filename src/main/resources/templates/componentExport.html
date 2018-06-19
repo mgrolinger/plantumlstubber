@@ -10,10 +10,10 @@
 !endif
 
 !ifdef TECHNICAL
-    !ifndef [[${#strings.toUpperCase(applicationName)}]]_[[${#strings.toUpperCase(serviceName)}]]_API_[[${#strings.toUpperCase(interfaceName)}]]_CREATED
-        interface [[${#strings.capitalize(interfaceName)}]] as [[${#strings.capitalize(interfaceName)}]]Int [(${colorType})]
-        [[${#strings.toLowerCase(applicationNameShort)}]]  -[#[[${#strings.toUpperCase(connectionColor)}]]]-  [[${#strings.capitalize(interfaceName)}]]Int
-        !define [[${#strings.toUpperCase(applicationName)}]]_[[${#strings.toUpperCase(serviceName)}]]_API_[[${#strings.toUpperCase(interfaceName)}]]_CREATED true
+    !ifndef [[${#strings.toUpperCase(applicationName)}]]_[(${isRootService} ? '' : ${#strings.toUpperCase(serviceName)})]_API_[[${#strings.toUpperCase(interfaceName)}]]_CREATED
+        interface [[${#strings.capitalize(interfaceName)}]] as [(${isRootService} ?  ${#strings.capitalize(applicationName)} : ${#strings.capitalize(serviceName)})][[${#strings.capitalize(interfaceName)}]]Int [(${colorType})]
+        [[${#strings.toLowerCase(applicationNameShort)}]]  -[#[[${#strings.toUpperCase(connectionColor)}]]]-  [(${isRootService} ?  ${#strings.capitalize(applicationName)} : ${#strings.capitalize(serviceName)})][[${#strings.capitalize(interfaceName)}]]Int
+        !define [[${#strings.toUpperCase(applicationName)}]]_[(${isRootService} ? '' : ${#strings.toUpperCase(serviceName)})]_API_[[${#strings.toUpperCase(interfaceName)}]]_CREATED true
     !endif
 !endif
 
@@ -27,9 +27,9 @@ end note
 
 ' Methods go here
 ' Import and method calls
-!definelong [[${serviceName}]]_[[${interfaceName}]](CALLER="consumer[[${serviceName}]]")
+!definelong [(${isRootService} ?  ${applicationName} : ${serviceName})]_[[${interfaceName}]](CALLER="consumer[(${#strings.capitalize(interfaceName)})]")
     !ifdef TECHNICAL
-        CALLER ..( [[${#strings.capitalize(interfaceName)}]]Int
+        CALLER ..( [(${isRootService} ?  ${#strings.capitalize(applicationName)} : ${#strings.capitalize(serviceName)})][[${#strings.capitalize(interfaceName)}]]Int
     !else
         CALLER --(0- [[${#strings.toLowerCase(applicationNameShort)}]]
     !endif
