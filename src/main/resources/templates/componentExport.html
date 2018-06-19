@@ -1,0 +1,40 @@
+@startuml
+' auto created on [[${dateCreated}]]
+'!define TECHNICAL
+'!define UML_STRICT
+!include [[${commonPath}]]common/common.iuml
+'Definition of the components
+!ifndef [[${#strings.toUpperCase(applicationName)}]]_COMPONENT_CREATED
+     [[${#strings.toUpperCase(applicationName)}]]_COMPONENT
+    !define [[${#strings.toUpperCase(applicationName)}]]_COMPONENT_CREATED true
+!endif
+
+!ifdef TECHNICAL
+    !ifndef [[${#strings.toUpperCase(applicationName)}]]_[[${#strings.toUpperCase(serviceName)}]]_API_[[${#strings.toUpperCase(interfaceName)}]]_CREATED
+        interface [[${#strings.capitalize(interfaceName)}]] as [[${#strings.capitalize(interfaceName)}]]Int [(${colorType})]
+        [[${#strings.toLowerCase(applicationNameShort)}]]  -[#[[${#strings.toUpperCase(connectionColor)}]]]-  [[${#strings.capitalize(interfaceName)}]]Int
+        !define [[${#strings.toUpperCase(applicationName)}]]_[[${#strings.toUpperCase(serviceName)}]]_API_[[${#strings.toUpperCase(interfaceName)}]]_CREATED true
+    !endif
+!endif
+
+' TODO
+note as implNote #Red
+This may be a generated stub.
+PLEASE remove this after checking
+if all calls are included.
+end note
+[[${#strings.toLowerCase(applicationNameShort)}]] .. implNote
+
+' Methods go here
+' Import and method calls
+!definelong [[${serviceName}]]_[[${interfaceName}]](CALLER="consumer[[${serviceName}]]")
+    !ifdef TECHNICAL
+        CALLER ..( [[${#strings.capitalize(interfaceName)}]]Int
+    !else
+        CALLER --(0- [[${#strings.toLowerCase(applicationNameShort)}]]
+    !endif
+!enddefinelong
+
+@enduml
+
+
