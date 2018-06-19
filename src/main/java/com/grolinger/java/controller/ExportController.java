@@ -60,19 +60,19 @@ public class ExportController {
         Set<String> dirsCreate = new HashSet<>();
         for (Services services : servicesList) {
             Context context = new Context();
-            context.setVariable("dateCreated",LocalDateTime.now());
+            context.setVariable("dateCreated", LocalDateTime.now());
             String applicationName = services.getApplication();
             if (!dirsCreate.contains(applicationName)) {
-                context.setVariable("commonPath","../");
+                context.setVariable("commonPath", "../");
                 path = basepath + applicationName + "/";
                 Files.createDirectories(Paths.get(path));
                 dirsCreate.add(applicationName);
             }
             String colorName = services.getColor();
             context.setVariable("applicationName", applicationName);
-            String applicationNameShort = aliasMapper.containsKey(applicationName.toLowerCase())?aliasMapper.get(applicationName.toLowerCase()):applicationName;
+            String applicationNameShort = aliasMapper.containsKey(applicationName.toLowerCase()) ? aliasMapper.get(applicationName.toLowerCase()) : applicationName;
             context.setVariable("applicationNameShort", applicationNameShort);
-            context.setVariable("colorType", "<<"+colorName.toLowerCase()+">>");
+            context.setVariable("colorType", "<<" + colorName.toLowerCase() + ">>");
             context.setVariable("connectionColor", colorNameMapper.get(colorName.toLowerCase()));
 
             for (Map.Entry entry : services.getServices().entrySet()) {
@@ -80,16 +80,20 @@ public class ExportController {
                 if (serviceName.equalsIgnoreCase("EMPTY")) {
                     //serviceName = applicationName;
                     //context.setVariable("serviceName", serviceName);
-                    context.setVariable("commonPath","../");
-                    context.setVariable("isRootService",true);
+                    context.setVariable("commonPath", "../");
+                    context.setVariable("isRootService", true);
                 } else {
-                    context.setVariable("isRootService",false);
-                    context.setVariable("commonPath","../../");
-                    if (!dirsCreate.contains(serviceName)) {
+                    if (applicationName.equalsIgnoreCase("esb")) {
+                        context.setVariable("isRootService", false);
+                    } else {
+                        context.setVariable("isRootService", true);
+                    }
+                    context.setVariable("commonPath", "../../");
+                    if (!dirsCreate.contains(applicationName + serviceName)) {
                         path = basepath + applicationName + "/" + serviceName + "/";
                         Files.createDirectories(Paths.get(path));
-                        dirsCreate.add(serviceName);
-                        context.setVariable("serviceName",serviceName);
+                        dirsCreate.add(applicationName + serviceName);
+                        context.setVariable("serviceName", serviceName);
                     }
                 }
 

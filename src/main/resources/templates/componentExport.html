@@ -18,12 +18,12 @@
 !endif
 
 ' TODO
-note as implNote #Red
+note as implNote[(${applicationName})][(${interfaceName})] #Red
 This may be a generated stub.
 PLEASE remove this after checking
 if all calls are included.
 end note
-[[${#strings.toLowerCase(applicationNameShort)}]] .. implNote
+[[${#strings.toLowerCase(applicationNameShort)}]] .. implNote[(${applicationName})][(${interfaceName})]
 
 ' Methods go here
 ' Import and method calls
