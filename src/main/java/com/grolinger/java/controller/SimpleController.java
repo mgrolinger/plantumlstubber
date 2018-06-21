@@ -25,22 +25,22 @@ public class SimpleController {
         aliasMapper.put("atlas", "esb");
     }
 
-    @GetMapping("/component/{componentName}/interface/{interfaceName}/color/{colorName}")
-    public String component(Model model, @PathVariable String componentName, @PathVariable String interfaceName, @PathVariable String colorName) {
-        model.addAttribute("componentName", componentName);
+    @GetMapping("/service/{serviceName}/interface/{interfaceName}/color/{colorName}")
+    public String component(Model model, @PathVariable String serviceName, @PathVariable String interfaceName, @PathVariable String colorName) {
+        model.addAttribute("serviceName", serviceName);
         model.addAttribute("interfaceName", interfaceName);
         model.addAttribute("connectionColor", colorNameMapper.get(colorName));
         model.addAttribute("colorName", colorName);
         return "component";
     }
 
-    @GetMapping("/application/{applicationName}/component/{componentName}/interface/{interfaceName}/color/{colorName}")
-    public String application(Model model, @PathVariable String applicationName, @PathVariable String componentName, @PathVariable String interfaceName, @PathVariable String colorName) {
+    @GetMapping("/application/{applicationName}/service/{serviceName}/interface/{interfaceName}/color/{colorName}")
+    public String application(Model model, @PathVariable String applicationName, @PathVariable String serviceName, @PathVariable String interfaceName, @PathVariable String colorName) {
         model.addAttribute("applicationName", applicationName);
-        model.addAttribute("componentName", componentName);
+        model.addAttribute("serviceName", serviceName);
         model.addAttribute("interfaceName", interfaceName);
         model.addAttribute("connectionColor", colorNameMapper.get(colorName));
         model.addAttribute("colorName", colorName);
-        return "application";
+        return "componentExport";
     }
 }
