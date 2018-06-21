@@ -1,6 +1,6 @@
 @startuml
-' auto created on [[${dateCreated}]]
-'!define TECHNICAL
+' generated on [[${dateCreated}]]
+'!define DETAILED
 '!define UML_STRICT
 !include [[${commonPath}]]common/common.iuml
 'Definition of the components
@@ -9,10 +9,10 @@
     !define [[${#strings.toUpperCase(applicationName)}]]_COMPONENT_CREATED true
 !endif
 
-!ifdef TECHNICAL
+!ifdef DETAILED
     !ifndef [[${#strings.toUpperCase(applicationName)}]]_[(${isRootService} ? '' : ${#strings.toUpperCase(serviceName)})]_API_[[${#strings.toUpperCase(interfaceName)}]]_CREATED
-        interface [[${#strings.capitalize(interfaceName)}]] as [(${isRootService} ?  ${#strings.capitalize(applicationName)} : ${#strings.capitalize(serviceName)})][[${#strings.capitalize(interfaceName)}]]Int [(${colorType})]
-        [[${#strings.toLowerCase(applicationNameShort)}]]  -[#[[${#strings.toUpperCase(connectionColor)}]]]-  [(${isRootService} ?  ${#strings.capitalize(applicationName)} : ${#strings.capitalize(serviceName)})][[${#strings.capitalize(interfaceName)}]]Int
+        interface [[${#strings.capitalize(interfaceName)}]] as [[${#strings.capitalize(applicationName)}]][[${isRootService} ?  '' : ${#strings.capitalize(serviceName)}]][[${#strings.capitalize(interfaceName)}]]Int [(${colorType})]
+        [[${#strings.toLowerCase(applicationNameShort)}]]  -[#[[${#strings.toUpperCase(connectionColor)}]]]-  [[${#strings.capitalize(applicationName)}]][[${isRootService} ?  '' : ${#strings.capitalize(serviceName)}]][[${#strings.capitalize(interfaceName)}]]Int
         !define [[${#strings.toUpperCase(applicationName)}]]_[(${isRootService} ? '' : ${#strings.toUpperCase(serviceName)})]_API_[[${#strings.toUpperCase(interfaceName)}]]_CREATED true
     !endif
 !endif
@@ -27,9 +27,9 @@ end note
 
 ' Methods go here
 ' Import and method calls
-!definelong [(${isRootService} ?  ${applicationName} : ${serviceName})]_[[${interfaceName}]](CALLER="consumer[(${#strings.capitalize(interfaceName)})]")
-    !ifdef TECHNICAL
-        CALLER ..( [(${isRootService} ?  ${#strings.capitalize(applicationName)} : ${#strings.capitalize(serviceName)})][[${#strings.capitalize(interfaceName)}]]Int
+!definelong [(${isRootService} ?  ${applicationName} : ${applicationName}+'_'+${#strings.capitalize(serviceName)})]_[[${interfaceName}]](CALLER="consumer[(${#strings.capitalize(interfaceName)})]")
+    !ifdef DETAILED
+        CALLER ..( [[${#strings.capitalize(applicationName)}]][[${isRootService} ?  '' : ${#strings.capitalize(serviceName)}]][[${#strings.capitalize(interfaceName)}]]Int
     !else
         CALLER --(0- [[${#strings.toLowerCase(applicationNameShort)}]]
     !endif

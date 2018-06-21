@@ -7,7 +7,7 @@
 <body>
 @startuml<br/>
 &#39; !! Remove after Testing !! <br/>
-!define TECHNICAL<br/>
+!define DETAILED<br/>
 !define UML_STRICT<br/>
 &#39;Definition of the components<br/>
 !include PATH_CHANGE_HERE../../common/common.iuml<br/>
@@ -16,7 +16,7 @@
 &nbsp;&nbsp;&nbsp;&nbsp;!define <span th:text="${#strings.toUpperCase(componentName)}">name</span>_COMPONENT_CREATED true<br/>
 !endif<br/>
 
-!ifdef TECHNICAL<br/>
+!ifdef DETAILED<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;!ifndef <span th:text="${#strings.toUpperCase(componentName)}">componentName</span>_API_<span th:text="${#strings.toUpperCase(interfaceName)}">interfaceName</span>_CREATED<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;interface <span th:text="${#strings.capitalize(interfaceName)}">interfaceName</span> as <span th:text="${#strings.capitalize(interfaceName)}">interfaceName</span>Int &lt;&lt;<span th:text="${#strings.toLowerCase(colorName)}">colorName</span>&gt;&gt;<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span th:text="${#strings.toLowerCase(componentName)}">componentName</span> -[#<span th:text="${#strings.toUpperCase(connectionColor)}">connectionColor</span>]- <span th:text="${#strings.capitalize(interfaceName)}">interfaceName</span>Int<br/>
@@ -29,7 +29,7 @@
 &#39; Methods go here<br/>
 &#39; Import and method calls<br/>
 !definelong <span th:text="${componentName}">componentName</span>_<span th:text="${interfaceName}">interfaceName</span>(CALLER=&quot;consumer<span th:text="${componentName}">componentName</span>&quot;)<br/>
-&nbsp;&nbsp;&nbsp;&nbsp;!ifdef TECHNICAL<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;!ifdef DETAILED<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALLER ..( <span th:text="${#strings.capitalize(interfaceName)}">interfaceName</span>Int<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;!else<br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALLER --(0- <span th:text="${#strings.toLowerCase(componentName)}">component</span><br/>
