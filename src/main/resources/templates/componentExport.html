@@ -16,6 +16,8 @@
         !define [[${#strings.toUpperCase(applicationName)}]]_[(${isRootService} ? '' : ${#strings.toUpperCase(serviceName)})]_API_[[${#strings.toUpperCase(interfaceName)}]]_CREATED true
     !endif
 !endif
+' Import subsequent services here to prevent double lines
+
 
 ' TODO
 note as implNote[(${applicationName})][(${interfaceName})] #Red
