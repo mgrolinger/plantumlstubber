@@ -1,26 +1,32 @@
-@startuml
+@startuml [(${isRootService} ?  ${applicationName} : ${applicationName}+'_'+${serviceName})]_[[${interfaceName}]]
 ' generated on [[${dateCreated}]]
 '!define DETAILED
 '!define UML_STRICT
 !include [[${commonPath}]]common/common.iuml
 'Definition of the components
 !ifndef [[${#strings.toUpperCase(applicationName)}]]_COMPONENT_CREATED
+    !ifndef [[${#strings.toUpperCase(applicationName)}]]_COMPONENT
+        !define [[${#strings.toUpperCase(applicationName)}]]_COMPONENT CREATE_COMPONENT("[[${applicationName}]]",[[${#strings.toLowerCase(applicationNameShort)}]],[[${#strings.toUpperCase(colorName)}]])
+    !endif
      [[${#strings.toUpperCase(applicationName)}]]_COMPONENT
     !define [[${#strings.toUpperCase(applicationName)}]]_COMPONENT_CREATED true
 !endif
-
-!ifdef DETAILED
-    !ifndef [[${#strings.toUpperCase(applicationName)}]]_[(${isRootService} ? '' : ${#strings.toUpperCase(serviceName)})]_API_[[${#strings.toUpperCase(interfaceName)}]]_CREATED
-        interface "[(${integrationType})]\n[[${#strings.capitalize(interfaceName)}]]" as [[${#strings.capitalize(applicationName)}]][[${isRootService} ?  '' : ${#strings.capitalize(serviceName)}]][[${#strings.capitalize(interfaceName)}]]Int [(${colorType})]
-        [[${#strings.toLowerCase(applicationNameShort)}]]  -[#[[${#strings.toUpperCase(connectionColor)}]]]-  [[${#strings.capitalize(applicationName)}]][[${isRootService} ?  '' : ${#strings.capitalize(serviceName)}]][[${#strings.capitalize(interfaceName)}]]Int
-        !define [[${#strings.toUpperCase(applicationName)}]]_[(${isRootService} ? '' : ${#strings.toUpperCase(serviceName)})]_API_[[${#strings.toUpperCase(interfaceName)}]]_CREATED true
+!ifndef [[${API_CREATED}]]
+    !ifdef DETAILED
+        interface "[(${integrationType})]\n[[${#strings.capitalize(interfaceName)}]]" as [[${COMPLETE_INTERFACE_PATH}]] [(${colorType})]
+        [[${#strings.toLowerCase(applicationNameShort)}]]  -[single,#[[${#strings.toUpperCase(connectionColor)}]]]-  [[${COMPLETE_INTERFACE_PATH}]]
+    !else
+        ' define application as interface endpoint for mixed detailed/non-detailed views.
+        !define [[${COMPLETE_INTERFACE_PATH}]] [[${#strings.toLowerCase(applicationNameShort)}]]
     !endif
+    !define [[${API_CREATED}]] true
 !endif
-' Import subsequent services here to prevent double lines
+'Includes to subsequent services go here
 
 ' TODO
 note as implNote[(${applicationName})][(${interfaceName})] #Red
-[(${applicationName})][(${interfaceName})] is a generated stub.
+[(${COMPLETE_INTERFACE_PATH})]
+is a generated stub.
 PLEASE remove this after checking
 if all calls are included.
 end note
@@ -28,14 +34,12 @@ end note
 
 ' Methods go here
 ' Import and method calls
-!definelong [(${isRootService} ?  ${applicationName} : ${applicationName}+'_'+${serviceName})]_[[${interfaceName}]](CALLER="\[consumer[(${#strings.capitalize(interfaceName)})]\]",CONNECTION_COLOR="DarkSlateGrey")
+!definelong [(${isRootService} ?  ${applicationName} : ${applicationName}+'_'+${serviceName})]_[[${interfaceName}]](CALLER="\[consumer[(${#strings.capitalize(interfaceName)})]\]",[[${applicationName}]]_CONNECTION_COLOR="DarkSlateGrey")
+    ' Import subsequent services here to use them and to have
     !ifdef DETAILED
-        CALLER ..[#CONNECTION_COLOR]..( [[${#strings.capitalize(applicationName)}]][[${isRootService} ?  '' : ${#strings.capitalize(serviceName)}]][[${#strings.capitalize(interfaceName)}]]Int
+        CALLER ..[single,#[[${applicationName}]]_CONNECTION_COLOR]..> [[${COMPLETE_INTERFACE_PATH}]]
     !else
-        CALLER --[dashed,#CONNECTION_COLOR]-->> [[${#strings.toLowerCase(applicationNameShort)}]]
+        CALLER --[dashed,single,#[[${applicationName}]]_CONNECTION_COLOR]-->> [[${#strings.toLowerCase(applicationNameShort)}]]
     !endif
 !enddefinelong
-
 @enduml
-
-

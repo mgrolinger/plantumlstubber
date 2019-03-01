@@ -5,8 +5,9 @@ import java.util.Map;
 public class Services {
     private String application;
     private String integrationType;
-    private String  color;
-    private Map<String,String[]> services;
+    private String color;
+    private String orderPrio="0";
+    private Map<String, String[]> serviceList;
 
     public String getApplication() {
         return application;
@@ -32,11 +33,19 @@ public class Services {
         this.color = color;
     }
 
+    public String getOrderPrio() {
+        return orderPrio;
+    }
+
+    public void setOrderPrio(String orderPrio) {
+        this.orderPrio = orderPrio;
+    }
+
     public Map<String, String[]> getServices() {
-        return services;
+        return serviceList;
     }
 
     public void setServices(Map<String, String[]> services) {
-        this.services = services;
+        this.serviceList = services;
     }
 }

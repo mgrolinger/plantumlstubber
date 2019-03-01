@@ -69,6 +69,7 @@ public class ExportController implements Loggable {
         Set<String> dirsCreate = new HashSet<>();
 
         for (Services services : applicationList) {
+            boolean currentServiceIsRootService = false;
             // Prepare example file for every Application
             StringBuilder exampleFile = new StringBuilder();
             exampleFile.append("@startuml\n");
@@ -90,7 +91,7 @@ public class ExportController implements Loggable {
             context.setVariable("connectionColor", connectionColorNameMapper.get(colorName.toLowerCase()));
             String integrationType = "";
             if (!StringUtils.isEmpty(services.getIntegrationType())) {
-                integrationType = services.getIntegrationType() + "_INTEGRATION_TYPE";
+                integrationType = "INTEGRATION_TYPE(" + services.getIntegrationType() + ")";
             }
             context.setVariable("integrationType", integrationType);
 
@@ -99,18 +100,21 @@ public class ExportController implements Loggable {
             }
             for (Map.Entry entry : services.getServices().entrySet()) {
                 String serviceName = (String) entry.getKey();
-
+                logger().warn("Servicename: {}", serviceName);
                 if (serviceName.equalsIgnoreCase(EMPTY)) {
+                    currentServiceIsRootService = true;
                     context.setVariable(commonPath, DIR_UP);
                     context.setVariable("isRootService", true);
                 } else {
+                    currentServiceIsRootService = false;
                     context.setVariable("isRootService", false);
                     StringBuilder cp = new StringBuilder();
                     if (serviceName.contains(SLASH)) {
                         for (int i = 0; i <= serviceName.split(SLASH).length; i++) {
+                            logger().warn(">> Servicename: {}, {}", i, serviceName);
                             cp.append(DIR_UP);
                         }
-                    }else{
+                    } else {
                         cp.append(DIR_UP).append(DIR_UP);
                     }
                     context.setVariable(commonPath, cp.toString());
@@ -121,7 +125,6 @@ public class ExportController implements Loggable {
                         dirsCreate.add(applicationName + serviceName);
                         if (serviceName.contains(SLASH)) {
                             // Get rid of toms API entry point in the service name
-                            serviceName = serviceName.replace("api/","");
                             context.setVariable("serviceName", getReplaceUnwantedCharacters(serviceName, false));
                         } else {
                             context.setVariable("serviceName", serviceName);
@@ -130,7 +133,8 @@ public class ExportController implements Loggable {
                 }
 
                 String[] interfaces = (String[]) entry.getValue();
-                if (!processInterface(path, exampleFile, context, applicationName, serviceName, interfaces,"componentExport.html")) break;
+                if (!processInterface("componentExport.html", path, exampleFile, context, currentServiceIsRootService, applicationName, serviceName, interfaces))
+                    break;
 
             }
             exampleFile.append("@enduml");
@@ -143,6 +147,24 @@ public class ExportController implements Loggable {
         }
     }
 
+    public String capitalizePathParts(final String pathToCapitalize) {
+        StringBuilder result = new StringBuilder();
+        return result.append(capitalizeStringParts(capitalizeStringParts(pathToCapitalize,SLASH),"_")).toString();
+    }
+    public String capitalizeStringParts(final String pathToCapitalize, final String splitChar){
+        StringBuilder result = new StringBuilder();
+        if (pathToCapitalize != null) {
+            if (pathToCapitalize.contains(splitChar)) {
+                String[] parts = pathToCapitalize.split(splitChar);
+                for (String part : parts) {
+                    result.append(StringUtils.capitalize(part.replace(splitChar, "")));
+                }
+            } else {
+                result.append(StringUtils.capitalize(pathToCapitalize));
+            }
+        }
+        return result.toString();
+    }
 
     @GetMapping("/export/sequences")
     public void sequence(Model model) throws IOException {
@@ -156,6 +178,7 @@ public class ExportController implements Loggable {
         Set<String> dirsCreate = new HashSet<>();
 
         for (Services services : applicationList) {
+            boolean currentServiceIsRootService = false;
             // Prepare example file for every Application
             StringBuilder exampleFile = new StringBuilder();
             exampleFile.append("@startuml\n");
@@ -173,13 +196,14 @@ public class ExportController implements Loggable {
             String applicationNameShort = aliasMapper.getOrDefault(applicationName.toLowerCase(), applicationName);
             context.setVariable("applicationNameShort", applicationNameShort);
             context.setVariable("colorType", "<<" + colorName.toLowerCase() + ">>");
+            context.setVariable("orderPrio",services.getOrderPrio());
             context.setVariable("colorName", colorNameMapper.get(colorName.toLowerCase()));
             context.setVariable("connectionColor", connectionColorNameMapper.get(colorName.toLowerCase()));
             String integrationType = "";
-            context.setVariable("isRestService",false);
+            context.setVariable("isRestService", false);
             if (!StringUtils.isEmpty(services.getIntegrationType())) {
                 integrationType = services.getIntegrationType() + "_INTEGRATION_TYPE";
-                context.setVariable("isRestService","rest".equalsIgnoreCase(services.getIntegrationType()));
+                context.setVariable("isRestService", "rest".equalsIgnoreCase(services.getIntegrationType()));
             }
             context.setVariable("integrationType", integrationType);
 
@@ -190,6 +214,7 @@ public class ExportController implements Loggable {
                 String serviceName = (String) entry.getKey();
 
                 if (serviceName.equalsIgnoreCase(EMPTY)) {
+                    currentServiceIsRootService = true;
                     context.setVariable(commonPath, DIR_UP);
                     context.setVariable("isRootService", true);
                 } else {
@@ -199,7 +224,7 @@ public class ExportController implements Loggable {
                         for (int i = 0; i <= serviceName.split(SLASH).length; i++) {
                             cp.append(DIR_UP);
                         }
-                    }else{
+                    } else {
                         cp.append(DIR_UP).append(DIR_UP);
                     }
                     logger().info("Handle {} {} service", applicationName, integrationType);
@@ -210,8 +235,6 @@ public class ExportController implements Loggable {
                         Files.createDirectories(Paths.get(path));
                         dirsCreate.add(applicationName + serviceName);
                         if (serviceName.contains(SLASH)) {
-                            // Get rid of toms API entry point in the service name
-                            serviceName = serviceName.replace("api/","");
                             context.setVariable("serviceName", getReplaceUnwantedCharacters(serviceName, false));
                         } else {
                             context.setVariable("serviceName", serviceName);
@@ -220,7 +243,8 @@ public class ExportController implements Loggable {
                 }
 
                 String[] interfaces = (String[]) entry.getValue();
-                if (!processInterface(path, exampleFile, context, applicationName, serviceName, interfaces, "sequenceExport.html")) break;
+                if (!processInterface("sequenceExport.html", path, exampleFile, context, currentServiceIsRootService, applicationName, serviceName, interfaces))
+                    break;
 
             }
             exampleFile.append("@enduml");
@@ -251,7 +275,7 @@ public class ExportController implements Loggable {
     }
 
 
-    private boolean processInterface(String path, StringBuilder exampleFile, Context context, String applicationName, String serviceName, String[] interfaces, final String template) {
+    private boolean processInterface(final String template, String path, StringBuilder exampleFile, Context context, boolean isRoot, String applicationName, String serviceName, String[] interfaces) {
         if (interfaces == null) {
             return false;
         }
@@ -266,15 +290,14 @@ public class ExportController implements Loggable {
             interfaceName = getReplaceUnwantedCharacters(interfaceName, false);
             //interface
             context.setVariable("interfaceName", interfaceName);
+            context.setVariable("COMPLETE_INTERFACE_PATH", StringUtils.capitalize(applicationName) + (isRoot ? "" : capitalizePathParts(serviceName)) + StringUtils.capitalize(interfaceName) + "Int");
+            context.setVariable("API_CREATED", applicationName.toUpperCase() + "_API" + (isRoot ? "" : "_" + capitalizePathParts(serviceName).toUpperCase()) + "_" + interfaceName.toUpperCase() + "_CREATED");
 
             try (Writer writer = new FileWriter(currentPath + interfaceName + ".iuml")) {
                 String pEx = getServicePathPrefix(serviceName);
-                // Finally replace all stupid chars
-                serviceName = getReplaceUnwantedCharacters(serviceName, false);
                 exampleFile.append("!include ").append(pEx).append(interfaceName).append(".iuml \n");
                 String serviceCall = getServiceCallName(applicationName, serviceName);
-                exampleFile.append(serviceCall).append("_").append(interfaceName).append("()\n\n");
-
+                exampleFile.append(getReplaceUnwantedCharacters(serviceCall,false)).append("_").append(getReplaceUnwantedCharacters(interfaceName,false)).append("()\n\n");
                 logger().info("Export call: {}_{}", serviceCall, interfaceName);
                 writer.write(templateEngine.process(template, context));
             } catch (IOException io) {
@@ -302,9 +325,9 @@ public class ExportController implements Loggable {
         return (serviceName.equalsIgnoreCase(EMPTY)) ? "" : serviceName + PATH_SEPARATOR;
     }
 
-    private String getReplaceUnwantedCharacters(String name, boolean dotsOnly) {
+    private String getReplaceUnwantedCharacters(String name, boolean replaceDotsOnly) {
         String newName = name.replace('.', '_');
-        if (!dotsOnly)
+        if (!replaceDotsOnly)
             newName = newName.replace('/', '_');
         return newName;
     }

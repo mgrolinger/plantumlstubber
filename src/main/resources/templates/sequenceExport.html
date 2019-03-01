@@ -1,10 +1,13 @@
-@startuml
+@startuml [(${isRootService} ?  ${applicationName} : ${applicationName}+'_'+${#strings.capitalize(serviceName)})]
 ' generated on [[${dateCreated}]]
 '!define TECHNICAL
 '!define SIMPLE
 'Definition of participants
 !include [[${commonPath}]]common/common.iuml
 !ifndef SIMPLE
+    !ifndef [[${#strings.toUpperCase(applicationName)}]]_PARTICIPANT
+        !define [[${#strings.toUpperCase(applicationName)}]]_PARTICIPANT CREATE_PARTICIPANT("[[${applicationName}]]",[[${#strings.toLowerCase(applicationNameShort)}]],[[${#strings.toUpperCase(colorName)}]],[[${orderPrio}]])
+    !endif
     !ifndef [[${#strings.toUpperCase(applicationName)}]]_PARTICIPANT_CREATED
         [[${#strings.toUpperCase(applicationName)}]]_PARTICIPANT
         !define [[${#strings.toUpperCase(applicationName)}]]_PARTICIPANT_CREATED true
