@@ -3,13 +3,19 @@ package com.grolinger.java.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.*;
 
 @Controller
 public class SimpleController {
+    private TreeNode<String> components = new TreeNode<>("Service");
     private Map<String, String> colorNameMapper = new HashMap<>();
 
     private Map<String, String> aliasMapper = new HashMap<>();
@@ -41,6 +47,57 @@ public class SimpleController {
         model.addAttribute("interfaceName", interfaceName);
         model.addAttribute("connectionColor", colorNameMapper.get(colorName));
         model.addAttribute("colorName", colorName);
-        return "componentExport";
+        return "component";
+    }
+
+    @GetMapping("/start")
+    public String files(Model model) throws IOException {
+
+        List<Path> paths = new LinkedList<>();
+        Files.walk(Paths.get("M:\\Documents\\_Dokumente\\UMLServiceDefinitions\\Service"))
+                .filter(Files::isRegularFile)
+                .filter(it -> it.toString().endsWith(".iuml"))
+                .forEach(p -> paths.add(p));
+
+        for (Path path : paths) {
+            String[] file = splitFilename(path);
+            String previousNode = "";
+            for (String currentNode: file) {
+                if (currentNode.endsWith(".iuml")) {
+                    //if(components.contains(currentNode))
+                        break;
+                    //components.add()
+                }else{
+
+                }
+
+            }
+            //getList(previousNode).add(file.toString());
+        }
+
+
+        // model.addAttribute("paths", paths.stream().toArray(String[]::new));
+        model.addAttribute("files", components);
+
+        return "start";
+    }
+
+    @PostMapping("/generate")
+    public String generate(@ModelAttribute("command") FormCommand command, Model model) {
+        System.out.println(">>>>>>>>>>>" + command.multiCheckboxSelectedValues);
+        return "generate";
+
+    }
+
+    private String[] splitFilename(Path filename) {
+        return filename.toString().replace("M:\\Documents\\_Dokumente\\UMLServiceDefinitions\\Service\\", "").split("\\\\");
+    }
+
+    private List<String> getList(String newComponent) {
+        //if (components.containsKey(newComponent)) {
+        //} else {
+        //    components.put(newComponent, new LinkedList<>());
+        //}
+        return new LinkedList<>();//components.get(newComponent);
     }
 }
