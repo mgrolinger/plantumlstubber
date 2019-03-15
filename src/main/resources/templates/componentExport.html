@@ -2,11 +2,11 @@
 ' generated on [[${dateCreated}]]
 '!define DETAILED
 '!define UML_STRICT
-!include [[${commonPath}]]common/common.iuml
+!include_many [[${commonPath}]]common/common.iuml
 'Definition of the components
 !ifndef [[${#strings.toUpperCase(applicationName)}]]_COMPONENT_CREATED
     !ifndef [[${#strings.toUpperCase(applicationName)}]]_COMPONENT
-        !define [[${#strings.toUpperCase(applicationName)}]]_COMPONENT CREATE_COMPONENT("[[${applicationName}]]",[[${#strings.toLowerCase(applicationNameShort)}]],[[${#strings.toUpperCase(colorName)}]])
+        !define [[${#strings.toUpperCase(applicationName)}]]_COMPONENT component "**[[${applicationName}]]**\nPlease define\nthe component \nin **common.iuml**" as [[${#strings.toLowerCase(applicationNameShort)}]] #Red
     !endif
      [[${#strings.toUpperCase(applicationName)}]]_COMPONENT
     !define [[${#strings.toUpperCase(applicationName)}]]_COMPONENT_CREATED true
@@ -34,12 +34,12 @@ end note
 
 ' Methods go here
 ' Import and method calls
-!definelong [(${isRootService} ?  ${applicationName} : ${applicationName}+'_'+${serviceName})]_[[${interfaceName}]](CALLER="\[consumer[(${#strings.capitalize(interfaceName)})]\]",[[${applicationName}]]_CONNECTION_COLOR="DarkSlateGrey")
+!definelong [(${isRootService} ?  ${applicationName} : ${applicationName}+'_'+${serviceName})]_[[${interfaceName}]](CALLER="\[consumer[(${#strings.capitalize(interfaceName)})]\]",[[${#strings.toUpperCase(interfaceName)}]]_CONNECTION_COLOR="DarkSlateGrey")
     ' Import subsequent services here to use them and to have
     !ifdef DETAILED
-        CALLER ..[single,#[[${applicationName}]]_CONNECTION_COLOR]..> [[${COMPLETE_INTERFACE_PATH}]]
+        CALLER ..[single,#[[${#strings.toUpperCase(interfaceName)}]]_CONNECTION_COLOR]..> [[${COMPLETE_INTERFACE_PATH}]]
     !else
-        CALLER --[dashed,single,#[[${applicationName}]]_CONNECTION_COLOR]-->> [[${#strings.toLowerCase(applicationNameShort)}]]
+        CALLER --[dashed,single,#[[${#strings.toUpperCase(interfaceName)}]]_CONNECTION_COLOR]-->> [[${#strings.toLowerCase(applicationNameShort)}]]
     !endif
 !enddefinelong
 @enduml

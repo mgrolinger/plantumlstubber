@@ -3,7 +3,7 @@
 '!define TECHNICAL
 '!define SIMPLE
 'Definition of participants
-!include [[${commonPath}]]common/common.iuml
+!include_many [[${commonPath}]]common/common.iuml
 !ifndef SIMPLE
     !ifndef [[${#strings.toUpperCase(applicationName)}]]_PARTICIPANT
         !define [[${#strings.toUpperCase(applicationName)}]]_PARTICIPANT CREATE_PARTICIPANT("[[${applicationName}]]",[[${#strings.toLowerCase(applicationNameShort)}]],[[${#strings.toUpperCase(colorName)}]],[[${orderPrio}]])

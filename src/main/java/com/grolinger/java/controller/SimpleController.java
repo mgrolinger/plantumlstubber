@@ -1,7 +1,9 @@
 package com.grolinger.java.controller;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,43 +13,38 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Controller
 public class SimpleController {
     private TreeNode<String> components = new TreeNode<>("Service");
-    private Map<String, String> colorNameMapper = new HashMap<>();
-
     private Map<String, String> aliasMapper = new HashMap<>();
 
     private SimpleController() {
-        colorNameMapper.put("integration", "INTEGRATION_COLOR_CONNECTION");
-        colorNameMapper.put("resource", "RESOURCE_DOMAIN_COLOR_CONNECTION");
-        colorNameMapper.put("financial", "FINANCIAL_DOMAIN_COLOR_COLOR");
-        colorNameMapper.put("customer", "CUSTOMER_DOMAIN_COLOR_CONNECTION");
-        colorNameMapper.put("external", "EXTERNAL_INTERFACE_COLOR_CONNECTION");
-
         aliasMapper.put("esb", "atlas");
         aliasMapper.put("atlas", "esb");
     }
 
-    @GetMapping("/service/{serviceName}/interface/{interfaceName}/color/{colorName}")
-    public String component(Model model, @PathVariable String serviceName, @PathVariable String interfaceName, @PathVariable String colorName) {
+    @GetMapping("/application/{applicationName}/service/{serviceName}/interface/{interfaceName}/color/{colorName}/{integrationType}")
+    public String application(Model model, @PathVariable final String applicationName, @PathVariable final String serviceName, @PathVariable final String interfaceName, @PathVariable final String colorName,@PathVariable final String integrationType) {
+        model.addAttribute("dateCreated", LocalDateTime.now());
+        model.addAttribute("commonPath", "../");
+        String applicationNameNew = getReplaceUnwantedCharacters(applicationName, false);
+        model.addAttribute("applicationName", StringUtils.capitalize(applicationNameNew));
+        String applicationNameShort = aliasMapper.getOrDefault(applicationNameNew.toLowerCase(), applicationNameNew);
+        model.addAttribute("applicationNameShort", applicationNameShort.toLowerCase());
         model.addAttribute("serviceName", serviceName);
         model.addAttribute("interfaceName", interfaceName);
-        model.addAttribute("connectionColor", colorNameMapper.get(colorName));
-        model.addAttribute("colorName", colorName);
-        return "component";
-    }
-
-    @GetMapping("/application/{applicationName}/service/{serviceName}/interface/{interfaceName}/color/{colorName}")
-    public String application(Model model, @PathVariable String applicationName, @PathVariable String serviceName, @PathVariable String interfaceName, @PathVariable String colorName) {
-        model.addAttribute("applicationName", applicationName);
-        model.addAttribute("serviceName", serviceName);
-        model.addAttribute("interfaceName", interfaceName);
-        model.addAttribute("connectionColor", colorNameMapper.get(colorName));
-        model.addAttribute("colorName", colorName);
-        return "component";
+        model.addAttribute("colorType", "<<" + colorName.toLowerCase() + ">>");
+        model.addAttribute("connectionColor", ConnectionColorMapper.getByType(colorName.toLowerCase()));
+        model.addAttribute("colorName", ComponentColorMapper.getByType(colorName.toLowerCase()));
+        Boolean isRestService =  integrationType.toLowerCase().startsWith("rest");
+        model.addAttribute("isRestService", isRestService);
+        model.addAttribute("integrationType", "INTEGRATION_TYPE("+ integrationType+")");
+        model.addAttribute("COMPLETE_INTERFACE_PATH", StringUtils.capitalize(applicationNameNew) +  StringUtils.capitalize(serviceName) + StringUtils.capitalize(interfaceName) + "Int");
+        model.addAttribute("API_CREATED", applicationName.toUpperCase() + "_API" +serviceName.toUpperCase() + "_" + interfaceName.toUpperCase() + "_CREATED");
+        return "componentExport";
     }
 
     @GetMapping("/start")
@@ -99,5 +96,12 @@ public class SimpleController {
         //    components.put(newComponent, new LinkedList<>());
         //}
         return new LinkedList<>();//components.get(newComponent);
+    }
+
+    private String getReplaceUnwantedCharacters(String name, boolean replaceDotsOnly) {
+        String newName = name.replace('.', '_');
+        if (!replaceDotsOnly)
+            newName = newName.replace('/', '_');
+        return newName;
     }
 }

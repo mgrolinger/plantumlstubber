@@ -34,24 +34,9 @@ public class ExportController implements Loggable {
 
     @Autowired
     private SpringTemplateEngine templateEngine;
-
-    private Map<String, String> connectionColorNameMapper = new HashMap<>();
-    private Map<String, String> colorNameMapper = new HashMap<>();
-
     private Map<String, String> aliasMapper = new HashMap<>();
 
     private ExportController() {
-        connectionColorNameMapper.put("integration", "INTEGRATION_COLOR_CONNECTION");
-        connectionColorNameMapper.put("resource", "RESOURCE_DOMAIN_COLOR_CONNECTION");
-        connectionColorNameMapper.put("financial", "FINANCIAL_DOMAIN_COLOR_CONNECTION");
-        connectionColorNameMapper.put("customer", "CUSTOMER_DOMAIN_COLOR_CONNECTION");
-        connectionColorNameMapper.put("external", "EXTERNAL_INTERFACE_COLOR_CONNECTION");
-
-        colorNameMapper.put("integration", "INTEGRATION_COLOR");
-        colorNameMapper.put("resource", "RESOURCE_DOMAIN_COLOR");
-        colorNameMapper.put("financial", "FINANCIAL_DOMAIN_COLOR");
-        colorNameMapper.put("customer", "CUSTOMER_DOMAIN_COLOR");
-        colorNameMapper.put("external", "EXTERNAL_INTERFACE_COLOR");
 
         aliasMapper.put("esb", "atlas");
     }
@@ -87,8 +72,8 @@ public class ExportController implements Loggable {
             String applicationNameShort = aliasMapper.getOrDefault(applicationName.toLowerCase(), applicationName);
             context.setVariable("applicationNameShort", applicationNameShort);
             context.setVariable("colorType", "<<" + colorName.toLowerCase() + ">>");
-            context.setVariable("colorName", colorNameMapper.get(colorName.toLowerCase()));
-            context.setVariable("connectionColor", connectionColorNameMapper.get(colorName.toLowerCase()));
+            context.setVariable("colorName", ComponentColorMapper.getByType(colorName.toLowerCase()));
+            context.setVariable("connectionColor", ConnectionColorMapper.getByType(colorName.toLowerCase()));
             String integrationType = "";
             if (!StringUtils.isEmpty(services.getIntegrationType())) {
                 integrationType = "INTEGRATION_TYPE(" + services.getIntegrationType() + ")";
@@ -140,6 +125,14 @@ public class ExportController implements Loggable {
             exampleFile.append("@enduml");
             try (Writer writer = new FileWriter(basepath + applicationName + PATH_SEPARATOR + applicationName + "_example.puml")) {
                 writer.write(exampleFile.toString());
+            } catch (IOException e) {
+                // do nothing
+                logger().error("Exception occurred: {}", e);
+            }
+            //write a pseudo common
+            Files.createDirectories(Paths.get(basepath+"common/"));
+            try (Writer writer = new FileWriter(basepath+"common/common.puml")) {
+                writer.write("'intentionally left empty");
             } catch (IOException e) {
                 // do nothing
                 logger().error("Exception occurred: {}", e);
@@ -197,8 +190,8 @@ public class ExportController implements Loggable {
             context.setVariable("applicationNameShort", applicationNameShort);
             context.setVariable("colorType", "<<" + colorName.toLowerCase() + ">>");
             context.setVariable("orderPrio",services.getOrderPrio());
-            context.setVariable("colorName", colorNameMapper.get(colorName.toLowerCase()));
-            context.setVariable("connectionColor", connectionColorNameMapper.get(colorName.toLowerCase()));
+            context.setVariable("colorName", ComponentColorMapper.getByType(colorName.toLowerCase()).getValue());
+            context.setVariable("connectionColor", ConnectionColorMapper.getByType(colorName.toLowerCase()).getValue());
             String integrationType = "";
             context.setVariable("isRestService", false);
             if (!StringUtils.isEmpty(services.getIntegrationType())) {
@@ -298,7 +291,7 @@ public class ExportController implements Loggable {
                 exampleFile.append("!include ").append(pEx).append(interfaceName).append(".iuml \n");
                 String serviceCall = getServiceCallName(applicationName, serviceName);
                 exampleFile.append(getReplaceUnwantedCharacters(serviceCall,false)).append("_").append(getReplaceUnwantedCharacters(interfaceName,false)).append("()\n\n");
-                logger().info("Export call: {}_{}", serviceCall, interfaceName);
+                logger().info("Write {}_{} to {}", serviceCall, interfaceName, currentPath + interfaceName + ".iuml");
                 writer.write(templateEngine.process(template, context));
             } catch (IOException io) {
                 // do nothing
