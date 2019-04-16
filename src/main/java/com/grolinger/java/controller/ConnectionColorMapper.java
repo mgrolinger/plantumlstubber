@@ -13,6 +13,7 @@ public enum ConnectionColorMapper {
     private static final Map<String, ConnectionColorMapper> reverseLookup = new HashMap<>();
     private final String type;
 
+
     static {
         for (ConnectionColorMapper c : ConnectionColorMapper.values()) {
             reverseLookup.put(c.getValue(), c);
@@ -20,16 +21,17 @@ public enum ConnectionColorMapper {
 
     }
 
-    ConnectionColorMapper(String type) {
+    ConnectionColorMapper(final String type) {
         this.type = type;
     }
 
     public static ConnectionColorMapper getByType(final String type) {
-        return reverseLookup.getOrDefault(type, EXTERNAL_INTERFACE_COLOR_CONNECTION);
+        return reverseLookup.getOrDefault(type.toLowerCase(), EXTERNAL_INTERFACE_COLOR_CONNECTION);
     }
 
     public String getValue() {
         return this.type;
     }
+
 
 }

@@ -1,12 +1,14 @@
-@startuml [(${isRootService} ?  ${applicationName} : ${applicationName}+'_'+${#strings.capitalize(serviceName)})]
+@startuml [(${isRootService} ?  ${applicationName} : ${applicationName}+'_'+${serviceName})]_[[${interfaceName}]]
 ' generated on [[${dateCreated}]]
 '!define TECHNICAL
 '!define SIMPLE
+'!define SHOW_EXCEPTION
+'!define SHOW_DOCUMENT_LINK
 'Definition of participants
 !include_many [[${commonPath}]]common/common.iuml
 !ifndef SIMPLE
     !ifndef [[${#strings.toUpperCase(applicationName)}]]_PARTICIPANT
-        !define [[${#strings.toUpperCase(applicationName)}]]_PARTICIPANT CREATE_PARTICIPANT("[[${applicationName}]]",[[${#strings.toLowerCase(applicationNameShort)}]],[[${#strings.toUpperCase(colorName)}]],[[${orderPrio}]])
+        !define [[${#strings.toUpperCase(applicationName)}]]_PARTICIPANT participant "[[${applicationName}]]" as [[${#strings.toLowerCase(applicationNameShort)}]] ORDER [[${orderPrio}]] #Red
     !endif
     !ifndef [[${#strings.toUpperCase(applicationName)}]]_PARTICIPANT_CREATED
         [[${#strings.toUpperCase(applicationName)}]]_PARTICIPANT
@@ -16,35 +18,44 @@
 
 '
 [(${isRestService} ? '\' Define CRUD methods here' : '\' Define soap method here')]
-[(${isRestService} ? '\' Crud - Create' : '\'')]
+[(${isRestService} ? '\' Crud - Create' : '\'' )]
 [(${isRestService} ? '\' cRud - Read/Get' : '\'' )]
-!definelong [(${isRootService} ?  ${applicationName} : ${applicationName}+'_'+${#strings.capitalize(serviceName)})]_[(${isRestService} ? 'get_' : '')][[${interfaceName}]](CALLER="consumer[(${#strings.capitalize(interfaceName)})]",REQ_PARAM="")
+' When REST consider putting request method into the name [(${isRootService} ?  ${applicationName} : ${applicationName}+'_'+${serviceName})]_[(${isRestService} ? 'get_' : '')][[${interfaceName}]]
+!definelong [(${isRootService} ?  ${applicationName} : ${applicationName}+'_'+${serviceName})]_[[${interfaceName}]](CALLER="consumer[(${#strings.capitalize(interfaceName)})]",REQ_PARAM="")
     !ifdef SIMPLE
-        referenceBox(CALLER,[[${#strings.toUpperCase(colorName)}]],Todo)
+        referenceBox(CALLER,[[${#strings.toUpperCase(colorName)}]]_DOMAIN_COLOR,"Todo")
     !else
         'Technical view
         !ifdef TECHNICAL
-            documentBox([[${#strings.toLowerCase(applicationNameShort)}]],Todo)
-            CALLER -> [[${#strings.toLowerCase(applicationNameShort)}]] ++ : Todo
-            CALLER <-- [[${#strings.toLowerCase(applicationNameShort)}]] : Todo
+            documentBox([[${#strings.toLowerCase(applicationNameShort)}]],"Todo")
+            CALLER -> [[${#strings.toLowerCase(applicationNameShort)}]] ++ :[(${isRestService} ? 'restGET("",' : 'soapCall("Todo",'+${#strings.capitalize(serviceName)}+','+${interfaceName}+'(')]REQ_PARAM))
+            ' subsequent calls
+
+            ' response
+            ' success case
+            CALLER <--  [[${#strings.toLowerCase(applicationNameShort)}]] : [(${isRestService} ? 'http200 response(ToDo)' :  'response(ToDo)' )]
+
             !ifdef SHOW_EXCEPTION
-                note over [[${#strings.toLowerCase(applicationNameShort)}]]
-                    Possible errors for  [(${isRootService} ?  ${applicationName} : ${applicationName}+'_'+${#strings.capitalize(serviceName)})]_[[${interfaceName}]]
-                    not yet defined
-                end note
+                'add else failed clauses here
+                alt error
+                    note over [[${#strings.toLowerCase(applicationNameShort)}]] #Red
+                        Possible errors
+                        not yet defined
+                    end note
+                    CALLER <-- [[${#strings.toLowerCase(applicationNameShort)}]] : [(${isRestService} ? 'http500' : 'soapFault("ERROR-Code,"ERROR-Message")' )]
+                end
             !endif
             deactivate [[${#strings.toLowerCase(applicationNameShort)}]]
         !else
         'Business view
-            CALLER -> [[${#strings.toLowerCase(applicationNameShort)}]] ++ : Todo
-            CALLER <-- [[${#strings.toLowerCase(applicationNameShort)}]] --: Todo
+            CALLER -> [[${#strings.toLowerCase(applicationNameShort)}]] ++ : Request Todo
+            ' subsequent calls
+            ' response
+            CALLER <-- [[${#strings.toLowerCase(applicationNameShort)}]] --: Response Todo
         !endif
     !endif
 !enddefinelong
-
 [(${isRestService} ? '\' crUd - Update' : '\'' )]
-
 [(${isRestService} ? '\' cruD - Delete' : '\'' )]
-
 @enduml
 

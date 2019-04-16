@@ -2,6 +2,7 @@
 ' generated on [[${dateCreated}]]
 '!define DETAILED
 '!define UML_STRICT
+'!define SHOW_LAST_UPDATED
 !include_many [[${commonPath}]]common/common.iuml
 'Definition of the components
 !ifndef [[${#strings.toUpperCase(applicationName)}]]_COMPONENT_CREATED
@@ -14,7 +15,7 @@
 !ifndef [[${API_CREATED}]]
     !ifdef DETAILED
         interface "[(${integrationType})]\n[[${#strings.capitalize(interfaceName)}]]" as [[${COMPLETE_INTERFACE_PATH}]] [(${colorType})]
-        [[${#strings.toLowerCase(applicationNameShort)}]]  -[single,#[[${#strings.toUpperCase(connectionColor)}]]]-  [[${COMPLETE_INTERFACE_PATH}]]
+        [[${#strings.toLowerCase(applicationNameShort)}]] -[single,#[[${#strings.toUpperCase(connectionColor)}]]]- [[${COMPLETE_INTERFACE_PATH}]] LUPDATE([[${dateCreated}]])
     !else
         ' define application as interface endpoint for mixed detailed/non-detailed views.
         !define [[${COMPLETE_INTERFACE_PATH}]] [[${#strings.toLowerCase(applicationNameShort)}]]
@@ -33,9 +34,7 @@ end note
 [[${#strings.toLowerCase(applicationNameShort)}]] .. implNote[(${applicationName})][(${interfaceName})]
 
 ' Methods go here
-' Import and method calls
-!definelong [(${isRootService} ?  ${applicationName} : ${applicationName}+'_'+${serviceName})]_[[${interfaceName}]](CALLER="\[consumer[(${#strings.capitalize(interfaceName)})]\]",[[${#strings.toUpperCase(interfaceName)}]]_CONNECTION_COLOR="DarkSlateGrey")
-    ' Import subsequent services here to use them and to have
+!definelong [(${isRootService} ?  ${applicationName} : ${applicationName}+'_'+${serviceName})]_[[${interfaceName}]](CALLER="consumer[(${#strings.capitalize(interfaceName)})]",[[${#strings.toUpperCase(interfaceName)}]]_CONNECTION_COLOR="DarkSlateGrey")
     !ifdef DETAILED
         CALLER ..[single,#[[${#strings.toUpperCase(interfaceName)}]]_CONNECTION_COLOR]..> [[${COMPLETE_INTERFACE_PATH}]]
     !else

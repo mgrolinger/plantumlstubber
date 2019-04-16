@@ -1,6 +1,5 @@
 package com.grolinger.java.controller;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -13,22 +12,22 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.*;
 
 @Controller
-public class SimpleController {
+public class SingleExportController {
     private TreeNode<String> components = new TreeNode<>("Service");
     private Map<String, String> aliasMapper = new HashMap<>();
 
-    private SimpleController() {
+    private SingleExportController() {
         aliasMapper.put("esb", "atlas");
         aliasMapper.put("atlas", "esb");
     }
 
     @GetMapping("/application/{applicationName}/service/{serviceName}/interface/{interfaceName}/color/{colorName}/{integrationType}")
     public String application(Model model, @PathVariable final String applicationName, @PathVariable final String serviceName, @PathVariable final String interfaceName, @PathVariable final String colorName,@PathVariable final String integrationType) {
-        model.addAttribute("dateCreated", LocalDateTime.now());
+        model.addAttribute("dateCreated", LocalDate.now());
         model.addAttribute("commonPath", "../");
         String applicationNameNew = getReplaceUnwantedCharacters(applicationName, false);
         model.addAttribute("applicationName", StringUtils.capitalize(applicationNameNew));
@@ -36,9 +35,9 @@ public class SimpleController {
         model.addAttribute("applicationNameShort", applicationNameShort.toLowerCase());
         model.addAttribute("serviceName", serviceName);
         model.addAttribute("interfaceName", interfaceName);
-        model.addAttribute("colorType", "<<" + colorName.toLowerCase() + ">>");
-        model.addAttribute("connectionColor", ConnectionColorMapper.getByType(colorName.toLowerCase()));
-        model.addAttribute("colorName", ComponentColorMapper.getByType(colorName.toLowerCase()));
+        model.addAttribute("colorType", ComponentColorMapper.getByType(colorName).getStereotype());
+        model.addAttribute("connectionColor", ConnectionColorMapper.getByType(colorName));
+        model.addAttribute("colorName", ComponentColorMapper.getByType(colorName));
         Boolean isRestService =  integrationType.toLowerCase().startsWith("rest");
         model.addAttribute("isRestService", isRestService);
         model.addAttribute("integrationType", "INTEGRATION_TYPE("+ integrationType+")");
@@ -54,7 +53,7 @@ public class SimpleController {
         Files.walk(Paths.get("M:\\Documents\\_Dokumente\\UMLServiceDefinitions\\Service"))
                 .filter(Files::isRegularFile)
                 .filter(it -> it.toString().endsWith(".iuml"))
-                .forEach(p -> paths.add(p));
+                .forEach(paths::add);
 
         for (Path path : paths) {
             String[] file = splitFilename(path);
@@ -63,9 +62,6 @@ public class SimpleController {
                 if (currentNode.endsWith(".iuml")) {
                     //if(components.contains(currentNode))
                         break;
-                    //components.add()
-                }else{
-
                 }
 
             }
