@@ -7,7 +7,6 @@ import com.grolinger.java.config.Services;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.springframework.util.StringUtils;
-import org.thymeleaf.context.Context;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -27,7 +26,7 @@ class FileUtils  implements Loggable {
     private static final String DIR_UP = "../";
     private static final String FILEENDING_IUML = ".iuml";
 
-    private String capitalizePathParts(final String pathToCapitalize) {
+    String capitalizePathParts(final String pathToCapitalize) {
         return capitalizeStringParts(capitalizeStringParts(pathToCapitalize, SLASH), "_");
     }
 
@@ -83,9 +82,8 @@ class FileUtils  implements Loggable {
         }
     }
 
-    String createDirectory(String basepath, String path, Set<String> dirsCreate, Context context, String applicationName, String commonPath) throws IOException {
+    String createDirectory(String basepath, String path, Set<String> dirsCreate, String applicationName) throws IOException {
         if (!dirsCreate.contains(applicationName)) {
-            context.setVariable(commonPath, DIR_UP);
             path = basepath + applicationName + PATH_SEPARATOR;
             Files.createDirectories(Paths.get(path));
             dirsCreate.add(applicationName);

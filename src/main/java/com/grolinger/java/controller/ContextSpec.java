@@ -8,49 +8,32 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ContextSpec {
+class ContextSpec {
     private static final String SERVICE_NAME = "serviceName";
     private static final String EMPTY = "EMPTY";
-    public static final String REST = "REST";
+    private static final String REST = "REST";
 
-
-    /*
-    //Color
-
-                context.setVariable("isRestService", isCurrentServiceARestService(services));
-
-                context.setVariable(IS_ROOT_SERVICE, true);
-
-                    context.setVariable(commonPath, DIR_UP);
-             context.setVariable(SERVICE_NAME, extServiceName);
-            context.setVariable("interfaceName", interfaceName);
-            context.setVariable("COMPLETE_INTERFACE_PATH", StringUtils.capitalize(applicationName) + (isRoot ? "" : capitalizePathParts(serviceName)) + StringUtils.capitalize(interfaceName) + "Int");
-
-            context.setVariable("API_CREATED", applicationName.toUpperCase() + "_API" + (isRoot ? "" : "_" + capitalizePathParts(serviceName).toUpperCase()) + "_" + interfaceName.toUpperCase() + "_CREATED");
-
-
-     */
-    public static OrderPrioBuilder Builder() {
+    static OrderPrioBuilder Builder() {
         return new ContextBuilderImpl(new Context());
     }
 
-    public interface OrderPrioBuilder {
+    interface OrderPrioBuilder {
         ColorBuilder withOrderPrio(final Integer orderNumber);
     }
 
-    public interface ColorBuilder {
+    interface ColorBuilder {
         IntegrationTypeBuilder withColorName(final DomainColorMapper colorName);
     }
 
-    public interface IntegrationTypeBuilder {
+    interface IntegrationTypeBuilder {
         ApplicationNameBuilder withIntegrationType(final String integrationType);
     }
 
-    public interface ApplicationNameBuilder {
+    interface ApplicationNameBuilder {
         ContextBuilder withApplicationName(final String applicationName);
     }
 
-    public interface ContextBuilder {
+    interface ContextBuilder {
 
         ContextBuilder withServiceName(final String serviceName);
 
