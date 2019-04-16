@@ -35,9 +35,9 @@ public class SingleExportController {
         model.addAttribute("applicationNameShort", applicationNameShort.toLowerCase());
         model.addAttribute("serviceName", serviceName);
         model.addAttribute("interfaceName", interfaceName);
-        model.addAttribute("colorType", ComponentColorMapper.getByType(colorName).getStereotype());
+        model.addAttribute("colorType", DomainColorMapper.getByType(colorName).getStereotype());
         model.addAttribute("connectionColor", ConnectionColorMapper.getByType(colorName));
-        model.addAttribute("colorName", ComponentColorMapper.getByType(colorName));
+        model.addAttribute("colorName", DomainColorMapper.getByType(colorName));
         Boolean isRestService =  integrationType.toLowerCase().startsWith("rest");
         model.addAttribute("isRestService", isRestService);
         model.addAttribute("integrationType", "INTEGRATION_TYPE("+ integrationType+")");

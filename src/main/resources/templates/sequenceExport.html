@@ -8,7 +8,7 @@
 !include_many [[${commonPath}]]common/common.iuml
 !ifndef SIMPLE
     !ifndef [[${#strings.toUpperCase(applicationName)}]]_PARTICIPANT
-        !define [[${#strings.toUpperCase(applicationName)}]]_PARTICIPANT participant "[[${applicationName}]]" as [[${#strings.toLowerCase(applicationNameShort)}]] ORDER [[${orderPrio}]] #Red
+        !define [[${#strings.toUpperCase(applicationName)}]]_PARTICIPANT participant "[[${applicationName}]]" as [[${#strings.toLowerCase(applicationNameShort)}]] ORDER [[${sequenceOrderPrio}]] #Red
     !endif
     !ifndef [[${#strings.toUpperCase(applicationName)}]]_PARTICIPANT_CREATED
         [[${#strings.toUpperCase(applicationName)}]]_PARTICIPANT

@@ -14,7 +14,7 @@
 !endif
 !ifndef [[${API_CREATED}]]
     !ifdef DETAILED
-        interface "[(${integrationType})]\n[[${#strings.capitalize(interfaceName)}]]" as [[${COMPLETE_INTERFACE_PATH}]] [(${colorType})]
+        interface "[(${componentIntegrationType})]\n[[${#strings.capitalize(interfaceName)}]]" as [[${COMPLETE_INTERFACE_PATH}]] [(${colorType})]
         [[${#strings.toLowerCase(applicationNameShort)}]] -[single,#[[${#strings.toUpperCase(connectionColor)}]]]- [[${COMPLETE_INTERFACE_PATH}]] LUPDATE([[${dateCreated}]])
     !else
         ' define application as interface endpoint for mixed detailed/non-detailed views.
@@ -24,14 +24,17 @@
 !endif
 'Includes to subsequent services go here
 
-' TODO
-note as implNote[(${applicationName})][(${interfaceName})] #Red
-[(${COMPLETE_INTERFACE_PATH})]
-is a generated stub.
-PLEASE remove this after checking
-if all calls are included.
-end note
-[[${#strings.toLowerCase(applicationNameShort)}]] .. implNote[(${applicationName})][(${interfaceName})]
+' FIXME REMOVE THIS AFTER CHECK
+!ifdef SHOW_TODO
+    ' TODO
+    note as implNote[(${applicationName})][(${interfaceName})] #Red
+    [(${COMPLETE_INTERFACE_PATH})]
+    is a generated stub.
+    PLEASE remove this after checking
+    if all calls are included.
+    end note
+    [[${#strings.toLowerCase(applicationNameShort)}]] .. implNote[(${applicationName})][(${interfaceName})]
+!endif
 
 ' Methods go here
 !definelong [(${isRootService} ?  ${applicationName} : ${applicationName}+'_'+${serviceName})]_[[${interfaceName}]](CALLER="consumer[(${#strings.capitalize(interfaceName)})]",[[${#strings.toUpperCase(interfaceName)}]]_CONNECTION_COLOR="DarkSlateGrey")

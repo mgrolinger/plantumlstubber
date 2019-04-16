@@ -1,11 +1,7 @@
 package com.grolinger.java.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.grolinger.java.config.Loggable;
 import com.grolinger.java.config.Services;
-import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,9 +13,6 @@ import org.thymeleaf.spring5.SpringTemplateEngine;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -33,7 +26,8 @@ public class MultiExportController implements Loggable {
     private static final String FILEENDING_IUML = ".iuml";
     private static final String IS_ROOT_SERVICE = "isRootService";
     private static final String SERVICE_NAME = "serviceName";
-    private List<Services> applicationList = new LinkedList<>();
+    private final FileUtils fileUtils = new FileUtils();
+
 
     private final SpringTemplateEngine templateEngine;
     private Map<String, String> aliasMapper = new HashMap<>();
@@ -47,9 +41,8 @@ public class MultiExportController implements Loggable {
     @SuppressWarnings("squid:S2095")
     @GetMapping("/export/components")
     public void component(Model model) throws IOException {
-
         // Find all yaml files
-        findAllYamlFiles();
+        List<Services> applicationList = new LinkedList<>(fileUtils.findAllYamlFiles());
 
         // Iterate over yaml files
         String basepath = "./target/Component/";
@@ -62,26 +55,25 @@ public class MultiExportController implements Loggable {
             StringBuilder exampleFile = new StringBuilder();
             exampleFile.append("@startuml\n");
             exampleFile.append("' generated on ").append(LocalDate.now()).append("\n");
-            exampleFile.append("!define DETAILED\n'!define UML_STRICT\n\n\n");
-
+            exampleFile.append("!define DETAILED\n'!define UML_STRICT\n!define SHOW_TODO\n\n\n");
             Context context = new Context();
             context.setVariable("dateCreated", LocalDate.now());
             String applicationName = services.getApplication();
             applicationName = getReplaceUnwantedCharacters(applicationName, false);
             String commonPath = "commonPath";
-            path = createDirectory(basepath, path, dirsCreate, context, applicationName, commonPath);
+            path = fileUtils.createDirectory(basepath, path, dirsCreate, context, applicationName, commonPath);
             String colorName = services.getColor();
             context.setVariable("applicationName", applicationName);
             String applicationNameShort = aliasMapper.getOrDefault(applicationName.toLowerCase(), applicationName);
             context.setVariable("applicationNameShort", applicationNameShort);
-            context.setVariable("colorType", ComponentColorMapper.getByType(colorName).getStereotype());
-            context.setVariable("colorName", ComponentColorMapper.getByType(colorName));
+            context.setVariable("colorType", DomainColorMapper.getByType(colorName).getStereotype());
+            context.setVariable("colorName", DomainColorMapper.getByType(colorName));
             context.setVariable("connectionColor", ConnectionColorMapper.getByType(colorName));
             String integrationType = "";
             if (!StringUtils.isEmpty(services.getIntegrationType())) {
                 integrationType = "INTEGRATION_TYPE(" + services.getIntegrationType() + ")";
             }
-            context.setVariable("integrationType", integrationType);
+            context.setVariable("componentIntegrationType", integrationType);
 
             if (services.getServices() == null) {
                 break;
@@ -89,39 +81,42 @@ public class MultiExportController implements Loggable {
             for (Map.Entry entry : services.getServices().entrySet()) {
                 String serviceName = (String) entry.getKey();
                 logger().warn("Servicename: {}_{}", applicationName, serviceName);
+                ContextSpec.ContextBuilder contextBuilder = ContextSpec.Builder()
+                        .withOrderPrio(Integer.parseInt(services.getOrderPrio()))
+                        .withColorName(DomainColorMapper.getByType(services.getColor()))
+                        .withIntegrationType(services.getIntegrationType())
+                        .withApplicationName(services.getApplication());
+                boolean isRest = isCurrentServiceARestService(services);
                 if (serviceName.equalsIgnoreCase(EMPTY)) {
                     currentServiceIsRootService = true;
                     context.setVariable(commonPath, DIR_UP);
-                    context.setVariable(IS_ROOT_SERVICE, true);
+                    context.setVariable(IS_ROOT_SERVICE, currentServiceIsRootService);
                     context.setVariable(SERVICE_NAME, "");
+                    contextBuilder.withCommonPath(DIR_UP);
+                    contextBuilder.withServiceName(EMPTY);
                 } else {
                     currentServiceIsRootService = false;
-                    context.setVariable(IS_ROOT_SERVICE, false);
+                    context.setVariable(IS_ROOT_SERVICE, currentServiceIsRootService);
                     setRelativeCommonPath(context, commonPath, serviceName);
                     serviceName = getReplaceUnwantedCharacters(serviceName, true);
                     if (!dirsCreate.contains(applicationName + serviceName)) {
-                        path = createServiceDirectory(basepath, dirsCreate, applicationName, serviceName);
-                        setServiceName(context, serviceName, isCurrentServiceARestService(services));
+                        path = fileUtils.createServiceDirectory(basepath, dirsCreate, applicationName, serviceName);
+                        setServiceName(context, serviceName, isRest);
                     }
+                    contextBuilder.withServiceName(getServiceName(serviceName,isRest));
+                    contextBuilder.withCommonPath(getRelativeCommonPath(serviceName));
                 }
 
                 String[] interfaces = (String[]) entry.getValue();
-                processInterface("componentExport.html", path, exampleFile, context, currentServiceIsRootService, applicationName, serviceName, interfaces);
-
+                //processInterface("componentExport.html", path, exampleFile, context, currentServiceIsRootService, applicationName, serviceName, interfaces);
+                processInterface("componentExport.html", path, exampleFile, contextBuilder, currentServiceIsRootService, applicationName, serviceName, interfaces);
             }
             exampleFile.append("@enduml");
-            writeExampleFile(basepath, applicationName, exampleFile);
-            writeEmptyCommonFile(basepath);
+            fileUtils.writeExampleFile(basepath, applicationName, exampleFile);
+            fileUtils.writeEmptyCommonFile(basepath);
         }
     }
 
-    private String createServiceDirectory(String basepath, Set<String> dirsCreate, String applicationName, String serviceName) throws IOException {
-        String path;
-        path = basepath + applicationName + PATH_SEPARATOR + serviceName + PATH_SEPARATOR;
-        Files.createDirectories(Paths.get(path));
-        dirsCreate.add(applicationName + serviceName);
-        return path;
-    }
 
     private void setRelativeCommonPath(Context context, String commonPath, String serviceName) {
         StringBuilder cp = new StringBuilder();
@@ -135,6 +130,18 @@ public class MultiExportController implements Loggable {
         }
         context.setVariable(commonPath, cp.toString());
     }
+    private String getRelativeCommonPath(String serviceName) {
+        StringBuilder cp = new StringBuilder();
+        if (serviceName.contains(SLASH)) {
+            for (int i = 0; i <= serviceName.split(SLASH).length; i++) {
+                logger().warn(">> Servicename: {}, {}", i, serviceName);
+                cp.append(DIR_UP);
+            }
+        } else {
+            cp.append(DIR_UP).append(DIR_UP);
+        }
+        return cp.toString();
+    }
 
     private void setServiceName(Context context, final String serviceName, boolean isRest) {
         String extServiceName = isRest ? serviceName : StringUtils.capitalize(serviceName);
@@ -147,14 +154,14 @@ public class MultiExportController implements Loggable {
         }
     }
 
-    private void writeEmptyCommonFile(final String basepath) throws IOException {
-        //write a pseudo common
-        Files.createDirectories(Paths.get(basepath + "common/"));
-        try (Writer writer = new FileWriter(basepath + "common/common.iuml")) {
-            writer.write("'intentionally left empty");
-        } catch (IOException e) {
-            // do nothing
-            logger().error("Exception occurred: {}", e.getMessage());
+    private String getServiceName(final String serviceName, boolean isRest) {
+        String extServiceName = isRest ? serviceName : StringUtils.capitalize(serviceName);
+
+        if (serviceName.contains(SLASH)) {
+            return getReplaceUnwantedCharacters(extServiceName, false);
+        } else {
+
+            return extServiceName;
         }
     }
 
@@ -179,9 +186,8 @@ public class MultiExportController implements Loggable {
 
     @GetMapping("/export/sequences")
     public void sequence(Model model) throws IOException {
-
         // Find all yaml files
-        findAllYamlFiles();
+        List<Services> applicationList = new LinkedList<>(fileUtils.findAllYamlFiles());
 
         // Iterate over yaml files
         String basepath = "./target/Sequence/";
@@ -190,6 +196,7 @@ public class MultiExportController implements Loggable {
 
         for (Services services : applicationList) {
             boolean currentServiceIsRootService = false;
+            boolean isRest = isCurrentServiceARestService(services);
             // Prepare example file for every Application
             StringBuilder exampleFile = new StringBuilder();
             exampleFile.append("@startuml\n");
@@ -201,29 +208,37 @@ public class MultiExportController implements Loggable {
             String applicationName = services.getApplication();
             applicationName = getReplaceUnwantedCharacters(applicationName, false);
             String commonPath = "commonPath";
-            path = createDirectory(basepath, path, dirsCreate, context, applicationName, commonPath);
+            path = fileUtils.createDirectory(basepath, path, dirsCreate, context, applicationName, commonPath);
             String colorName = services.getColor();
             context.setVariable("applicationName", applicationName);
             String applicationNameShort = aliasMapper.getOrDefault(applicationName.toLowerCase(), applicationName);
             context.setVariable("applicationNameShort", applicationNameShort);
-            context.setVariable("colorType", ComponentColorMapper.getByType(colorName).getStereotype());
+            context.setVariable("colorType", DomainColorMapper.getByType(colorName).getStereotype());
             context.setVariable("orderPrio", services.getOrderPrio());
-            context.setVariable("colorName", ComponentColorMapper.getByType(colorName).getValue());
+            context.setVariable("colorName", DomainColorMapper.getByType(colorName).getValue());
             context.setVariable("connectionColor", ConnectionColorMapper.getByType(colorName).getValue());
-            context.setVariable("isRestService", isCurrentServiceARestService(services));
+            ContextSpec.ContextBuilder contextBuilder = ContextSpec.Builder()
+                    .withOrderPrio(Integer.parseInt(services.getOrderPrio()))
+                    .withColorName(DomainColorMapper.getByType(services.getColor()))
+                    .withIntegrationType(services.getIntegrationType())
+                    .withApplicationName(services.getApplication());
+
 
             if (services.getServices() == null) {
                 break;
             }
             for (Map.Entry entry : services.getServices().entrySet()) {
                 String serviceName = (String) entry.getKey();
-
+                logger().warn("Servicename: {}_{}", applicationName, serviceName);
                 if (serviceName.equalsIgnoreCase(EMPTY)) {
                     currentServiceIsRootService = true;
                     context.setVariable(commonPath, DIR_UP);
                     context.setVariable(IS_ROOT_SERVICE, true);
+                    contextBuilder.withCommonPath(DIR_UP);
+                    contextBuilder.withServiceName(EMPTY);
                 } else {
                     context.setVariable(IS_ROOT_SERVICE, false);
+
                     StringBuilder cp = new StringBuilder();
                     if (serviceName.contains(SLASH)) {
                         for (int i = 0; i <= serviceName.split(SLASH).length; i++) {
@@ -236,18 +251,20 @@ public class MultiExportController implements Loggable {
                     context.setVariable(commonPath, cp.toString());
                     serviceName = getReplaceUnwantedCharacters(serviceName, true);
                     if (!dirsCreate.contains(applicationName + serviceName)) {
-                        path = createServiceDirectory(basepath, dirsCreate, applicationName, serviceName);
+                        path = fileUtils.createServiceDirectory(basepath, dirsCreate, applicationName, serviceName);
                         setServiceName(context, serviceName, isCurrentServiceARestService(services));
                     }
+                    contextBuilder.withServiceName(getServiceName(serviceName,isRest));
+                    contextBuilder.withCommonPath(getRelativeCommonPath(serviceName));
                 }
 
                 String[] interfaces = (String[]) entry.getValue();
-                processInterface("sequenceExport.html", path, exampleFile, context, currentServiceIsRootService, applicationName, serviceName, interfaces);
+                processInterface("sequenceExport.html", path, exampleFile, contextBuilder, currentServiceIsRootService, applicationName, serviceName, interfaces);
 
             }
             exampleFile.append("@enduml");
-            writeExampleFile(basepath, applicationName, exampleFile);
-            writeEmptyCommonFile(basepath);
+            fileUtils.writeExampleFile(basepath, applicationName, exampleFile);
+            fileUtils.writeEmptyCommonFile(basepath);
         }
     }
 
@@ -259,35 +276,6 @@ public class MultiExportController implements Loggable {
         return isRestService;
     }
 
-    private void writeExampleFile(String basepath, String applicationName, StringBuilder exampleFile) {
-        try (Writer writer = new FileWriter(basepath + applicationName + PATH_SEPARATOR + applicationName + "_example.puml")) {
-            writer.write(exampleFile.toString());
-        } catch (IOException e) {
-            // do nothing
-            logger().error("Exception occurred: {}", e.getMessage());
-        }
-    }
-
-    private String createDirectory(String basepath, String path, Set<String> dirsCreate, Context context, String applicationName, String commonPath) throws IOException {
-        if (!dirsCreate.contains(applicationName)) {
-            context.setVariable(commonPath, DIR_UP);
-            path = basepath + applicationName + PATH_SEPARATOR;
-            Files.createDirectories(Paths.get(path));
-            dirsCreate.add(applicationName);
-        }
-        return path;
-    }
-
-    private void findAllYamlFiles() throws IOException {
-        String pathRoot = "./target/classes/";
-        // TODO open file chooser for root if args given
-        Files.list(Paths.get(pathRoot))
-                .filter(Files::isRegularFile)
-                .filter(YamlPredicate::isYamlFile)
-                .forEach(this::mapYamls);
-    }
-
-
     private void processInterface(final String template, String path, StringBuilder exampleFile, Context context, boolean isRoot, String applicationName, String serviceName, String[] interfaces) {
         if (interfaces == null) {
             return;
@@ -296,7 +284,7 @@ public class MultiExportController implements Loggable {
             String currentPath = path;
             //first create the parent dir and next replace chars
             if (interfaceName.contains(SLASH)) {
-                createParentDir(currentPath + interfaceName + FILEENDING_IUML);
+                fileUtils.createParentDir(currentPath + interfaceName + FILEENDING_IUML);
                 currentPath = path + interfaceName.split(SLASH)[0] + SLASH;
 
             }
@@ -320,14 +308,39 @@ public class MultiExportController implements Loggable {
         }
     }
 
-    private void createParentDir(String fullPath) {
-        try {
-            Path pathToFile = Paths.get(fullPath);
-            Files.createDirectories(pathToFile.getParent());
-        } catch (IOException ioe) {
-            logger().error("exception:", ioe);
+    private void processInterface(final String template, String path, StringBuilder exampleFile, ContextSpec.ContextBuilder contextBuilder, boolean isRoot, String applicationName, String serviceName, String[] interfaces) {
+        if (interfaces == null) {
+            return;
+        }
+        for (String interfaceName : interfaces) {
+            String currentPath = path;
+            //first create the parent dir and next replace chars
+            if (interfaceName.contains(SLASH)) {
+                fileUtils.createParentDir(currentPath + interfaceName + FILEENDING_IUML);
+                currentPath = path + interfaceName.split(SLASH)[0] + SLASH;
+
+            }
+            interfaceName = getReplaceUnwantedCharacters(interfaceName, false);
+            //interface
+            contextBuilder.withInterfaceName(interfaceName);
+            Context context = contextBuilder.getContext();
+            context.setVariable("COMPLETE_INTERFACE_PATH", StringUtils.capitalize(applicationName) + (isRoot ? "" : capitalizePathParts(serviceName)) + StringUtils.capitalize(interfaceName) + "Int");
+            context.setVariable("API_CREATED", applicationName.toUpperCase() + "_API" + (isRoot ? "" : "_" + capitalizePathParts(serviceName).toUpperCase()) + "_" + interfaceName.toUpperCase() + "_CREATED");
+
+            try (Writer writer = new FileWriter(currentPath + interfaceName + FILEENDING_IUML)) {
+                String pEx = getServicePathPrefix(serviceName);
+                exampleFile.append("!include ").append(pEx).append(interfaceName).append(".iuml \n");
+                String serviceCall = getServiceCallName(applicationName, serviceName);
+                exampleFile.append(getReplaceUnwantedCharacters(serviceCall, false)).append("_").append(getReplaceUnwantedCharacters(interfaceName, false)).append("()\n\n");
+                logger().info("Write {}_{} to {}", serviceCall, interfaceName, currentPath + interfaceName + FILEENDING_IUML);
+                writer.write(templateEngine.process(template, context));
+            } catch (IOException io) {
+                // do nothing
+                logger().error("exception: {}", io.getMessage());
+            }
         }
     }
+
 
     private String getServiceCallName(String applicationName, String serviceName) {
         return (serviceName.equalsIgnoreCase(EMPTY)) ? applicationName : applicationName + "_" + serviceName;
@@ -344,22 +357,4 @@ public class MultiExportController implements Loggable {
         return newName;
     }
 
-    private static class YamlPredicate {
-        static boolean isYamlFile(Path path) {
-            return path.toAbsolutePath().toString().toLowerCase().contains(".yaml");
-        }
-    }
-
-    @SuppressWarnings("squid:S2629")
-    private void mapYamls(Path path) {
-        ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
-        try {
-            Services services = mapper.readValue(path.toFile(), Services.class);
-            logger().info(ReflectionToStringBuilder.toString(services, ToStringStyle.MULTI_LINE_STYLE));
-            applicationList.add(services);
-        } catch (Exception e) {
-            //Do nothing
-            logger().error("mapYamls exception: {}", e.getMessage());
-        }
-    }
 }
