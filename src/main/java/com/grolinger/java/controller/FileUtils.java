@@ -4,9 +4,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.grolinger.java.config.Loggable;
 import com.grolinger.java.config.Services;
+import com.grolinger.java.service.NameService;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import org.springframework.util.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.thymeleaf.context.Context;
+import org.thymeleaf.spring5.SpringTemplateEngine;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -19,31 +23,25 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-class FileUtils  implements Loggable {
-    private static final String EMPTY = "EMPTY";
+import static com.grolinger.java.controller.Constants.DIR_UP;
+import static com.grolinger.java.controller.Constants.FILE_TYPE_IUML;
+import static com.grolinger.java.controller.TemplateContent.EOL;
+import static com.grolinger.java.controller.TemplateContent.INCLUDE;
+
+@Component
+class FileUtils implements Loggable {
     private static final String SLASH = "/";
     private static final String PATH_SEPARATOR = SLASH;
-    private static final String DIR_UP = "../";
-    private static final String FILEENDING_IUML = ".iuml";
+    private final SpringTemplateEngine templateEngine;
+    private final NameService nameService;
 
-    String capitalizePathParts(final String pathToCapitalize) {
-        return capitalizeStringParts(capitalizeStringParts(pathToCapitalize, SLASH), "_");
+
+    @Autowired
+    private FileUtils(SpringTemplateEngine templateEngine, NameService nameService) {
+        this.templateEngine = templateEngine;
+        this.nameService = nameService;
     }
 
-    private String capitalizeStringParts(final String pathToCapitalize, final String splitChar) {
-        StringBuilder result = new StringBuilder();
-        if (pathToCapitalize != null) {
-            if (pathToCapitalize.contains(splitChar)) {
-                String[] parts = pathToCapitalize.split(splitChar);
-                for (String part : parts) {
-                    result.append(StringUtils.capitalize(part.replace(splitChar, "")));
-                }
-            } else {
-                result.append(StringUtils.capitalize(pathToCapitalize));
-            }
-        }
-        return result.toString();
-    }
 
     String createServiceDirectory(String basepath, Set<String> dirsCreate, String applicationName, String serviceName) throws IOException {
         String path;
@@ -57,7 +55,7 @@ class FileUtils  implements Loggable {
         //write a pseudo common
         Files.createDirectories(Paths.get(basepath + "common/"));
         try (Writer writer = new FileWriter(basepath + "common/common.iuml")) {
-            writer.write("'intentionally left empty");
+            writer.write(TemplateContent.COMMON_FILE.getContent());
         } catch (IOException e) {
             // do nothing
             logger().error("Exception occurred: {}", e.getMessage());
@@ -72,6 +70,31 @@ class FileUtils  implements Loggable {
             logger().error("Exception occurred: {}", e.getMessage());
         }
     }
+
+
+    StringBuilder writeInterfaceFile(final Template template, String currentPath, Context context) {
+        StringBuilder exampleFile = new StringBuilder();
+        String applicationName = (String) context.getVariable("applicationName");
+        String serviceName = (String) context.getVariable("serviceName");
+        String interfaceName = (String) context.getVariable("interfaceName");
+        try (Writer writer = new FileWriter(currentPath + interfaceName + FILE_TYPE_IUML.getValue())) {
+
+            String pEx = nameService.getServicePathPrefix(serviceName);
+            exampleFile.append(INCLUDE.getContent()).append(pEx).append(interfaceName).append(FILE_TYPE_IUML.getValue()).append(EOL.getContent());
+            String serviceCall = nameService.getServiceCallName(applicationName, serviceName);
+            exampleFile.append(nameService.getReplaceUnwantedCharacters(serviceCall, false))
+                    .append("_")
+                    .append(nameService.getReplaceUnwantedCharacters(interfaceName, false))
+                    .append("()").append(EOL.getContent()).append(EOL.getContent());
+            logger().info("Write {}_{} to {}", serviceCall, interfaceName, currentPath + interfaceName + FILE_TYPE_IUML.getValue());
+            writer.write(templateEngine.process(template.getTemplateURL(), context));
+        } catch (IOException io) {
+            // do nothing
+            logger().error("exception: {}", io.getMessage());
+        }
+        return exampleFile;
+    }
+
 
     void createParentDir(String fullPath) {
         try {
@@ -89,6 +112,20 @@ class FileUtils  implements Loggable {
             dirsCreate.add(applicationName);
         }
         return path;
+    }
+
+    String getRelativeCommonPath(String serviceName) {
+        StringBuilder cp = new StringBuilder();
+        if (serviceName.contains(Constants.SLASH.getValue())) {
+            for (int i = 0; i <= serviceName.split(Constants.SLASH.getValue()).length; i++) {
+                logger().warn(">> Servicename: {}, {}", i, serviceName);
+                cp.append(DIR_UP.getValue());
+            }
+        } else {
+            cp.append(DIR_UP.getValue())
+                    .append(DIR_UP.getValue());
+        }
+        return cp.toString();
     }
 
     private static class YamlPredicate {

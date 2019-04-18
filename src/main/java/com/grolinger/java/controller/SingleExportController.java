@@ -17,7 +17,6 @@ import java.util.*;
 
 @Controller
 public class SingleExportController {
-    private TreeNode<String> components = new TreeNode<>("Service");
     private Map<String, String> aliasMapper = new HashMap<>();
 
     private SingleExportController() {
@@ -46,55 +45,8 @@ public class SingleExportController {
         return "componentExport";
     }
 
-    @GetMapping("/start")
-    public String files(Model model) throws IOException {
 
-        List<Path> paths = new LinkedList<>();
-        Files.walk(Paths.get("M:\\Documents\\_Dokumente\\UMLServiceDefinitions\\Service"))
-                .filter(Files::isRegularFile)
-                .filter(it -> it.toString().endsWith(".iuml"))
-                .forEach(paths::add);
-
-        for (Path path : paths) {
-            String[] file = splitFilename(path);
-            String previousNode = "";
-            for (String currentNode: file) {
-                if (currentNode.endsWith(".iuml")) {
-                    //if(components.contains(currentNode))
-                        break;
-                }
-
-            }
-            //getList(previousNode).add(file.toString());
-        }
-
-
-        // model.addAttribute("paths", paths.stream().toArray(String[]::new));
-        model.addAttribute("files", components);
-
-        return "start";
-    }
-
-    @PostMapping("/generate")
-    public String generate(@ModelAttribute("command") FormCommand command, Model model) {
-        System.out.println(">>>>>>>>>>>" + command.multiCheckboxSelectedValues);
-        return "generate";
-
-    }
-
-    private String[] splitFilename(Path filename) {
-        return filename.toString().replace("M:\\Documents\\_Dokumente\\UMLServiceDefinitions\\Service\\", "").split("\\\\");
-    }
-
-    private List<String> getList(String newComponent) {
-        //if (components.containsKey(newComponent)) {
-        //} else {
-        //    components.put(newComponent, new LinkedList<>());
-        //}
-        return new LinkedList<>();//components.get(newComponent);
-    }
-
-    private String getReplaceUnwantedCharacters(String name, boolean replaceDotsOnly) {
+    private String getReplaceUnwantedCharacters(final String name, final boolean replaceDotsOnly) {
         String newName = name.replace('.', '_');
         if (!replaceDotsOnly)
             newName = newName.replace('/', '_');

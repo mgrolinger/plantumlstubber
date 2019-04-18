@@ -8,12 +8,18 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
-class ContextSpec {
-    private static final String SERVICE_NAME = "serviceName";
-    private static final String EMPTY = "EMPTY";
-    private static final String REST = "REST";
+import static com.grolinger.java.controller.Constants.EMPTY;
 
-    static OrderPrioBuilder Builder() {
+class ContextSpec {
+    private static final String APPLICATION_NAME = "applicationName";
+    private static final String SERVICE_NAME = "serviceName";
+    private static final String REST = "REST";
+    private static final String IS_ROOT_SERVICE = "isRootService";
+    private static final String IS_REST_SERVICE = "isRestService";
+    private static final String APPLICATION_NAME_SHORT = "applicationNameShort";
+    private static final String INTERFACE_NAME = "interfaceName";
+
+    static OrderPrioBuilder builder() {
         return new ContextBuilderImpl(new Context());
     }
 
@@ -45,7 +51,6 @@ class ContextSpec {
     }
 
     private static class ContextBuilderImpl implements ContextBuilder, OrderPrioBuilder, ColorBuilder, IntegrationTypeBuilder, ApplicationNameBuilder, Loggable {
-        private static final String APPLICATION_NAME = "applicationName";
         private Context context;
         private Map<String, String> aliasMapper = new HashMap<>();
 
@@ -56,6 +61,8 @@ class ContextSpec {
         ContextBuilderImpl(Context context) {
             this.context = context;
             context.setVariable("dateCreated", LocalDate.now());
+            // set the default to true to prevent NullPointer, so called root services have only the applicationName and interfaceName set
+            context.setVariable(IS_ROOT_SERVICE, true);
         }
 
         @Override
@@ -80,34 +87,38 @@ class ContextSpec {
             }
             context.setVariable("componentIntegrationType", formattedIntegrationType);
             if (!StringUtils.isEmpty(integrationType)) {
-                context.setVariable("isRestService", integrationType.toUpperCase().contains(REST));
+                context.setVariable(IS_REST_SERVICE, integrationType.toUpperCase().contains(REST));
             }
             return this;
         }
 
         @Override
         public ContextBuilder withApplicationName(final String applicationName) {
-            context.setVariable("applicationName", applicationName);
+            context.setVariable(APPLICATION_NAME, applicationName);
             String applicationNameShort = aliasMapper.getOrDefault(applicationName.toLowerCase(), applicationName.toLowerCase());
-            context.setVariable("applicationNameShort", applicationNameShort);
+            context.setVariable(APPLICATION_NAME_SHORT, applicationNameShort);
             return this;
         }
 
         @Override
         public ContextBuilder withServiceName(final String serviceName) {
-            context.setVariable(SERVICE_NAME, StringUtils.isEmpty(serviceName) ? EMPTY : serviceName);
-            context.setVariable("isRootService", StringUtils.isEmpty(serviceName) || EMPTY.equalsIgnoreCase(serviceName));
+            if (StringUtils.isEmpty(serviceName) || EMPTY.getValue().equalsIgnoreCase(serviceName)) {
+                context.setVariable(IS_ROOT_SERVICE, true);
+            } else {
+                context.setVariable(SERVICE_NAME, serviceName);
+                context.setVariable(IS_ROOT_SERVICE, false);
+            }
             return this;
         }
 
         @Override
         public ContextBuilder withInterfaceName(final String interfaceName) {
-            context.setVariable("interfaceName", interfaceName);
+            context.setVariable(INTERFACE_NAME, interfaceName);
             String applicationName = (String) context.getVariable(APPLICATION_NAME);
             String serviceName = (String) context.getVariable(SERVICE_NAME);
-//FIXME            context.setVariable("COMPLETE_INTERFACE_PATH", StringUtils.capitalize(applicationName) + (isRoot ? "" : capitalizePathParts(serviceName)) + StringUtils.capitalize(interfaceName) + "Int");
-//FIXME            context.setVariable("API_CREATED", applicationName.toUpperCase() + "_API" + (isRoot ? "" : "_" + capitalizePathParts(serviceName).toUpperCase()) + "_" + interfaceName.toUpperCase() + "_CREATED");
-
+            boolean isRoot = (boolean) context.getVariable(IS_ROOT_SERVICE);
+            context.setVariable("COMPLETE_INTERFACE_PATH", StringUtils.capitalize(applicationName) + (isRoot ? "" : capitalizePathParts(serviceName)) + StringUtils.capitalize(interfaceName) + "Int");
+            context.setVariable("API_CREATED", applicationName.toUpperCase() + "_API" + (isRoot ? "" : "_" + serviceName.toUpperCase()) + "_" + interfaceName.toUpperCase() + "_CREATED");
             return this;
         }
 
@@ -121,5 +132,25 @@ class ContextSpec {
         public Context getContext() {
             return this.context;
         }
+        //TODO add test
+        private static String capitalizePathParts(final String pathToCapitalize) {
+            return capitalizeStringParts(capitalizeStringParts(pathToCapitalize, Constants.SLASH.getValue()), Constants.NAME_SEPARATOR.getValue());
+        }
+
+        private static String capitalizeStringParts(final String pathToCapitalize, final String splitChar) {
+            StringBuilder result = new StringBuilder();
+            if (pathToCapitalize != null) {
+                if (pathToCapitalize.contains(splitChar)) {
+                    String[] parts = pathToCapitalize.split(splitChar);
+                    for (String part : parts) {
+                        result.append(StringUtils.capitalize(part.replace(splitChar, "")));
+                    }
+                } else {
+                    result.append(StringUtils.capitalize(pathToCapitalize));
+                }
+            }
+            return result.toString();
+        }
+
     }
 }

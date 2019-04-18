@@ -4,11 +4,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public enum ConnectionColorMapper {
-    INTEGRATION_COLOR_CONNECTION("integration"),
+    INTEGRATION_DOMAIN_COLOR_CONNECTION("integration"),
     RESOURCE_DOMAIN_COLOR_CONNECTION("resource"),
     FINANCIAL_DOMAIN_COLOR_CONNECTION("financial"),
     CUSTOMER_DOMAIN_COLOR_CONNECTION("customer"),
-    EXTERNAL_INTERFACE_COLOR_CONNECTION("external");
+    EXTERNAL_DOMAIN_COLOR_CONNECTION("external");
 
     private static final Map<String, ConnectionColorMapper> reverseLookup = new HashMap<>();
     private final String type;
@@ -26,7 +26,7 @@ public enum ConnectionColorMapper {
     }
 
     public static ConnectionColorMapper getByType(final String type) {
-        return reverseLookup.getOrDefault(type.toLowerCase(), EXTERNAL_INTERFACE_COLOR_CONNECTION);
+        return reverseLookup.getOrDefault(type.toLowerCase(), EXTERNAL_DOMAIN_COLOR_CONNECTION);
     }
 
     public String getValue() {
