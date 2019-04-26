@@ -28,7 +28,7 @@ public class NameServiceImpl implements NameService {
 
     public String formatServiceName(final String serviceName, final boolean isRest) {
         if (StringUtils.isEmpty(serviceName) || EMPTY.getValue().equalsIgnoreCase(serviceName)) {
-            return "";
+            return DEFAULT_ROOT_SERVICE_NAME.getValue();
         } else {
             String formattedServiceName = isRest ? serviceName : StringUtils.capitalize(serviceName);
 

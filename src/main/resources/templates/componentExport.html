@@ -14,7 +14,7 @@
 !endif
 !ifndef [[${API_CREATED}]]
     !ifdef DETAILED
-        interface "[(${componentIntegrationType})]\n[[${#strings.capitalize(interfaceName)}]]" as [[${COMPLETE_INTERFACE_PATH}]] [(${colorType})]
+        interface "[(${componentIntegrationType})]\n[[${interfaceName}]]" as [[${COMPLETE_INTERFACE_PATH}]] [(${colorType})]
         [[${#strings.toLowerCase(applicationNameShort)}]] -[single,#[[${#strings.toUpperCase(connectionColor)}]]]- [[${COMPLETE_INTERFACE_PATH}]] LUPDATE([[${dateCreated}]])
     !else
         ' define application as interface endpoint for mixed detailed/non-detailed views.

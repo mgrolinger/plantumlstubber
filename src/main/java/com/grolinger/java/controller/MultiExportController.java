@@ -33,7 +33,6 @@ public class MultiExportController implements Loggable {
 
     }
 
-    @SuppressWarnings("squid:S2095")
     @GetMapping("/export/components")
     public void component(Model model) throws IOException {
         // Find all yaml files
@@ -126,15 +125,17 @@ public class MultiExportController implements Loggable {
 
     private String processServices(String basePath, String path, Set<String> dirsCreate, Services services, String applicationName, String serviceName, ContextSpec.ContextBuilder contextBuilder) throws IOException {
         boolean isRest = decisionService.isCurrentServiceARestService(services);
+        contextBuilder.withServiceName(nameService.formatServiceName(serviceName, isRest));
+        logger().info("Handle {} {} service", applicationName, serviceName);
+
         if (EMPTY.getValue().equalsIgnoreCase(serviceName)) {
             contextBuilder.withCommonPath(DIR_UP.getValue());
         } else {
-            logger().info("Handle {} {} service", applicationName, serviceName);
             serviceName = nameService.getReplaceUnwantedCharacters(serviceName, true);
             if (!dirsCreate.contains(applicationName + serviceName)) {
+                // create directory if not done yet
                 path = fileUtils.createServiceDirectory(basePath, dirsCreate, applicationName, serviceName);
             }
-            contextBuilder.withServiceName(nameService.formatServiceName(serviceName, isRest));
             contextBuilder.withCommonPath(fileUtils.getRelativeCommonPath(serviceName));
         }
         return path;
@@ -145,8 +146,6 @@ public class MultiExportController implements Loggable {
         if (interfaces == null) {
             return exampleFile;
         }
-        // Pull context to change it later with workaround
-        Context context = contextBuilder.getContext();
 
         for (String interfaceName : interfaces) {
             String currentPath = path;
@@ -159,6 +158,8 @@ public class MultiExportController implements Loggable {
             interfaceName = nameService.getReplaceUnwantedCharacters(interfaceName, false);
             //interface
             contextBuilder.withInterfaceName(interfaceName);
+            // Pull context to change it later with workaround
+            Context context = contextBuilder.getContext();
             exampleFile.append(fileUtils.writeInterfaceFile(template, currentPath, context));
         }
         return exampleFile;
