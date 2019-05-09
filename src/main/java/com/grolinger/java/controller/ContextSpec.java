@@ -5,21 +5,16 @@ import org.springframework.util.StringUtils;
 import org.thymeleaf.context.Context;
 
 import java.time.LocalDate;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.Map;
 
 import static com.grolinger.java.controller.Constants.EMPTY;
+import static com.grolinger.java.controller.ContextVariables.*;
 
-class ContextSpec {
-    private static final String APPLICATION_NAME = "applicationName";
-    private static final String SERVICE_NAME = "serviceName";
-    private static final String REST = "REST";
-    private static final String IS_ROOT_SERVICE = "isRootService";
-    private static final String IS_REST_SERVICE = "isRestService";
-    private static final String APPLICATION_NAME_SHORT = "applicationNameShort";
-    private static final String INTERFACE_NAME = "interfaceName";
+final class ContextSpec {
 
-    static OrderPrioBuilder builder() {
+
+    OrderPrioBuilder builder() {
         return new ContextBuilderImpl(new Context());
     }
 
@@ -50,32 +45,29 @@ class ContextSpec {
         Context getContext();
     }
 
-    private static class ContextBuilderImpl implements ContextBuilder, OrderPrioBuilder, ColorBuilder, IntegrationTypeBuilder, ApplicationNameBuilder, Loggable {
+    private class ContextBuilderImpl implements ContextBuilder, OrderPrioBuilder, ColorBuilder, IntegrationTypeBuilder, ApplicationNameBuilder, Loggable {
         private Context context;
-        private Map<String, String> aliasMapper = new HashMap<>();
-
-        {
-            aliasMapper.put("esb", "atlas");
-        }
+        // ToDo: Decide if we should really rely on atlas as name or esb?
+        private Map<String, String> aliasMapper = Collections.singletonMap("esb", "atlas");
 
         ContextBuilderImpl(Context context) {
             this.context = context;
-            context.setVariable("dateCreated", LocalDate.now());
+            context.setVariable(DATE_CREATED.getName(), LocalDate.now());
             // set the default to true to prevent NullPointer, so called root services have only the applicationName and interfaceName set
-            context.setVariable(IS_ROOT_SERVICE, true);
+            context.setVariable(IS_ROOT_SERVICE.getName(), true);
         }
 
         @Override
         public ColorBuilder withOrderPrio(final Integer orderWithinSequence) {
-            context.setVariable("sequenceOrderPrio", orderWithinSequence);
+            context.setVariable(SEQUENCE_PARTICIPANT_ORDER.getName(), orderWithinSequence);
             return this;
         }
 
         @Override
         public IntegrationTypeBuilder withColorName(final DomainColorMapper color) {
-            context.setVariable("colorType", color.getStereotype());
-            context.setVariable("colorName", color.getValue());
-            context.setVariable("connectionColor", ConnectionColorMapper.getByType(color.getValue()));
+            context.setVariable(COLOR_TYPE.getName(), color.getStereotype());
+            context.setVariable(COLOR_NAME.getName(), color.getValue());
+            context.setVariable(CONNECTION_COLOR.getName(), ConnectionColorMapper.getByType(color.getValue()));
             return this;
         }
 
@@ -85,46 +77,46 @@ class ContextSpec {
             if (!StringUtils.isEmpty(integrationType)) {
                 formattedIntegrationType = "INTEGRATION_TYPE(" + integrationType + ")";
             }
-            context.setVariable("componentIntegrationType", formattedIntegrationType);
+            context.setVariable(COMPONENT_INTEGRATION_TYPE.getName(), formattedIntegrationType);
             if (!StringUtils.isEmpty(integrationType)) {
-                context.setVariable(IS_REST_SERVICE, integrationType.toUpperCase().contains(REST));
+                context.setVariable(IS_REST_SERVICE.getName(), integrationType.toUpperCase().contains(REST.getName()));
             }
             return this;
         }
 
         @Override
         public ContextBuilder withApplicationName(final String applicationName) {
-            context.setVariable(APPLICATION_NAME, applicationName);
+            context.setVariable(APPLICATION_NAME.getName(), applicationName);
             String applicationNameShort = aliasMapper.getOrDefault(applicationName.toLowerCase(), applicationName.toLowerCase());
-            context.setVariable(APPLICATION_NAME_SHORT, applicationNameShort);
+            context.setVariable(APPLICATION_NAME_SHORT.getName(), applicationNameShort);
             return this;
         }
 
         @Override
         public ContextBuilder withServiceName(final String serviceName) {
             if (StringUtils.isEmpty(serviceName) || EMPTY.getValue().equalsIgnoreCase(serviceName)) {
-                context.setVariable(IS_ROOT_SERVICE, true);
+                context.setVariable(IS_ROOT_SERVICE.getName(), true);
             } else {
-                context.setVariable(SERVICE_NAME, serviceName);
-                context.setVariable(IS_ROOT_SERVICE, false);
+                context.setVariable(SERVICE_NAME.getName(), serviceName);
+                context.setVariable(IS_ROOT_SERVICE.getName(), false);
             }
             return this;
         }
 
         @Override
         public ContextBuilder withInterfaceName(final String interfaceName) {
-            context.setVariable(INTERFACE_NAME, interfaceName);
-            String applicationName = (String) context.getVariable(APPLICATION_NAME);
-            String serviceName = (String) context.getVariable(SERVICE_NAME);
-            boolean isRoot = (boolean) context.getVariable(IS_ROOT_SERVICE);
-            context.setVariable("COMPLETE_INTERFACE_PATH", StringUtils.capitalize(applicationName) + (isRoot ? "" : capitalizePathParts(serviceName)) + StringUtils.capitalize(interfaceName) + "Int");
-            context.setVariable("API_CREATED", applicationName.toUpperCase() + "_API" + (isRoot ? "" : "_" + serviceName.toUpperCase()) + "_" + interfaceName.toUpperCase() + "_CREATED");
+            context.setVariable(INTERFACE_NAME.getName(), interfaceName);
+            String applicationName = (String) context.getVariable(APPLICATION_NAME.getName());
+            String serviceName = (String) context.getVariable(SERVICE_NAME.getName());
+            boolean isRoot = (boolean) context.getVariable(IS_ROOT_SERVICE.getName());
+            context.setVariable(COMPLETE_API_PATH.getName(), StringUtils.capitalize(applicationName) + (isRoot ? "" : capitalizePathParts(serviceName)) + StringUtils.capitalize(interfaceName) + "Int");
+            context.setVariable(API_CREATED.getName(), applicationName.toUpperCase() + "_API" + (isRoot ? "" : "_" + serviceName.toUpperCase().replaceAll(Constants.SLASH.getValue(),Constants.NAME_SEPARATOR.getValue()) + "_" + interfaceName.toUpperCase() + "_CREATED"));
             return this;
         }
 
         @Override
         public ContextBuilder withCommonPath(final String commonPath) {
-            context.setVariable("commonPath", commonPath);
+            context.setVariable(PATH_TO_COMMON_FILE.getName(), commonPath);
             return this;
         }
 
@@ -132,18 +124,19 @@ class ContextSpec {
         public Context getContext() {
             return this.context;
         }
+
         //TODO add test
-        private static String capitalizePathParts(final String pathToCapitalize) {
+        private String capitalizePathParts(final String pathToCapitalize) {
             return capitalizeStringParts(capitalizeStringParts(pathToCapitalize, Constants.SLASH.getValue()), Constants.NAME_SEPARATOR.getValue());
         }
 
-        private static String capitalizeStringParts(final String pathToCapitalize, final String splitChar) {
+        private String capitalizeStringParts(final String pathToCapitalize, final String splitChar) {
             StringBuilder result = new StringBuilder();
-            if (pathToCapitalize != null) {
+            if (!StringUtils.isEmpty(pathToCapitalize)) {
                 if (pathToCapitalize.contains(splitChar)) {
                     String[] parts = pathToCapitalize.split(splitChar);
                     for (String part : parts) {
-                        result.append(StringUtils.capitalize(part.replace(splitChar, "")));
+                        result.append(StringUtils.capitalize(part.replaceAll(splitChar, "")));
                     }
                 } else {
                     result.append(StringUtils.capitalize(pathToCapitalize));

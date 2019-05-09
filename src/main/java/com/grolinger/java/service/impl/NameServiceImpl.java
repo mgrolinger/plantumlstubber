@@ -10,10 +10,13 @@ import static com.grolinger.java.controller.Constants.*;
 @Component
 public class NameServiceImpl implements NameService {
 
-    public String getReplaceUnwantedCharacters(final String name, final boolean replaceDotsOnly) {
-        String newName = name.replace(DOT_SEPARATOR.getFirstChar(), NAME_SEPARATOR.getFirstChar());
-        if (!replaceDotsOnly) {
-            newName = newName.replace(PATH_SEPARATOR.getFirstChar(), NAME_SEPARATOR.getFirstChar());
+    public String replaceUnwantedCharacters(final String name, final boolean replaceDotsOnly) {
+        String newName = "";
+        if (!StringUtils.isEmpty(name)) {
+            newName = name.replace(DOT_SEPARATOR.getFirstChar(), NAME_SEPARATOR.getFirstChar());
+            if (!replaceDotsOnly) {
+                newName = newName.replace(PATH_SEPARATOR.getFirstChar(), NAME_SEPARATOR.getFirstChar());
+            }
         }
         return newName;
     }
@@ -33,15 +36,21 @@ public class NameServiceImpl implements NameService {
             String formattedServiceName = isRest ? serviceName : StringUtils.capitalize(serviceName);
 
             if (serviceName.contains(Constants.SLASH.getValue())) {
-                return getReplaceUnwantedCharacters(formattedServiceName, false);
+                return replaceUnwantedCharacters(formattedServiceName, false);
             } else {
                 return formattedServiceName;
             }
         }
     }
 
-    public String getServicePathPrefix(final String serviceName) {
-        return (Constants.EMPTY.getValue().equalsIgnoreCase(serviceName)) ? DEFAULT_ROOT_SERVICE_NAME.getValue() : serviceName + Constants.PATH_SEPARATOR.getValue();
+    public String getServiceNameSuffix(final String serviceName) {
+        String result;
+        if (StringUtils.isEmpty(serviceName)) {
+            result = DEFAULT_ROOT_SERVICE_NAME.getValue();
+        } else {
+            result = (Constants.EMPTY.getValue().equalsIgnoreCase(serviceName)) ? DEFAULT_ROOT_SERVICE_NAME.getValue() : serviceName + Constants.PATH_SEPARATOR.getValue();
+        }
+        return result;
     }
 
 

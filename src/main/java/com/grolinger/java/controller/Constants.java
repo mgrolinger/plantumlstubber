@@ -21,6 +21,6 @@ public enum Constants {
     }
 
     public char getFirstChar() {
-        return this.value.charAt(0);
+        return this.value.length() > 0 ? this.value.charAt(0) : Character.MIN_VALUE;
     }
 }

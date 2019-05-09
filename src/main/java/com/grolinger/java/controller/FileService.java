@@ -25,36 +25,41 @@ import java.util.stream.Collectors;
 
 import static com.grolinger.java.controller.Constants.DIR_UP;
 import static com.grolinger.java.controller.Constants.FILE_TYPE_IUML;
+import static com.grolinger.java.controller.ContextVariables.*;
 import static com.grolinger.java.controller.TemplateContent.EOL;
 import static com.grolinger.java.controller.TemplateContent.INCLUDE;
 
 @Component
-class FileUtils implements Loggable {
+class FileService implements Loggable {
     private static final String SLASH = "/";
     private static final String PATH_SEPARATOR = SLASH;
+    private static final String COMMON_PATH = "common/";
+    private static final String COMMON_FILE = "common.iuml";
+    private static final String EXAMPLE_FILE_SUFFIX = "_example.puml";
     private final SpringTemplateEngine templateEngine;
     private final NameService nameService;
 
 
     @Autowired
-    private FileUtils(SpringTemplateEngine templateEngine, NameService nameService) {
+    private FileService(SpringTemplateEngine templateEngine, NameService nameService) {
         this.templateEngine = templateEngine;
         this.nameService = nameService;
     }
 
 
-    String createServiceDirectory(String basepath, Set<String> dirsCreate, String applicationName, String serviceName) throws IOException {
+    String createServiceDirectory(String basePath, Set<String> dirsCreate, String applicationName, String serviceName) throws IOException {
         String path;
-        path = basepath + applicationName + PATH_SEPARATOR + serviceName + PATH_SEPARATOR;
+        path = basePath + applicationName + PATH_SEPARATOR + serviceName + PATH_SEPARATOR;
         Files.createDirectories(Paths.get(path));
         dirsCreate.add(applicationName + serviceName);
         return path;
     }
 
-    void writeEmptyCommonFile(final String basepath) throws IOException {
+    void writeEmptyCommonFile(final String basePath) throws IOException {
+        ;
         //write a pseudo common
-        Files.createDirectories(Paths.get(basepath + "common/"));
-        try (Writer writer = new FileWriter(basepath + "common/common.iuml")) {
+        Files.createDirectories(Paths.get(basePath + COMMON_PATH));
+        try (Writer writer = new FileWriter(basePath + COMMON_PATH + COMMON_FILE)) {
             writer.write(TemplateContent.COMMON_FILE.getContent());
         } catch (IOException e) {
             // do nothing
@@ -63,7 +68,7 @@ class FileUtils implements Loggable {
     }
 
     void writeExampleFile(String basepath, String applicationName, StringBuilder exampleFile) {
-        try (Writer writer = new FileWriter(basepath + applicationName + PATH_SEPARATOR + applicationName + "_example.puml")) {
+        try (Writer writer = new FileWriter(basepath + applicationName + PATH_SEPARATOR + applicationName + EXAMPLE_FILE_SUFFIX)) {
             writer.write(exampleFile.toString());
         } catch (IOException e) {
             // do nothing
@@ -74,19 +79,20 @@ class FileUtils implements Loggable {
 
     StringBuilder writeInterfaceFile(final Template template, String currentPath, Context context) {
         StringBuilder exampleFile = new StringBuilder();
-        String applicationName = (String) context.getVariable("applicationName");
-        String serviceName = (String) context.getVariable("serviceName");
-        String interfaceName = (String) context.getVariable("interfaceName");
+        String applicationName = (String) context.getVariable(APPLICATION_NAME.getName());
+        String serviceName = (String) context.getVariable(SERVICE_NAME.getName());
+        String interfaceName = (String) context.getVariable(INTERFACE_NAME.getName());
         try (Writer writer = new FileWriter(currentPath + interfaceName + FILE_TYPE_IUML.getValue())) {
 
-            String pEx = nameService.getServicePathPrefix(serviceName);
+            String pEx = nameService.getServiceNameSuffix(serviceName);
             exampleFile.append(INCLUDE.getContent()).append(pEx).append(interfaceName).append(FILE_TYPE_IUML.getValue()).append(EOL.getContent());
             String serviceCall = nameService.getServiceCallName(applicationName, serviceName);
-            exampleFile.append(nameService.getReplaceUnwantedCharacters(serviceCall, false))
-                    .append("_")
-                    .append(nameService.getReplaceUnwantedCharacters(interfaceName, false))
-                    .append("()").append(EOL.getContent()).append(EOL.getContent());
-            logger().info("Write {}_{} to {}", serviceCall, interfaceName, currentPath + interfaceName + FILE_TYPE_IUML.getValue());
+            exampleFile.append(nameService.replaceUnwantedCharacters(serviceCall, false))
+                    .append(Constants.NAME_SEPARATOR)
+                    .append(nameService.replaceUnwantedCharacters(interfaceName, false))
+                    .append("()")
+                    .append(EOL.getContent()).append(EOL.getContent());
+            logger().info("Write {}_{} to {}{}{}", serviceCall, interfaceName, currentPath, interfaceName, FILE_TYPE_IUML.getValue());
             writer.write(templateEngine.process(template.getTemplateURL(), context));
         } catch (IOException io) {
             // do nothing
@@ -105,9 +111,9 @@ class FileUtils implements Loggable {
         }
     }
 
-    String createDirectory(String basepath, String path, Set<String> dirsCreate, String applicationName) throws IOException {
+    String createDirectory(String basePath, String path, Set<String> dirsCreate, String applicationName) throws IOException {
         if (!dirsCreate.contains(applicationName)) {
-            path = basepath + applicationName + PATH_SEPARATOR;
+            path = basePath + applicationName + PATH_SEPARATOR;
             Files.createDirectories(Paths.get(path));
             dirsCreate.add(applicationName);
         }
@@ -150,7 +156,7 @@ class FileUtils implements Loggable {
     }
 
     @SuppressWarnings("squid:S2629")
-    List<Services> mapYamls(Path path) {
+    private List<Services> mapYamls(Path path) {
         List<Services> servicesList = new LinkedList<>();
         ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
         try {
