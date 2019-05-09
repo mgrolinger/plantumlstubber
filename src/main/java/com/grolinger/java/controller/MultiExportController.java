@@ -23,7 +23,7 @@ public class MultiExportController implements Loggable {
     private final FileService fileService;
     private NameService nameService;
     private DecisionService decisionService;
-    private static final String GLOBAL_FILE_EXPORT_PATH="./target/";
+    private static final String GLOBAL_FILE_EXPORT_PATH = "./target/";
 
 
     @Autowired
@@ -40,7 +40,7 @@ public class MultiExportController implements Loggable {
         List<Services> applicationList = new LinkedList<>(fileService.findAllYamlFiles());
 
         // Iterate over yaml files
-        String basepath = GLOBAL_FILE_EXPORT_PATH+"Component/";
+        String basepath = GLOBAL_FILE_EXPORT_PATH + "Component/";
         String path = "";
         Set<String> dirsCreate = new HashSet<>();
 
@@ -61,11 +61,13 @@ public class MultiExportController implements Loggable {
             for (Map.Entry entry : services.getServices().entrySet()) {
                 String serviceName = (String) entry.getKey();
                 logger().warn("Servicename: {}_{}", applicationName, serviceName);
+
                 ContextSpec.ContextBuilder contextBuilder = new ContextSpec().builder()
-                        .withOrderPrio(Integer.parseInt(services.getOrderPrio()))
                         .withColorName(DomainColorMapper.getByType(services.getColor()))
                         .withIntegrationType(services.getIntegrationType())
-                        .withApplicationName(services.getApplication());
+                        .withApplicationName(services.getApplication())
+                        .withOrderPrio(Integer.parseInt(services.getOrderPrio()));
+
                 path = processServices(basepath, path, dirsCreate, services, applicationName, serviceName, contextBuilder);
 
                 String[] interfaces = (String[]) entry.getValue();
@@ -83,7 +85,7 @@ public class MultiExportController implements Loggable {
         List<Services> applicationList = new LinkedList<>(fileService.findAllYamlFiles());
 
         // Iterate over yaml files
-        String basepath = GLOBAL_FILE_EXPORT_PATH+"Sequence/";
+        String basepath = GLOBAL_FILE_EXPORT_PATH + "Sequence/";
         String path = "";
         Set<String> dirsCreate = new HashSet<>();
 
@@ -104,10 +106,10 @@ public class MultiExportController implements Loggable {
             path = fileService.createDirectory(basepath, path, dirsCreate, applicationName);
 
             ContextSpec.ContextBuilder contextBuilder = new ContextSpec().builder()
-                    .withOrderPrio(Integer.parseInt(services.getOrderPrio()))
                     .withColorName(DomainColorMapper.getByType(services.getColor()))
                     .withIntegrationType(services.getIntegrationType())
-                    .withApplicationName(services.getApplication());
+                    .withApplicationName(services.getApplication())
+                    .withOrderPrio(Integer.parseInt(services.getOrderPrio()));
 
             for (Map.Entry entry : services.getServices().entrySet()) {
                 String serviceName = (String) entry.getKey();

@@ -14,8 +14,6 @@ public class ContextSpecTest {
 
     @Test
     public void testBuilder() {
-        ContextSpec.OrderPrioBuilder cut = new ContextSpec().builder();
-        assertThat(cut).isNotNull();
 
         final String applicationName = "testApplication";
         final String serviceName = "testServiceName/withSeparator";
@@ -25,12 +23,14 @@ public class ContextSpecTest {
         final String interfaceName = "testInterfaceName";
         final String commonPath = "../testCommonPath";
 
-        Context result = cut.withOrderPrio(1).withColorName(DomainColorMapper.getByType(colorName))
+        Context result = new ContextSpec().builder().withColorName(DomainColorMapper.getByType(colorName))
                 .withIntegrationType(integrationType)
                 .withApplicationName(applicationName)
                 .withPreformattedServiceName(serviceName)
                 .withInterfaceName(interfaceName)
-                .withCommonPath(commonPath).getContext();
+                .withCommonPath(commonPath)
+                .withOrderPrio(1)
+                .getContext();
         // FIXME
         assertThat(result.getVariable(DATE_CREATED.getName())).isEqualTo(LocalDate.now());
         assertThat(result.getVariable(COLOR_NAME.getName())).isEqualTo("integration");
@@ -45,6 +45,7 @@ public class ContextSpecTest {
         assertThat(result.getVariable(INTERFACE_NAME.getName())).isEqualTo(interfaceName);
         assertThat(result.getVariable(SEQUENCE_PARTICIPANT_ORDER.getName())).isEqualTo(1);
         assertThat(result.getVariable(PATH_TO_COMMON_FILE.getName())).isEqualTo(commonPath);
+        assertThat(result.getVariable(SEQUENCE_PARTICIPANT_ORDER.getName())).isEqualTo(1);
         assertThat(result.getVariable(COMPLETE_INTERFACE_NAME.getName())).isEqualTo(StringUtils.capitalize(applicationName) + serviceNameAfterConversion + StringUtils.capitalize(interfaceName) + "Int");
         assertThat(result.getVariable(API_CREATED.getName())).isEqualTo((applicationName + "_API_" + serviceName.replace("/", "_") + "_" + interfaceName + "_CREATED").toUpperCase());
 

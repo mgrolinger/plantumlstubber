@@ -14,13 +14,10 @@ import static com.grolinger.java.controller.ContextVariables.*;
 final class ContextSpec {
 
 
-    OrderPrioBuilder builder() {
+    ColorBuilder builder() {
         return new ContextBuilderImpl(new Context());
     }
 
-    interface OrderPrioBuilder {
-        ColorBuilder withOrderPrio(final Integer orderNumber);
-    }
 
     interface ColorBuilder {
         IntegrationTypeBuilder withColorName(final DomainColorMapper colorName);
@@ -35,6 +32,7 @@ final class ContextSpec {
     }
 
     interface ContextBuilder {
+        ContextBuilder withOrderPrio(final Integer orderNumber);
 
         ContextBuilder withPreformattedServiceName(final String serviceName);
 
@@ -45,7 +43,7 @@ final class ContextSpec {
         Context getContext();
     }
 
-    private class ContextBuilderImpl implements ContextBuilder, OrderPrioBuilder, ColorBuilder, IntegrationTypeBuilder, ApplicationNameBuilder, Loggable {
+    private class ContextBuilderImpl implements ContextBuilder, ColorBuilder, IntegrationTypeBuilder, ApplicationNameBuilder, Loggable {
         private Context context;
         // ToDo: Decide if we should really rely on atlas as name or esb?
         private Map<String, String> aliasMapper = Collections.singletonMap("esb", "atlas");
@@ -57,14 +55,6 @@ final class ContextSpec {
             context.setVariable(IS_ROOT_SERVICE.getName(), true);
             // default is the same directory
             context.setVariable(PATH_TO_COMMON_FILE.getName(), "");
-        }
-
-        @Override
-        public ColorBuilder withOrderPrio(final Integer orderWithinSequence) {
-            if(orderWithinSequence != null) {
-                context.setVariable(SEQUENCE_PARTICIPANT_ORDER.getName(), orderWithinSequence);
-            }
-            return this;
         }
 
         @Override
@@ -115,6 +105,14 @@ final class ContextSpec {
             boolean isRoot = (boolean) context.getVariable(IS_ROOT_SERVICE.getName());
             context.setVariable(COMPLETE_INTERFACE_NAME.getName(), StringUtils.capitalize(applicationName) + (isRoot ? "" : capitalizePathParts(serviceName)) + StringUtils.capitalize(interfaceName.replaceAll(Constants.NAME_SEPARATOR.getValue(), "")) + "Int");
             context.setVariable(API_CREATED.getName(), applicationName.toUpperCase() + "_API" + (isRoot ? "" : "_" + serviceName.toUpperCase().replaceAll(Constants.SLASH.getValue(), Constants.NAME_SEPARATOR.getValue()) + "_" + interfaceName.toUpperCase() + "_CREATED"));
+            return this;
+        }
+
+        @Override
+        public ContextBuilder withOrderPrio(final Integer orderWithinSequence) {
+            if (orderWithinSequence != null) {
+                context.setVariable(SEQUENCE_PARTICIPANT_ORDER.getName(), orderWithinSequence);
+            }
             return this;
         }
 

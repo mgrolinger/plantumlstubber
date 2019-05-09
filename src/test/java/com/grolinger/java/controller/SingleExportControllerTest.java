@@ -45,6 +45,7 @@ public class SingleExportControllerTest {
 
         when(decisionService.isCurrentServiceARestService(anyString())).thenReturn(false);
         when(nameService.formatServiceName(anyString(), eq(false))).thenReturn(serviceNameAfterConversion);
+        when(nameService.replaceUnwantedCharacters(anyString(), eq(false))).thenReturn(interfaceName);
 
         cut.prepareModel(model, applicationName, serviceName, interfaceName, DomainColorMapper.EXTERNAL_DOMAIN_COLOR, integrationType, 1);
         Map<String, Object> modelMap = model.asMap();

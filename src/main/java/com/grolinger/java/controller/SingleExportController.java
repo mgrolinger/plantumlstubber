@@ -64,16 +64,17 @@ public class SingleExportController {
      * @param orderPrio
      */
     void prepareModel(Model model, @PathVariable String applicationName, @PathVariable String serviceName, @PathVariable String interfaceName, @PathVariable DomainColorMapper colorName, @PathVariable String integrationType, @PathVariable Integer orderPrio) {
-        Context context = new ContextSpec().builder().withOrderPrio(orderPrio)
+        model.addAttribute(DATE_CREATED.getName(), LocalDate.now());
+        Context context = new ContextSpec().builder()
                 .withColorName(colorName)
                 .withIntegrationType(integrationType)
                 .withApplicationName(applicationName)
                 .withPreformattedServiceName(nameService.formatServiceName(serviceName, decisionService.isCurrentServiceARestService(integrationType)))
                 //FIXME move those service calls to the Builder
                 .withInterfaceName(nameService.replaceUnwantedCharacters(interfaceName,false))
+                .withOrderPrio(orderPrio)
                 .withCommonPath("../")
                 .getContext();
-        model.addAttribute(DATE_CREATED.getName(), LocalDate.now());
         model.addAttribute(PATH_TO_COMMON_FILE.getName(), context.getVariable(PATH_TO_COMMON_FILE.getName()));
         model.addAttribute(APPLICATION_NAME.getName(), context.getVariable(APPLICATION_NAME.getName()));
         model.addAttribute(APPLICATION_NAME_SHORT.getName(), context.getVariable(APPLICATION_NAME_SHORT.getName()));
