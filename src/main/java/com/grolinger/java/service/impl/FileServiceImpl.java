@@ -1,9 +1,11 @@
-package com.grolinger.java.controller;
+package com.grolinger.java.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-import com.grolinger.java.config.Loggable;
 import com.grolinger.java.config.Services;
+import com.grolinger.java.controller.Constants;
+import com.grolinger.java.controller.Template;
+import com.grolinger.java.controller.TemplateContent;
 import com.grolinger.java.service.NameService;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -30,7 +32,7 @@ import static com.grolinger.java.controller.TemplateContent.EOL;
 import static com.grolinger.java.controller.TemplateContent.INCLUDE;
 
 @Component
-class FileService implements Loggable {
+public class FileServiceImpl implements com.grolinger.java.service.FileService {
     private static final String SLASH = "/";
     private static final String PATH_SEPARATOR = SLASH;
     private static final String COMMON_PATH = "common/";
@@ -41,13 +43,14 @@ class FileService implements Loggable {
 
 
     @Autowired
-    private FileService(SpringTemplateEngine templateEngine, NameService nameService) {
+    private FileServiceImpl(SpringTemplateEngine templateEngine, NameService nameService) {
         this.templateEngine = templateEngine;
         this.nameService = nameService;
     }
 
 
-    String createServiceDirectory(String basePath, Set<String> dirsCreate, String applicationName, String serviceName) throws IOException {
+    @Override
+    public String createServiceDirectory(final String basePath, Set<String> dirsCreate, final String applicationName, final String serviceName) throws IOException {
         String path;
         path = basePath + applicationName + PATH_SEPARATOR + serviceName + PATH_SEPARATOR;
         Files.createDirectories(Paths.get(path));
@@ -55,8 +58,8 @@ class FileService implements Loggable {
         return path;
     }
 
-    void writeEmptyCommonFile(final String basePath) throws IOException {
-        ;
+    @Override
+    public void writeEmptyCommonFile(final String basePath) throws IOException {
         //write a pseudo common
         Files.createDirectories(Paths.get(basePath + COMMON_PATH));
         try (Writer writer = new FileWriter(basePath + COMMON_PATH + COMMON_FILE)) {
@@ -67,8 +70,9 @@ class FileService implements Loggable {
         }
     }
 
-    void writeExampleFile(String basepath, String applicationName, StringBuilder exampleFile) {
-        try (Writer writer = new FileWriter(basepath + applicationName + PATH_SEPARATOR + applicationName + EXAMPLE_FILE_SUFFIX)) {
+    @Override
+    public void writeExampleFile(final String basePath, final String applicationName, final StringBuilder exampleFile) {
+        try (Writer writer = new FileWriter(basePath + applicationName + PATH_SEPARATOR + applicationName + EXAMPLE_FILE_SUFFIX)) {
             writer.write(exampleFile.toString());
         } catch (IOException e) {
             // do nothing
@@ -76,8 +80,8 @@ class FileService implements Loggable {
         }
     }
 
-
-    StringBuilder writeInterfaceFile(final Template template, String currentPath, Context context) {
+    @Override
+    public StringBuilder writeInterfaceFile(final Template template, final String currentPath, final Context context) {
         StringBuilder exampleFile = new StringBuilder();
         String applicationName = (String) context.getVariable(APPLICATION_NAME.getName());
         String serviceName = (String) context.getVariable(SERVICE_NAME.getName());
@@ -101,8 +105,8 @@ class FileService implements Loggable {
         return exampleFile;
     }
 
-
-    void createParentDir(String fullPath) {
+    @Override
+    public void createParentDir(final String fullPath) {
         try {
             Path pathToFile = Paths.get(fullPath);
             Files.createDirectories(pathToFile.getParent());
@@ -111,16 +115,22 @@ class FileService implements Loggable {
         }
     }
 
-    String createDirectory(String basePath, String path, Set<String> dirsCreate, String applicationName) throws IOException {
+    @Override
+    public String createDirectory(final String basePath, String path, Set<String> dirsCreate, final String applicationName) {
         if (!dirsCreate.contains(applicationName)) {
             path = basePath + applicationName + PATH_SEPARATOR;
-            Files.createDirectories(Paths.get(path));
-            dirsCreate.add(applicationName);
+            try {
+                Files.createDirectories(Paths.get(path));
+                dirsCreate.add(applicationName);
+            } catch (IOException ioe) {
+                logger().error("Could not create directory {}{} for {}", basePath, path, applicationName);
+            }
         }
         return path;
     }
 
-    String getRelativeCommonPath(String serviceName) {
+    @Override
+    public String getRelativeCommonPath(final String serviceName) {
         StringBuilder cp = new StringBuilder();
         if (serviceName.contains(Constants.SLASH.getValue())) {
             for (int i = 0; i <= serviceName.split(Constants.SLASH.getValue()).length; i++) {
@@ -134,20 +144,19 @@ class FileService implements Loggable {
         return cp.toString();
     }
 
-    private static class YamlPredicate {
-        static boolean isYamlFile(Path path) {
-            return path.toAbsolutePath().toString().toLowerCase().contains(".yaml");
-        }
-    }
-
-    List<Services> findAllYamlFiles() throws IOException {
+    @Override
+    public List<Services> findAllYamlFiles() {
         String pathRoot = "./target/classes/";
+        List<Path> collect = new LinkedList<>();
         // TODO open file chooser for root if args given
-
-        List<Path> collect = Files.list(Paths.get(pathRoot))
-                .filter(Files::isRegularFile)
-                .filter(YamlPredicate::isYamlFile)
-                .collect(Collectors.toList());
+        try {
+            collect = Files.list(Paths.get(pathRoot))
+                    .filter(Files::isRegularFile)
+                    .filter(YamlPredicate::isYamlFile)
+                    .collect(Collectors.toList());
+        } catch (IOException ioe) {
+            logger().error("IOException {}", ioe.getMessage());
+        }
         List<Services> services = new LinkedList<>();
         for (Path filesToMap : collect) {
             services.addAll(mapYamls(filesToMap));
@@ -155,8 +164,9 @@ class FileService implements Loggable {
         return services;
     }
 
-    @SuppressWarnings("squid:S2629")
-    private List<Services> mapYamls(Path path) {
+
+    @Override
+    public List<Services> mapYamls(final Path path) {
         List<Services> servicesList = new LinkedList<>();
         ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
         try {

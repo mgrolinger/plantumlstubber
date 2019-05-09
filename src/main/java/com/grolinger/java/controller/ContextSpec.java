@@ -36,7 +36,7 @@ final class ContextSpec {
 
     interface ContextBuilder {
 
-        ContextBuilder withServiceName(final String serviceName);
+        ContextBuilder withPreformattedServiceName(final String serviceName);
 
         ContextBuilder withInterfaceName(final String interfaceName);
 
@@ -55,11 +55,15 @@ final class ContextSpec {
             context.setVariable(DATE_CREATED.getName(), LocalDate.now());
             // set the default to true to prevent NullPointer, so called root services have only the applicationName and interfaceName set
             context.setVariable(IS_ROOT_SERVICE.getName(), true);
+            // default is the same directory
+            context.setVariable(PATH_TO_COMMON_FILE.getName(), "");
         }
 
         @Override
         public ColorBuilder withOrderPrio(final Integer orderWithinSequence) {
-            context.setVariable(SEQUENCE_PARTICIPANT_ORDER.getName(), orderWithinSequence);
+            if(orderWithinSequence != null) {
+                context.setVariable(SEQUENCE_PARTICIPANT_ORDER.getName(), orderWithinSequence);
+            }
             return this;
         }
 
@@ -86,14 +90,14 @@ final class ContextSpec {
 
         @Override
         public ContextBuilder withApplicationName(final String applicationName) {
-            context.setVariable(APPLICATION_NAME.getName(), applicationName);
+            context.setVariable(APPLICATION_NAME.getName(), StringUtils.capitalize(applicationName));
             String applicationNameShort = aliasMapper.getOrDefault(applicationName.toLowerCase(), applicationName.toLowerCase());
             context.setVariable(APPLICATION_NAME_SHORT.getName(), applicationNameShort);
             return this;
         }
 
         @Override
-        public ContextBuilder withServiceName(final String serviceName) {
+        public ContextBuilder withPreformattedServiceName(final String serviceName) {
             if (StringUtils.isEmpty(serviceName) || EMPTY.getValue().equalsIgnoreCase(serviceName)) {
                 context.setVariable(IS_ROOT_SERVICE.getName(), true);
             } else {
@@ -109,8 +113,8 @@ final class ContextSpec {
             String applicationName = (String) context.getVariable(APPLICATION_NAME.getName());
             String serviceName = (String) context.getVariable(SERVICE_NAME.getName());
             boolean isRoot = (boolean) context.getVariable(IS_ROOT_SERVICE.getName());
-            context.setVariable(COMPLETE_API_PATH.getName(), StringUtils.capitalize(applicationName) + (isRoot ? "" : capitalizePathParts(serviceName)) + StringUtils.capitalize(interfaceName) + "Int");
-            context.setVariable(API_CREATED.getName(), applicationName.toUpperCase() + "_API" + (isRoot ? "" : "_" + serviceName.toUpperCase().replaceAll(Constants.SLASH.getValue(),Constants.NAME_SEPARATOR.getValue()) + "_" + interfaceName.toUpperCase() + "_CREATED"));
+            context.setVariable(COMPLETE_INTERFACE_NAME.getName(), StringUtils.capitalize(applicationName) + (isRoot ? "" : capitalizePathParts(serviceName)) + StringUtils.capitalize(interfaceName.replaceAll(Constants.NAME_SEPARATOR.getValue(), "")) + "Int");
+            context.setVariable(API_CREATED.getName(), applicationName.toUpperCase() + "_API" + (isRoot ? "" : "_" + serviceName.toUpperCase().replaceAll(Constants.SLASH.getValue(), Constants.NAME_SEPARATOR.getValue()) + "_" + interfaceName.toUpperCase() + "_CREATED"));
             return this;
         }
 

@@ -1,56 +1,54 @@
 package com.grolinger.java.controller;
 
 import com.grolinger.java.config.Service;
+import com.grolinger.java.service.DecisionService;
 import com.grolinger.java.service.NameService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.thymeleaf.context.Context;
 
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.Map;
 
 import static com.grolinger.java.controller.ContextVariables.*;
 
 @Controller
 public class SingleExportController {
-    private Map<String, String> aliasMapper = new HashMap<>();
     private final NameService nameService;
+    private final DecisionService decisionService;
 
     @Autowired
-    private SingleExportController(NameService nameService) {
-        aliasMapper.put("esb", "atlas");
-        aliasMapper.put("atlas", "esb");
+    SingleExportController(NameService nameService, DecisionService decisionService) {
         this.nameService = nameService;
+        this.decisionService = decisionService;
     }
 
     @GetMapping("/component/{applicationName}/service/{serviceName}/interface/{interfaceName}/color/{colorName}/{integrationType}")
     public String singleComponent(Model model, @PathVariable final String applicationName, @PathVariable final String serviceName, @PathVariable final String interfaceName, @PathVariable final String colorName, @PathVariable final String integrationType) {
-        prepareModel(model, applicationName, serviceName, interfaceName, colorName, integrationType, null);
+        prepareModel(model, applicationName, serviceName, interfaceName, DomainColorMapper.getByType(colorName), integrationType, null);
         return "componentExport";
     }
 
     @PostMapping(value = "/component", produces = "text/html", consumes = "application/json")
     public String singleComponent(Model model, @org.jetbrains.annotations.NotNull @RequestBody Service service) {
-        prepareModel(model, service.getApplication(), service.getServiceName(), service.getInterfaceName(), service.getColorName(), service.getColorName(), null);
+        prepareModel(model, service.getApplication(), service.getServiceName(), service.getInterfaceName(), DomainColorMapper.getByType(service.getColorName()), service.getIntegrationType(), null);
         return "componentExport";
     }
 
 
     @GetMapping("/sequence/{applicationName}/service/{serviceName}/interface/{interfaceName}/color/{colorName}/{integrationType}/order/{orderPrio}")
     public String singleSequence(Model model, @PathVariable final String applicationName, @PathVariable final String serviceName, @PathVariable final String interfaceName, @PathVariable final String colorName, @PathVariable final String integrationType, @PathVariable final int orderPrio) {
-        prepareModel(model, applicationName, serviceName, interfaceName, colorName, integrationType, orderPrio);
+        prepareModel(model, applicationName, serviceName, interfaceName, DomainColorMapper.getByType(colorName), integrationType, orderPrio);
         return "sequenceExport";
     }
 
     @PostMapping(value = "/sequence", produces = "text/html", consumes = "application/json")
     public String singleSequence(Model model, @org.jetbrains.annotations.NotNull @RequestBody Service service) {
-        prepareModel(model, service.getApplication(), service.getServiceName(), service.getInterfaceName(), service.getColorName(), service.getColorName(), null);
+        prepareModel(model, service.getApplication(), service.getServiceName(), service.getInterfaceName(), DomainColorMapper.getByType(service.getColorName()), service.getIntegrationType(), null);
         return "sequenceExport";
     }
 
@@ -65,25 +63,32 @@ public class SingleExportController {
      * @param integrationType
      * @param orderPrio
      */
-    private void prepareModel(Model model, @PathVariable String applicationName, @PathVariable String serviceName, @PathVariable String interfaceName, @PathVariable String colorName, @PathVariable String integrationType, @PathVariable Integer orderPrio) {
+    void prepareModel(Model model, @PathVariable String applicationName, @PathVariable String serviceName, @PathVariable String interfaceName, @PathVariable DomainColorMapper colorName, @PathVariable String integrationType, @PathVariable Integer orderPrio) {
+        Context context = new ContextSpec().builder().withOrderPrio(orderPrio)
+                .withColorName(colorName)
+                .withIntegrationType(integrationType)
+                .withApplicationName(applicationName)
+                .withPreformattedServiceName(nameService.formatServiceName(serviceName, decisionService.isCurrentServiceARestService(integrationType)))
+                //FIXME move those service calls to the Builder
+                .withInterfaceName(nameService.replaceUnwantedCharacters(interfaceName,false))
+                .withCommonPath("../")
+                .getContext();
         model.addAttribute(DATE_CREATED.getName(), LocalDate.now());
-        model.addAttribute(PATH_TO_COMMON_FILE.getName(), "../");
-        String applicationNameNew = nameService.replaceUnwantedCharacters(applicationName, false);
-        model.addAttribute(APPLICATION_NAME.getName(), StringUtils.capitalize(applicationNameNew));
-        String applicationNameShort = aliasMapper.getOrDefault(applicationNameNew.toLowerCase(), applicationNameNew);
-        model.addAttribute(APPLICATION_NAME_SHORT.getName(), applicationNameShort.toLowerCase());
-        model.addAttribute(SERVICE_NAME.getName(), serviceName);
-        model.addAttribute(INTERFACE_NAME.getName(), interfaceName);
-        model.addAttribute(COLOR_TYPE.getName(), DomainColorMapper.getByType(colorName).getStereotype());
-        model.addAttribute(CONNECTION_COLOR.getName(), ConnectionColorMapper.getByType(colorName));
-        model.addAttribute(COLOR_NAME.getName(), DomainColorMapper.getByType(colorName));
+        model.addAttribute(PATH_TO_COMMON_FILE.getName(), context.getVariable(PATH_TO_COMMON_FILE.getName()));
+        model.addAttribute(APPLICATION_NAME.getName(), context.getVariable(APPLICATION_NAME.getName()));
+        model.addAttribute(APPLICATION_NAME_SHORT.getName(), context.getVariable(APPLICATION_NAME_SHORT.getName()));
+        model.addAttribute(SERVICE_NAME.getName(), context.getVariable(SERVICE_NAME.getName()));
+        model.addAttribute(INTERFACE_NAME.getName(), context.getVariable(INTERFACE_NAME.getName()));
+        model.addAttribute(COLOR_TYPE.getName(), context.getVariable(COLOR_TYPE.getName()));
+        model.addAttribute(CONNECTION_COLOR.getName(), context.getVariable(CONNECTION_COLOR.getName()));
+        model.addAttribute(COLOR_NAME.getName(), context.getVariable(COLOR_NAME.getName()));
         if (orderPrio != null) {
             model.addAttribute(SEQUENCE_PARTICIPANT_ORDER.getName(), orderPrio);
         }
-        Boolean isRestService = integrationType.toUpperCase().startsWith(REST.getName());
-        model.addAttribute(IS_REST_SERVICE.getName(), isRestService);
-        model.addAttribute(COMPONENT_INTEGRATION_TYPE.getName(), "INTEGRATION_TYPE(" + integrationType + ")");
-        model.addAttribute(COMPLETE_API_PATH.getName(), StringUtils.capitalize(applicationNameNew) + StringUtils.capitalize(serviceName) + StringUtils.capitalize(interfaceName) + "Int");
-        model.addAttribute(API_CREATED.getName(), applicationName.toUpperCase() + "_API" + serviceName.toUpperCase() + Constants.NAME_SEPARATOR.getValue() + interfaceName.toUpperCase() + "_CREATED");
+        model.addAttribute(IS_ROOT_SERVICE.getName(), context.getVariable(IS_ROOT_SERVICE.getName()));
+        model.addAttribute(IS_REST_SERVICE.getName(), context.getVariable(IS_REST_SERVICE.getName()));
+        model.addAttribute(COMPONENT_INTEGRATION_TYPE.getName(), context.getVariable(COMPONENT_INTEGRATION_TYPE.getName()));
+        model.addAttribute(COMPLETE_INTERFACE_NAME.getName(), context.getVariable(COMPLETE_INTERFACE_NAME.getName()));
+        model.addAttribute(API_CREATED.getName(), context.getVariable(API_CREATED.getName()));
     }
 }

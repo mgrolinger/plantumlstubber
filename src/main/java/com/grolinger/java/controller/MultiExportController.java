@@ -3,6 +3,7 @@ package com.grolinger.java.controller;
 import com.grolinger.java.config.Loggable;
 import com.grolinger.java.config.Services;
 import com.grolinger.java.service.DecisionService;
+import com.grolinger.java.service.FileService;
 import com.grolinger.java.service.NameService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,6 +23,7 @@ public class MultiExportController implements Loggable {
     private final FileService fileService;
     private NameService nameService;
     private DecisionService decisionService;
+    private static final String GLOBAL_FILE_EXPORT_PATH="./target/";
 
 
     @Autowired
@@ -38,7 +40,7 @@ public class MultiExportController implements Loggable {
         List<Services> applicationList = new LinkedList<>(fileService.findAllYamlFiles());
 
         // Iterate over yaml files
-        String basepath = "./target/Component/";
+        String basepath = GLOBAL_FILE_EXPORT_PATH+"Component/";
         String path = "";
         Set<String> dirsCreate = new HashSet<>();
 
@@ -81,7 +83,7 @@ public class MultiExportController implements Loggable {
         List<Services> applicationList = new LinkedList<>(fileService.findAllYamlFiles());
 
         // Iterate over yaml files
-        String basepath = "./target/Sequence/";
+        String basepath = GLOBAL_FILE_EXPORT_PATH+"Sequence/";
         String path = "";
         Set<String> dirsCreate = new HashSet<>();
 
@@ -124,7 +126,7 @@ public class MultiExportController implements Loggable {
 
     private String processServices(String basePath, String path, Set<String> dirsCreate, Services services, String applicationName, String serviceName, ContextSpec.ContextBuilder contextBuilder) throws IOException {
         boolean isRest = decisionService.isCurrentServiceARestService(services);
-        contextBuilder.withServiceName(nameService.formatServiceName(serviceName, isRest));
+        contextBuilder.withPreformattedServiceName(nameService.formatServiceName(serviceName, isRest));
         logger().info("Handle {} {} service", applicationName, serviceName);
 
         if (EMPTY.getValue().equalsIgnoreCase(serviceName)) {
