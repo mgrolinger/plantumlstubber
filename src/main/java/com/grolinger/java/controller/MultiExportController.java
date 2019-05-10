@@ -2,9 +2,11 @@ package com.grolinger.java.controller;
 
 import com.grolinger.java.config.Loggable;
 import com.grolinger.java.config.Services;
+import com.grolinger.java.controller.templateModel.Template;
 import com.grolinger.java.service.DecisionService;
 import com.grolinger.java.service.FileService;
 import com.grolinger.java.service.NameService;
+import com.grolinger.java.service.mapper.DomainColorMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,8 +17,8 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
 
-import static com.grolinger.java.controller.Constants.*;
-import static com.grolinger.java.controller.TemplateContent.*;
+import static com.grolinger.java.controller.templateModel.Constants.*;
+import static com.grolinger.java.controller.templateModel.TemplateContent.*;
 
 @Controller
 public class MultiExportController implements Loggable {

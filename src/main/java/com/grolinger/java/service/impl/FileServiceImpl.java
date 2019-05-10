@@ -3,9 +3,9 @@ package com.grolinger.java.service.impl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.grolinger.java.config.Services;
-import com.grolinger.java.controller.Constants;
-import com.grolinger.java.controller.Template;
-import com.grolinger.java.controller.TemplateContent;
+import com.grolinger.java.controller.templateModel.Constants;
+import com.grolinger.java.controller.templateModel.Template;
+import com.grolinger.java.controller.templateModel.TemplateContent;
 import com.grolinger.java.service.NameService;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -25,11 +25,11 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.grolinger.java.controller.Constants.DIR_UP;
-import static com.grolinger.java.controller.Constants.FILE_TYPE_IUML;
-import static com.grolinger.java.controller.ContextVariables.*;
-import static com.grolinger.java.controller.TemplateContent.EOL;
-import static com.grolinger.java.controller.TemplateContent.INCLUDE;
+import static com.grolinger.java.controller.templateModel.Constants.DIR_UP;
+import static com.grolinger.java.controller.templateModel.Constants.FILE_TYPE_IUML;
+import static com.grolinger.java.controller.templateModel.ContextVariables.*;
+import static com.grolinger.java.controller.templateModel.TemplateContent.EOL;
+import static com.grolinger.java.controller.templateModel.TemplateContent.INCLUDE;
 
 @Component
 public class FileServiceImpl implements com.grolinger.java.service.FileService {

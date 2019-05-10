@@ -1,14 +1,16 @@
-package com.grolinger.java.controller;
+package com.grolinger.java.service.mapper;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public enum DomainColorMapper {
+    //@formatter:off
     INTEGRATION_DOMAIN_COLOR("integration", "<<integration>>"),
-    RESOURCE_DOMAIN_COLOR("resource", "<<resource>>"),
-    FINANCIAL_DOMAIN_COLOR("financial", "<<financial>>"),
-    CUSTOMER_DOMAIN_COLOR("customer", "<<customer>>"),
-    EXTERNAL_DOMAIN_COLOR("external", "<<external>>");
+    RESOURCE_DOMAIN_COLOR(   "resource",    "<<resource>>"),
+    FINANCIAL_DOMAIN_COLOR(  "financial",   "<<financial>>"),
+    CUSTOMER_DOMAIN_COLOR(   "customer",    "<<customer>>"),
+    EXTERNAL_DOMAIN_COLOR(   "external",    "<<external>>");
+    //@formatter:on
 
     private static Map<String, DomainColorMapper> reverseLookup = new HashMap<>();
     private String type;

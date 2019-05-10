@@ -1,14 +1,18 @@
-package com.grolinger.java.controller;
+package com.grolinger.java.service.mapper;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.grolinger.java.service.mapper.DomainColorMapper.*;
+
 public enum ConnectionColorMapper {
-    INTEGRATION_DOMAIN_COLOR_CONNECTION("integration"),
-    RESOURCE_DOMAIN_COLOR_CONNECTION("resource"),
-    FINANCIAL_DOMAIN_COLOR_CONNECTION("financial"),
-    CUSTOMER_DOMAIN_COLOR_CONNECTION("customer"),
-    EXTERNAL_DOMAIN_COLOR_CONNECTION("external");
+    //@formatter:off
+    CUSTOMER_DOMAIN_COLOR_CONNECTION(       CUSTOMER_DOMAIN_COLOR.getValue()),
+    EXTERNAL_DOMAIN_COLOR_CONNECTION(       EXTERNAL_DOMAIN_COLOR.getValue()),
+    FINANCIAL_DOMAIN_COLOR_CONNECTION(      FINANCIAL_DOMAIN_COLOR.getValue()),
+    INTEGRATION_DOMAIN_COLOR_CONNECTION(    INTEGRATION_DOMAIN_COLOR.getValue()),
+    RESOURCE_DOMAIN_COLOR_CONNECTION(       RESOURCE_DOMAIN_COLOR.getValue());
+    //@formatter:on
 
     private static final Map<String, ConnectionColorMapper> reverseLookup = new HashMap<>();
     private final String type;

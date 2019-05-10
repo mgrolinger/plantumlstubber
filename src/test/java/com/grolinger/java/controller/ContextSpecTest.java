@@ -1,13 +1,15 @@
 package com.grolinger.java.controller;
 
+import com.grolinger.java.service.mapper.DomainColorMapper;
 import org.springframework.util.StringUtils;
 import org.testng.annotations.Test;
 import org.thymeleaf.context.Context;
 
 import java.time.LocalDate;
 
-import static com.grolinger.java.controller.ConnectionColorMapper.INTEGRATION_DOMAIN_COLOR_CONNECTION;
-import static com.grolinger.java.controller.ContextVariables.*;
+
+import static com.grolinger.java.controller.templateModel.ContextVariables.*;
+import static com.grolinger.java.service.mapper.ConnectionColorMapper.INTEGRATION_DOMAIN_COLOR_CONNECTION;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ContextSpecTest {
@@ -31,7 +33,7 @@ public class ContextSpecTest {
                 .withCommonPath(commonPath)
                 .withOrderPrio(1)
                 .getContext();
-        // FIXME
+
         assertThat(result.getVariable(DATE_CREATED.getName())).isEqualTo(LocalDate.now());
         assertThat(result.getVariable(COLOR_NAME.getName())).isEqualTo("integration");
         assertThat(result.getVariable(COLOR_TYPE.getName())).isEqualTo("<<integration>>");

@@ -1,6 +1,6 @@
 package com.grolinger.java.service;
 
-import com.grolinger.java.controller.Constants;
+import com.grolinger.java.controller.templateModel.Constants;
 import com.grolinger.java.service.impl.NameServiceImpl;
 import org.mockito.InjectMocks;
 import org.mockito.MockitoAnnotations;

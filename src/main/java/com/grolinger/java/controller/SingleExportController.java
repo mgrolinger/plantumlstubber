@@ -3,6 +3,7 @@ package com.grolinger.java.controller;
 import com.grolinger.java.config.Service;
 import com.grolinger.java.service.DecisionService;
 import com.grolinger.java.service.NameService;
+import com.grolinger.java.service.mapper.DomainColorMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,7 +15,7 @@ import org.thymeleaf.context.Context;
 
 import java.time.LocalDate;
 
-import static com.grolinger.java.controller.ContextVariables.*;
+import static com.grolinger.java.controller.templateModel.ContextVariables.*;
 
 @Controller
 public class SingleExportController {
@@ -70,7 +71,6 @@ public class SingleExportController {
                 .withIntegrationType(integrationType)
                 .withApplicationName(applicationName)
                 .withPreformattedServiceName(nameService.formatServiceName(serviceName, decisionService.isCurrentServiceARestService(integrationType)))
-                //FIXME move those service calls to the Builder
                 .withInterfaceName(nameService.replaceUnwantedCharacters(interfaceName,false))
                 .withOrderPrio(orderPrio)
                 .withCommonPath("../")

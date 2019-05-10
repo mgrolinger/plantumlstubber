@@ -2,7 +2,7 @@ package com.grolinger.java.service;
 
 import com.grolinger.java.config.Loggable;
 import com.grolinger.java.config.Services;
-import com.grolinger.java.controller.Template;
+import com.grolinger.java.controller.templateModel.Template;
 import org.thymeleaf.context.Context;
 
 import java.io.IOException;

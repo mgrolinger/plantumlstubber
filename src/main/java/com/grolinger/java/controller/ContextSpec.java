@@ -1,6 +1,13 @@
 package com.grolinger.java.controller;
 
 import com.grolinger.java.config.Loggable;
+import com.grolinger.java.controller.templateModel.Constants;
+import com.grolinger.java.service.DecisionService;
+import com.grolinger.java.service.NameService;
+import com.grolinger.java.service.mapper.ConnectionColorMapper;
+import com.grolinger.java.service.mapper.DomainColorMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.thymeleaf.context.Context;
 
@@ -8,8 +15,8 @@ import java.time.LocalDate;
 import java.util.Collections;
 import java.util.Map;
 
-import static com.grolinger.java.controller.Constants.EMPTY;
-import static com.grolinger.java.controller.ContextVariables.*;
+import static com.grolinger.java.controller.templateModel.Constants.EMPTY;
+import static com.grolinger.java.controller.templateModel.ContextVariables.*;
 
 final class ContextSpec {
 
@@ -45,8 +52,7 @@ final class ContextSpec {
 
     private class ContextBuilderImpl implements ContextBuilder, ColorBuilder, IntegrationTypeBuilder, ApplicationNameBuilder, Loggable {
         private Context context;
-        // ToDo: Decide if we should really rely on atlas as name or esb?
-        private Map<String, String> aliasMapper = Collections.singletonMap("esb", "atlas");
+       private Map<String, String> aliasMapper = Collections.singletonMap("esb", "atlas");
 
         ContextBuilderImpl(Context context) {
             this.context = context;

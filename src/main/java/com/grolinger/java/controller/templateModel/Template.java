@@ -1,4 +1,4 @@
-package com.grolinger.java.controller;
+package com.grolinger.java.controller.templateModel;
 
 public enum Template {
     COMPONENT("componentExport.html"),

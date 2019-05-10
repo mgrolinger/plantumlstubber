@@ -1,11 +1,11 @@
 package com.grolinger.java.service.impl;
 
-import com.grolinger.java.controller.Constants;
+import com.grolinger.java.controller.templateModel.Constants;
 import com.grolinger.java.service.NameService;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import static com.grolinger.java.controller.Constants.*;
+import static com.grolinger.java.controller.templateModel.Constants.*;
 
 @Component
 public class NameServiceImpl implements NameService {

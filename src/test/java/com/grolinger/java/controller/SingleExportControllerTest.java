@@ -1,15 +1,15 @@
 package com.grolinger.java.controller;
 
+import com.grolinger.java.controller.templateModel.ContextVariables;
 import com.grolinger.java.service.DecisionService;
 import com.grolinger.java.service.NameService;
+import com.grolinger.java.service.mapper.DomainColorMapper;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.ui.ConcurrentModel;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import java.time.LocalDate;

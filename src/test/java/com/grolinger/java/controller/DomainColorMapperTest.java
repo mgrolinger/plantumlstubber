@@ -1,5 +1,6 @@
 package com.grolinger.java.controller;
 
+import com.grolinger.java.service.mapper.DomainColorMapper;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
