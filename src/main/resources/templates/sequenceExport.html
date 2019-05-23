@@ -28,7 +28,7 @@
         'Technical view
         !ifdef TECHNICAL
             documentBox([[${#strings.toLowerCase(applicationNameShort)}]],"Todo")
-            CALLER -> [[${#strings.toLowerCase(applicationNameShort)}]] ++ :[(${isRestService} ? 'restGET("",' : 'soapCall("Todo",'+${#strings.capitalize(serviceName)}+','+${interfaceName}+'(')]REQ_PARAM))
+            CALLER -> [[${#strings.toLowerCase(applicationNameShort)}]] ++ :[(${isRestService} ? 'restGET("ToDo",' : 'soapCall("Todo",'+${#strings.capitalize(serviceName)}+','+${interfaceName}+'(')]REQ_PARAM))
             ' subsequent calls
 
             ' response
