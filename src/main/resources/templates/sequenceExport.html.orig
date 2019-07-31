@@ -1,3 +1,12 @@
+<<<<<<< HEAD
+@startuml
+' generated on [[${dateCreated}]]
+'!define TECHNICAL
+'!define SIMPLE
+'Definition of participants
+!include [[${commonPath}]]common/common.iuml
+!ifndef SIMPLE
+=======
 @startuml [(${isRootService} ?  ${applicationName} : ${applicationName}+'_'+${serviceName})]_[[${interfaceName}]]
 ' generated on [[${dateCreated}]]
 '!define TECHNICAL
@@ -10,6 +19,7 @@
     !ifndef [[${#strings.toUpperCase(applicationName)}]]_PARTICIPANT
         !define [[${#strings.toUpperCase(applicationName)}]]_PARTICIPANT participant "[[${applicationName}]]" as [[${#strings.toLowerCase(applicationNameShort)}]] ORDER [[${sequenceOrderPrio}]] #Red
     !endif
+>>>>>>> ec246554049815498771813afc304b06eb9b351a
     !ifndef [[${#strings.toUpperCase(applicationName)}]]_PARTICIPANT_CREATED
         [[${#strings.toUpperCase(applicationName)}]]_PARTICIPANT
         !define [[${#strings.toUpperCase(applicationName)}]]_PARTICIPANT_CREATED true
@@ -18,6 +28,24 @@
 
 '
 [(${isRestService} ? '\' Define CRUD methods here' : '\' Define soap method here')]
+<<<<<<< HEAD
+[(${isRestService} ? '\' Crud - Create' : '\'')]
+[(${isRestService} ? '\' cRud - Read/Get' : '\'' )]
+!definelong [(${isRootService} ?  ${applicationName} : ${applicationName}+'_'+${#strings.capitalize(serviceName)})]_[(${isRestService} ? 'get_' : '')][[${interfaceName}]](CALLER="consumer[(${#strings.capitalize(interfaceName)})]",REQ_PARAM="")
+    !ifdef SIMPLE
+        referenceBox(CALLER,[[${#strings.toUpperCase(colorName)}]],Todo)
+    !else
+        'Technical view
+        !ifdef TECHNICAL
+            documentBox([[${#strings.toLowerCase(applicationNameShort)}]],Todo)
+            CALLER -> [[${#strings.toLowerCase(applicationNameShort)}]] ++ : Todo
+            CALLER <-- [[${#strings.toLowerCase(applicationNameShort)}]] : Todo
+            !ifdef SHOW_EXCEPTION
+                note over [[${#strings.toLowerCase(applicationNameShort)}]]
+                    Possible errors for  [(${isRootService} ?  ${applicationName} : ${applicationName}+'_'+${#strings.capitalize(serviceName)})]_[[${interfaceName}]]
+                    not yet defined
+                end note
+=======
 [(${isRestService} ? '\' Crud - Create' : '\'' )]
 [(${isRestService} ? '\' cRud - Read/Get' : '\'' )]
 ' When REST consider putting request method into the name [(${isRootService} ?  ${applicationName} : ${applicationName}+'_'+${serviceName})]_[(${isRestService} ? 'get_' : '')][[${interfaceName}]]
@@ -44,10 +72,23 @@
                     end note
                     CALLER <-- [[${#strings.toLowerCase(applicationNameShort)}]] : [(${isRestService} ? 'http500' : 'soapFault("ERROR-Code,"ERROR-Message")' )]
                 end
+>>>>>>> ec246554049815498771813afc304b06eb9b351a
             !endif
             deactivate [[${#strings.toLowerCase(applicationNameShort)}]]
         !else
         'Business view
+<<<<<<< HEAD
+            CALLER -> [[${#strings.toLowerCase(applicationNameShort)}]] ++ : Todo
+            CALLER <-- [[${#strings.toLowerCase(applicationNameShort)}]] --: Todo
+        !endif
+    !endif
+!enddefinelong
+
+[(${isRestService} ? '\' crUd - Update' : '\'' )]
+
+[(${isRestService} ? '\' cruD - Delete' : '\'' )]
+
+=======
             CALLER -> [[${#strings.toLowerCase(applicationNameShort)}]] ++ : Request Todo
             ' subsequent calls
             ' response
@@ -57,5 +98,6 @@
 !enddefinelong
 [(${isRestService} ? '\' crUd - Update' : '\'' )]
 [(${isRestService} ? '\' cruD - Delete' : '\'' )]
+>>>>>>> ec246554049815498771813afc304b06eb9b351a
 @enduml
 
