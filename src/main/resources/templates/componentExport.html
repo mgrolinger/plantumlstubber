@@ -11,17 +11,16 @@
 
 !ifdef DETAILED
     !ifndef [[${#strings.toUpperCase(applicationName)}]]_[(${isRootService} ? '' : ${#strings.toUpperCase(serviceName)})]_API_[[${#strings.toUpperCase(interfaceName)}]]_CREATED
-        interface [[${#strings.capitalize(interfaceName)}]] as [[${#strings.capitalize(applicationName)}]][[${isRootService} ?  '' : ${#strings.capitalize(serviceName)}]][[${#strings.capitalize(interfaceName)}]]Int [(${colorType})]
+        interface "[(${integrationType})]\n[[${#strings.capitalize(interfaceName)}]]" as [[${#strings.capitalize(applicationName)}]][[${isRootService} ?  '' : ${#strings.capitalize(serviceName)}]][[${#strings.capitalize(interfaceName)}]]Int [(${colorType})]
         [[${#strings.toLowerCase(applicationNameShort)}]]  -[#[[${#strings.toUpperCase(connectionColor)}]]]-  [[${#strings.capitalize(applicationName)}]][[${isRootService} ?  '' : ${#strings.capitalize(serviceName)}]][[${#strings.capitalize(interfaceName)}]]Int
         !define [[${#strings.toUpperCase(applicationName)}]]_[(${isRootService} ? '' : ${#strings.toUpperCase(serviceName)})]_API_[[${#strings.toUpperCase(interfaceName)}]]_CREATED true
     !endif
 !endif
 ' Import subsequent services here to prevent double lines
 
-
 ' TODO
 note as implNote[(${applicationName})][(${interfaceName})] #Red
-This may be a generated stub.
+[(${applicationName})][(${interfaceName})] is a generated stub.
 PLEASE remove this after checking
 if all calls are included.
 end note
@@ -29,11 +28,11 @@ end note
 
 ' Methods go here
 ' Import and method calls
-!definelong [(${isRootService} ?  ${applicationName} : ${applicationName}+'_'+${#strings.capitalize(serviceName)})]_[[${interfaceName}]](CALLER="consumer[(${#strings.capitalize(interfaceName)})]")
+!definelong [(${isRootService} ?  ${applicationName} : ${applicationName}+'_'+${serviceName})]_[[${interfaceName}]](CALLER="\[consumer[(${#strings.capitalize(interfaceName)})]\]",CONNECTION_COLOR="DarkSlateGrey")
     !ifdef DETAILED
-        CALLER ..( [[${#strings.capitalize(applicationName)}]][[${isRootService} ?  '' : ${#strings.capitalize(serviceName)}]][[${#strings.capitalize(interfaceName)}]]Int
+        CALLER ..[#CONNECTION_COLOR]..( [[${#strings.capitalize(applicationName)}]][[${isRootService} ?  '' : ${#strings.capitalize(serviceName)}]][[${#strings.capitalize(interfaceName)}]]Int
     !else
-        CALLER --(0- [[${#strings.toLowerCase(applicationNameShort)}]]
+        CALLER --[dashed,#CONNECTION_COLOR]-->> [[${#strings.toLowerCase(applicationNameShort)}]]
     !endif
 !enddefinelong
 

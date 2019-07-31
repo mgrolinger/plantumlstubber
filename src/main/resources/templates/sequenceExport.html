@@ -1,0 +1,47 @@
+@startuml
+' generated on [[${dateCreated}]]
+'!define TECHNICAL
+'!define SIMPLE
+'Definition of participants
+!include [[${commonPath}]]common/common.iuml
+!ifndef SIMPLE
+    !ifndef [[${#strings.toUpperCase(applicationName)}]]_PARTICIPANT_CREATED
+        [[${#strings.toUpperCase(applicationName)}]]_PARTICIPANT
+        !define [[${#strings.toUpperCase(applicationName)}]]_PARTICIPANT_CREATED true
+    !endif
+!endif
+
+'
+[(${isRestService} ? '\' Define CRUD methods here' : '\' Define soap method here')]
+[(${isRestService} ? '\' Crud - Create' : '\'')]
+[(${isRestService} ? '\' cRud - Read/Get' : '\'' )]
+!definelong [(${isRootService} ?  ${applicationName} : ${applicationName}+'_'+${#strings.capitalize(serviceName)})]_[(${isRestService} ? 'get_' : '')][[${interfaceName}]](CALLER="consumer[(${#strings.capitalize(interfaceName)})]",REQ_PARAM="")
+    !ifdef SIMPLE
+        referenceBox(CALLER,[[${#strings.toUpperCase(colorName)}]],Todo)
+    !else
+        'Technical view
+        !ifdef TECHNICAL
+            documentBox([[${#strings.toLowerCase(applicationNameShort)}]],Todo)
+            CALLER -> [[${#strings.toLowerCase(applicationNameShort)}]] ++ : Todo
+            CALLER <-- [[${#strings.toLowerCase(applicationNameShort)}]] : Todo
+            !ifdef SHOW_EXCEPTION
+                note over [[${#strings.toLowerCase(applicationNameShort)}]]
+                    Possible errors for  [(${isRootService} ?  ${applicationName} : ${applicationName}+'_'+${#strings.capitalize(serviceName)})]_[[${interfaceName}]]
+                    not yet defined
+                end note
+            !endif
+            deactivate [[${#strings.toLowerCase(applicationNameShort)}]]
+        !else
+        'Business view
+            CALLER -> [[${#strings.toLowerCase(applicationNameShort)}]] ++ : Todo
+            CALLER <-- [[${#strings.toLowerCase(applicationNameShort)}]] --: Todo
+        !endif
+    !endif
+!enddefinelong
+
+[(${isRestService} ? '\' crUd - Update' : '\'' )]
+
+[(${isRestService} ? '\' cruD - Delete' : '\'' )]
+
+@enduml
+
