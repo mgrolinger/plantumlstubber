@@ -1,12 +1,22 @@
 package com.grolinger.java.service;
 
-public interface NameService {
+import org.springframework.util.StringUtils;
 
-    String replaceUnwantedCharacters(final String name, final boolean replaceDotsOnly);
+import static com.grolinger.java.controller.templatemodel.Constants.*;
+import static com.grolinger.java.controller.templatemodel.Constants.NAME_SEPARATOR;
 
-    String getServiceCallName(final String applicationName, final String serviceName);
+public class NameService {
 
-    String formatServiceName(final String serviceName, final boolean isRest);
-
-    String getServiceNameSuffix(final String serviceName);
+    public static String replaceUnwantedCharacters(final String name, final boolean replaceDotsOnly) {
+        String newName = "";
+        if (!StringUtils.isEmpty(name)) {
+            newName = name.replace(DOT_SEPARATOR.getFirstChar(), NAME_SEPARATOR.getFirstChar());
+            newName = newName.replace(HYPHEN.getFirstChar(), NAME_SEPARATOR.getFirstChar());
+            if (!replaceDotsOnly) {
+                newName = newName.replace(PATH_SEPARATOR.getFirstChar(), NAME_SEPARATOR.getFirstChar());
+                newName = newName.replace(SLASH.getFirstChar(), NAME_SEPARATOR.getFirstChar());
+            }
+        }
+        return newName;
+    }
 }

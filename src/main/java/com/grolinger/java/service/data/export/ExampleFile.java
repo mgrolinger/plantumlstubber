@@ -1,0 +1,83 @@
+package com.grolinger.java.service.data.export;
+
+import com.grolinger.java.config.Loggable;
+import com.grolinger.java.controller.templatemodel.Constants;
+import com.grolinger.java.controller.templatemodel.Template;
+import com.grolinger.java.controller.templatemodel.TemplateContent;
+import com.grolinger.java.service.data.InterfaceDefinition;
+import com.grolinger.java.service.data.ServiceDefinition;
+import org.apache.commons.lang3.StringUtils;
+
+import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
+
+import static com.grolinger.java.controller.templatemodel.TemplateContent.*;
+import static com.grolinger.java.service.adapter.impl.FileServiceImpl.FILE_TYPE_IUML;
+
+/**
+ * Exporter for the example file that is generated for every application to ease
+ * the visual check of new services. It can be found in the root folder of each
+ * application with <name_of_appplication>_example.puml
+ */
+public class ExampleFile implements Loggable {
+    private Template template;
+    private StringBuilder content;
+
+    @NotNull
+    public ExampleFile(final Template template, final TemplateContent headerContent) {
+        this.template = template;
+
+
+        content = new StringBuilder();
+        content.append(START.getContent());
+        content.append(DATE.getContent()).append(LocalDate.now())
+                .append(EOL.getContent());
+        content.append(headerContent.getContent());
+    }
+
+    public void addInclude(final ServiceDefinition currentService, final InterfaceDefinition currentInterface) {
+        content.append(INCLUDE.getContent())
+                .append(currentService.getServicePath())
+                .append(currentInterface.getName())
+                .append(FILE_TYPE_IUML)
+                .append(EOL.getContent());
+    }
+
+    public void addFunction(final ServiceDefinition currentService, final InterfaceDefinition currentInterface) {
+        content.append(Constants.FUNCTION_V2_PREFIX.getValue())
+                .append(currentService.getApplicationName())
+                .append(StringUtils.isEmpty(currentService.getApplicationName()) ? "" : Constants.NAME_SEPARATOR.getValue())
+                .append(currentService.getServiceCallName())
+                //append separator only when service is not EMPTY otherwise we end up in double underscore App__interface() instead of App_interface()
+                .append(StringUtils.isEmpty(currentService.getServiceCallName()) ? "" : Constants.NAME_SEPARATOR.getValue())
+                .append(currentInterface.getFormattedName())
+                .append("()")
+                .append(EOL.getContent()).append(EOL.getContent());
+        logger().info("Write {}_{}_{} to {}{}", currentService.getApplicationName(), currentService.getServiceCallName(), currentInterface.getFormattedName(), currentInterface.getMethodName(), FILE_TYPE_IUML);
+    }
+
+    /**
+     * Adds a String to the file
+     *
+     * @param content
+     */
+    public void add(final String content) {
+        this.content.append(content);
+    }
+
+    public Template getTemplate() {
+        return template;
+    }
+
+    /**
+     * Copies the content of a example file and syntactically closes the plantUML example.
+     *
+     * @return example file content as String
+     */
+    public String getFullFileContent() {
+        StringBuilder copy = content;
+        // close the file
+        content.append(END.getContent());
+        return copy.toString();
+    }
+}

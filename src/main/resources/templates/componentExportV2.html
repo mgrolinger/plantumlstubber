@@ -1,0 +1,76 @@
+@startuml [(${isRootService} ?  ${applicationName} : ${applicationName}+'_'+${serviceName})]_[[${interfaceName}]]
+' generated on [[${dateCreated}]]
+' Define UML_STRICT before including as this is needed in common.iuml
+'!$UML_STRICT=%true()
+!include [[${commonPath}]]common/common.iuml
+'!$DETAILED=%true()
+'!define SHOW_TODO
+!assert %variable_exists("$DETAILED") : "Please define !$DETAILED=%false()/%true()"
+!if (%not(%variable_exists("$[[${#strings.toUpperCase(applicationName)}]]_SIMPLE")))
+    !global $[[${#strings.toUpperCase(alias)}]]_SIMPLE = %false()
+!endif
+'Definition of the components
+!if (%not(%variable_exists("$[[${#strings.toUpperCase(applicationName)}]]_COMPONENT_CREATED")))
+    !if (%not(%variable_exists("$[[${#strings.toUpperCase(applicationName)}]]_COMPONENT")))
+        !$[[${#strings.toUpperCase(applicationName)}]]_COMPONENT = 'component "**[[${applicationName}]]**\nPlease define\nthe component \nin **component_definition.iuml**" as [[${alias}]] [(${colorType})] #Red'
+    !endif
+     $[[${#strings.toUpperCase(applicationName)}]]_COMPONENT
+    !global $[[${#strings.toUpperCase(applicationName)}]]_COMPONENT_CREATED=%true()
+!endif
+!if (%not(%variable_exists("$[[${API_CREATED}]]")))
+    !if (%not(%variable_exists("$DETAILED")))
+        !$DETAILED = %false()
+    !endif
+    !if ($DETAILED == %true())
+        'interface "$[(${componentIntegrationType})] [(${isSoapService} ?  '\n'+${serviceName}+'\n'+${interfaceName} : '\n'+${interfaceName})]" as [[${COMPLETE_INTERFACE_PATH}]] [(${colorType})]
+        interface "$[(${componentIntegrationType})] <font size="8"><i>[[${serviceName}]]</i></font>\n[[${interfaceName}]]" as [[${COMPLETE_INTERFACE_PATH}]] [(${colorType})]
+        [[${alias}]] -[single,#$[[${#strings.toUpperCase(connectionColor)}]]]- [[${COMPLETE_INTERFACE_PATH}]]
+    !else
+        ' define PUMLComponent as interface endpoint for mixed detailed/non-detailed views.
+        ' Variable does not contain a $ sign to catch the alias above
+        !$[[${COMPLETE_INTERFACE_PATH}]]='[[${alias}]]'
+    !endif
+    !global $[[${API_CREATED}]] = '[[${COMPLETE_INTERFACE_PATH}]]'
+!endif
+!if ( $[[${#strings.toUpperCase(alias)}]]_SIMPLE == %false() )
+'Includes to subsequent importedServices go here
+    <th:block th:each="callIncludes : ${callStackIncludes}" xmlns:th="http://www.w3.org/1999/xhtml">!include [[${commonPath}]][[${callIncludes}]].iuml
+    </th:block>
+!endif
+
+' FIXME REMOVE THIS AFTER CHECK
+!ifdef SHOW_TODO
+    ' TODO
+    note as implNote[(${applicationName})][(${serviceName})][(${interfaceName})] #Red
+    [(${COMPLETE_INTERFACE_PATH})]
+    is a generated stub.
+    PLEASE remove this after checking
+    if all calls are included.
+    end note
+    [[${alias}]] .. implNote[(${applicationName})][(${serviceName})][(${interfaceName})]
+!endif
+
+' Methods go here
+!function $[(${isRootService} ?  ${applicationName} : ${applicationName}+'_'+${serviceName})]_[[${interfaceName}]]($CALLER="consumer",$CONNECTION_COLOR="DarkSlateGrey")
+    !if ($DETAILED == %true())
+        ' Detailed call chain with consumer -> Interface --> PUMLComponent
+        $CALLER ..[single,#$CONNECTION_COLOR]..> [[${COMPLETE_INTERFACE_PATH}]]
+    !else
+        'More simple call chain with consumer --> PUMLComponent
+        $CALLER --[single,dashed,#$CONNECTION_COLOR]-->> [[${alias}]]
+    !endif
+    ' subsequent importedServices calls usually go here
+    ' connect with: ("[[${alias}]]",$[[${#strings.toUpperCase(connectionColor)}]])
+    !if ( $[[${#strings.toUpperCase(alias)}]]_SIMPLE == %false() )
+        <th:block th:each="call : ${callStack}" xmlns:th="http://www.w3.org/1999/xhtml">$[[${call}]]("[[${alias}]]",$[[${#strings.toUpperCase(connectionColor)}]])
+        </th:block>
+    !endif
+!endfunction
+
+<th:block th:if="${isLinked}" xmlns:th="http://www.w3.org/1999/xhtml">
+' Link this application/db to another application/db if the yaml definition said so
+!if (%variable_exists("$[[${#strings.toUpperCase(linkedComponent)}]]_COMPONENT_CREATED") && %not(%variable_exists("$DISABLE_AUTO_LINKING")) )
+    [[${alias}]] -[single,dotted,#$[[${#strings.toUpperCase(connectionColor)}]]] [[${linkedComponentAlias}]]
+!endif
+</th:block>
+@enduml

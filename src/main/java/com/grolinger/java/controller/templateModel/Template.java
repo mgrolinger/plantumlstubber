@@ -1,8 +1,8 @@
-package com.grolinger.java.controller.templateModel;
+package com.grolinger.java.controller.templatemodel;
 
 public enum Template {
-    COMPONENT("componentExport.html"),
-    SEQUENCE("sequenceExport.html");
+    COMPONENT_V2("componentExportV2.html"),
+    SEQUENCE_V2("sequenceExportV2.html");
 
     private String type;
 

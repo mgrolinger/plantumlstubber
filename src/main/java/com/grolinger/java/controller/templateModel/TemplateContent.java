@@ -1,14 +1,14 @@
-package com.grolinger.java.controller.templateModel;
+package com.grolinger.java.controller.templatemodel;
 
 public enum TemplateContent {
     START("@startuml\n"),
     END("@enduml"),
     DATE("' generated on "),
     EOL("\n"),
-    COMMON_FILE("'This file is intentionally blank or consists of elements that are necessary to display generated files\n!define LUPDATE(_TEXT) :_TEXT\n!define INTEGRATION_DOMAIN_COLOR_CONNECTION red\n!define RESOURCE_DOMAIN_COLOR_CONNECTION red\n!define CUSTOMER_DOMAIN_COLOR_CONNECTION red\n!define FINANCIAL_DOMAIN_COLOR_CONNECTION red\n!define EXTERNAL_DOMAIN_COLOR_CONNECTION red"),
+    COMMONV2_FILE("'This file is intentionally blank or consists of elements that are necessary to display generated files\n!if (%not(%variable_exists('$DETAILED')))\n!$DETAILED = %false()\n!endif\n!$SIMPLE=%false()\n!$SHOW_EXCEPTION=%false()\n\n!$INTEGRATION_DOMAIN_COLOR_CONNECTION='red'\n!$RESOURCE_DOMAIN_COLOR_CONNECTION='red'\n!$CUSTOMER_DOMAIN_COLOR_CONNECTION='red'\n!$FINANCIAL_DOMAIN_COLOR_CONNECTION='red'\n!$EXTERNAL_DOMAIN_COLOR_CONNECTION='red'\n!$AUTHENTIFIZIERUNG_DOMAIN_COLOR_CONNECTION='red'\n!$SUCHE_DOMAIN_COLOR_CONNECTION='red'\n!$UEBERMITTLUNG_DOMAIN_COLOR_CONNECTION='red'\n!$BESTAND_DOMAIN_COLOR_CONNECTION='red'\n!$TAA_DOMAIN_COLOR_CONNECTION='red'\n!$RISIKODATEN_DOMAIN_COLOR_CONNECTION='red'\n!$SPEZIFISCHE_DOMAIN_COLOR_CONNECTION='red'\n!if (%not(%variable_exists('$UML_STRICT')))\n!$UML_STRICT = %false()\n!endif"),
     INCLUDE("!include "),
-    SEQUENCE_HEADER("'!define TECHNICAL\n'!define SIMPLE\n'!define SHOW_SQL\n'!define SHOW_DOCUMENT_LINK\n'!define SHOW_EXCEPTIONS\n\n"),
-    COMPONENT_HEADER("!define DETAILED\n'!define UML_STRICT\n!define SHOW_TODO\n\n\n");
+    SEQUENCEV2_HEADER("'!$DETAILED=%true()\n'!$SIMPLE=%true()\n'!$SHOW_SQL=%false()\n'!$SHOW_DOCUMENT_LINK=%false()\n'!$SHOW_EXCEPTIONS=%false()\n\n"),
+    COMPONENTV2_HEADER("'!$DETAILED=%true()\n'!$UML_STRICT=%false()\n!$SHOW_TODO=%false()\n\n\n");
 
     private String content;
 
