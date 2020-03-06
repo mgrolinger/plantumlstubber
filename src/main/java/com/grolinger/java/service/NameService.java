@@ -1,5 +1,6 @@
 package com.grolinger.java.service;
 
+import com.grolinger.java.controller.templatemodel.TemplateContent;
 import org.springframework.util.StringUtils;
 
 import static com.grolinger.java.controller.templatemodel.Constants.*;
@@ -10,11 +11,11 @@ public class NameService {
     public static String replaceUnwantedCharacters(final String name, final boolean replaceDotsOnly) {
         String newName = "";
         if (!StringUtils.isEmpty(name)) {
-            newName = name.replace(DOT_SEPARATOR.getFirstChar(), NAME_SEPARATOR.getFirstChar());
-            newName = newName.replace(HYPHEN.getFirstChar(), NAME_SEPARATOR.getFirstChar());
+            String stringsToReplace= "(\\.|\\n|\\s|-)";
+            newName = name.replaceAll(stringsToReplace, NAME_SEPARATOR.getValue());
             if (!replaceDotsOnly) {
-                newName = newName.replace(PATH_SEPARATOR.getFirstChar(), NAME_SEPARATOR.getFirstChar());
-                newName = newName.replace(SLASH.getFirstChar(), NAME_SEPARATOR.getFirstChar());
+                String stringsToReplaceAdditionally = "([\\\\/])";
+                newName = newName.replaceAll(stringsToReplaceAdditionally, NAME_SEPARATOR.getValue());
             }
         }
         return newName;

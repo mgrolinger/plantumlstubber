@@ -1,7 +1,7 @@
 plugins {
     id "idea"
     id "java"
-    id 'org.springframework.boot' version '2.2.4.RELEASE'
+    id 'org.springframework.boot' version '2.2.5.RELEASE'
 }
 
 repositories {
@@ -16,21 +16,23 @@ sourceCompatibility = "1.8"
 buildDir = "target"
 
 dependencies {
-    compile "org.springframework.boot:spring-boot-starter-thymeleaf:2.2.4.RELEASE"
-    compile "org.springframework.boot:spring-boot-starter-web:2.2.3.RELEASE"
+    compile "org.springframework.boot:spring-boot-starter-thymeleaf:2.2.5.RELEASE"
+    compile "org.springframework.boot:spring-boot-starter-web:2.2.5.RELEASE"
     compile "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.9.6"
     compile "com.fasterxml.jackson.core:jackson-databind:2.9.6"
     compile "org.apache.commons:commons-lang3:3.7"
     compile "io.springfox:springfox-swagger2:2.9.2"
     compile "io.springfox:springfox-swagger-ui:2.9.2"
-    runtime "com.h2database:h2:1.4.197"
+    //runtime "com.h2database:h2:1.4.197"
     compileOnly 'org.projectlombok:lombok:1.18.12'
     annotationProcessor 'org.projectlombok:lombok:1.18.12'
 
     testCompileOnly 'org.projectlombok:lombok:1.18.12'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
-    testCompile "org.springframework.boot:spring-boot-starter-test:2.2.4.RELEASE"
-    testCompile "org.testng:testng:6.14.3"
+    testCompile "org.springframework.boot:spring-boot-starter-test:2.2.5.RELEASE"
+    testCompile "org.testng:testng:7.1.0"
+
+    runtimeOnly 'org.springframework.boot:spring-boot-devtools'
 
     implementation "org.springframework.boot:spring-boot-starter"
 }

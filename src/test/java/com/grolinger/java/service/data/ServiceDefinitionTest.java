@@ -24,7 +24,7 @@ public class ServiceDefinitionTest {
     @Test(dataProvider = "getServiceCallNameDataProvider")
     public void testGetServiceCallNameDataProvider(final String serviceName,
                                                    final String expectedValue) {
-        ServiceDefinition cut = new ServiceDefinition("applicationName", serviceName, "", "integration", 0);
+        ServiceDefinition cut = new ServiceDefinition(serviceName, "", "integration", 0);
         String result = cut.getServiceCallName();
         assertThat(result).isEqualTo(expectedValue);
     }
@@ -35,25 +35,23 @@ public class ServiceDefinitionTest {
         final String serviceName = "serviceName";
         final String serviceNameWithUnwantedChars = "restServiceName/subservice/interface";
         final String soapServiceNameWithUnwantedChars = "soapServiceName/subservice/interface";
-        final boolean isSoap = true;
-        final boolean notSoap = false;
         return new Object[][]{
                 //@formatter:off
-                {application, null, DEFAULT_ROOT_SERVICE_NAME.getValue()},
-                {application, null, DEFAULT_ROOT_SERVICE_NAME.getValue()},
-                {application, "", DEFAULT_ROOT_SERVICE_NAME.getValue()},
-                {application, "", DEFAULT_ROOT_SERVICE_NAME.getValue()},
-                {application, serviceName, serviceName},
-                {application, serviceNameWithUnwantedChars, "restServiceName_subservice_interface"},
-                {application, soapServiceNameWithUnwantedChars, "soapServiceName_subservice_interface"}
+                {null, DEFAULT_ROOT_SERVICE_NAME.getValue()},
+                {null, DEFAULT_ROOT_SERVICE_NAME.getValue()},
+                {"", DEFAULT_ROOT_SERVICE_NAME.getValue()},
+                {"", DEFAULT_ROOT_SERVICE_NAME.getValue()},
+                {serviceName, serviceName},
+                {serviceNameWithUnwantedChars, "restServiceName_subservice_interface"},
+                {soapServiceNameWithUnwantedChars, "soapServiceName_subservice_interface"}
                 //@formatter:on
         };
     }
 
     @Test(dataProvider = "testGetFormattedServiceNameDataProvider")
-    public void testGetFormattedServiceName(final String application, final String serviceName, final String expectedResult) {
+    public void testGetFormattedServiceName(final String serviceName, final String expectedResult) {
         // FixmE
-        ServiceDefinition cut = new ServiceDefinition(application, serviceName, "", "integration", 0);
+        ServiceDefinition cut = new ServiceDefinition(serviceName, "", "integration", 0);
         String result = cut.getServiceCallName();
         assertThat(result).isNotNull().isEqualTo(expectedResult);
 

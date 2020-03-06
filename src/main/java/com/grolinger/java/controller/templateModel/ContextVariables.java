@@ -2,11 +2,12 @@ package com.grolinger.java.controller.templatemodel;
 
 /**
  * Contains all variables that are used in the template. This file should be kept
- * in sync whith the templates.
+ * in sync with the templates.
  */
 public final class ContextVariables {
     public static final String ALIAS = "alias";
     public static final String API_CREATED = "API_CREATED";
+    public static final String APPLICATION_LABEL = "applicationLabel";
     public static final String APPLICATION_NAME = "applicationName";
     public static final String CALL_INTERFACE_BY = "callInterfaceBy";
     public static final String CALL_STACK = "callStack";
@@ -15,7 +16,6 @@ public final class ContextVariables {
     public static final String COLOR_TYPE = "colorType";
     public static final String COMPLETE_INTERFACE_NAME = "COMPLETE_INTERFACE_PATH";
     public static final String COMPONENT_INTEGRATION_TYPE = "componentIntegrationType";
-    public static final String COMPONENT_NAME = "componentNameWithSuffix";
     public static final String CONNECTION_COLOR = "connectionColor";
     public static final String DATE_CREATED = "dateCreated";
     public static final String INTERFACE_NAME = "interfaceName";

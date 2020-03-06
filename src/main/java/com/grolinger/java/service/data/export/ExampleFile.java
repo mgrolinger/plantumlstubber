@@ -4,6 +4,7 @@ import com.grolinger.java.config.Loggable;
 import com.grolinger.java.controller.templatemodel.Constants;
 import com.grolinger.java.controller.templatemodel.Template;
 import com.grolinger.java.controller.templatemodel.TemplateContent;
+import com.grolinger.java.service.data.ApplicationDefinition;
 import com.grolinger.java.service.data.InterfaceDefinition;
 import com.grolinger.java.service.data.ServiceDefinition;
 import org.apache.commons.lang3.StringUtils;
@@ -31,7 +32,7 @@ public class ExampleFile implements Loggable {
         content = new StringBuilder();
         content.append(START.getContent());
         content.append(DATE.getContent()).append(LocalDate.now())
-                .append(EOL.getContent());
+                .append(CARRIAGE_RETURN.getContent());
         content.append(headerContent.getContent());
     }
 
@@ -40,20 +41,20 @@ public class ExampleFile implements Loggable {
                 .append(currentService.getServicePath())
                 .append(currentInterface.getName())
                 .append(FILE_TYPE_IUML)
-                .append(EOL.getContent());
+                .append(CARRIAGE_RETURN.getContent());
     }
 
-    public void addFunction(final ServiceDefinition currentService, final InterfaceDefinition currentInterface) {
+    public void addFunction(final ApplicationDefinition currentApplication, final ServiceDefinition currentService, final InterfaceDefinition currentInterface) {
         content.append(Constants.FUNCTION_V2_PREFIX.getValue())
-                .append(currentService.getApplicationName())
-                .append(StringUtils.isEmpty(currentService.getApplicationName()) ? "" : Constants.NAME_SEPARATOR.getValue())
+                .append(StringUtils.capitalize(currentApplication.getName()))
+                .append(StringUtils.isEmpty(currentApplication.getName()) ? "" : Constants.NAME_SEPARATOR.getValue())
                 .append(currentService.getServiceCallName())
                 //append separator only when service is not EMPTY otherwise we end up in double underscore App__interface() instead of App_interface()
                 .append(StringUtils.isEmpty(currentService.getServiceCallName()) ? "" : Constants.NAME_SEPARATOR.getValue())
                 .append(currentInterface.getFormattedName())
                 .append("()")
-                .append(EOL.getContent()).append(EOL.getContent());
-        logger().info("Write {}_{}_{} to {}{}", currentService.getApplicationName(), currentService.getServiceCallName(), currentInterface.getFormattedName(), currentInterface.getMethodName(), FILE_TYPE_IUML);
+                .append(CARRIAGE_RETURN.getContent()).append(CARRIAGE_RETURN.getContent());
+        logger().info("Write {}_{}_{} to {}{}", currentApplication.getName(), currentService.getServiceCallName(), currentInterface.getFormattedName(), currentInterface.getMethodName(), FILE_TYPE_IUML);
     }
 
     /**

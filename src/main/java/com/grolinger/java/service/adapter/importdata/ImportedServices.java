@@ -15,6 +15,7 @@ import java.util.Map;
 @NoArgsConstructor
 public class ImportedServices {
     private String application;
+    private String customLabel;
     private String customAlias;
     @Builder.Default
     private String systemType = "application";

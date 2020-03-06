@@ -2,6 +2,7 @@ package com.grolinger.java.service.impl;
 
 import com.grolinger.java.config.Loggable;
 import com.grolinger.java.controller.templatemodel.Constants;
+import com.grolinger.java.service.data.ApplicationDefinition;
 import com.grolinger.java.service.data.InterfaceDefinition;
 import com.grolinger.java.service.data.ServiceDefinition;
 import com.grolinger.java.service.data.mapper.ColorMapper;
@@ -27,15 +28,13 @@ public final class ContextSpec {
     }
 
     interface ApplicationNameBuilder {
-        ContextBuilder withApplicationName(final String applicationName);
+        ContextBuilder withApplication(final ApplicationDefinition applicationDefinition);
     }
 
     public interface ContextBuilder {
         ContextBuilder withOrderPrio(final Integer orderNumber);
 
         ContextBuilder withServiceDefinition(final ServiceDefinition serviceDefinition);
-
-        ContextBuilder withCustomAlias(final String customAlias);
 
         ContextBuilder withInterfaceDefinition(final InterfaceDefinition interfaceDefinition);
 
@@ -85,28 +84,28 @@ public final class ContextSpec {
         }
 
         @Override
-        public ContextBuilder withApplicationName(final String applicationName) {
-            String localAppName;
-            if (StringUtils.isEmpty(applicationName)) {
-                localAppName = "undefined";
+        public ContextBuilder withApplication(final ApplicationDefinition application) {
+            // Set the name of the component/application
+            String name;
+            if (StringUtils.isEmpty(application.getName())) {
+                name = "Undefined";
             } else {
-                localAppName = applicationName;
+                name = StringUtils.capitalize(application.getName());
             }
+            context.setVariable(APPLICATION_NAME, name);
 
-            context.setVariable(APPLICATION_NAME, StringUtils.capitalize(localAppName));
-            String alias = localAppName.toLowerCase();
+            // set an alias
+            String alias = application.getAlias();
             // Set alias only if not yet defined, e.g. by the method withCustomAlias
-            if (StringUtils.isEmpty(context.getVariable(ALIAS))) {
-                context.setVariable(ALIAS, alias);
-            }
-            return this;
-        }
+            if (StringUtils.isEmpty(alias)) alias = name.toLowerCase();
 
-        @Override
-        public ContextBuilder withCustomAlias(final String alias) {
-            if (!StringUtils.isEmpty(alias)) {
-                context.setVariable(ALIAS, alias);
-            }
+            context.setVariable(ALIAS, alias);
+
+            // Set a custom label
+            String label = application.getLabel();
+            // Set a label to default if not defined
+            if (StringUtils.isEmpty(label)) label = name;
+            context.setVariable(APPLICATION_LABEL, label);
             return this;
         }
 
@@ -176,6 +175,7 @@ public final class ContextSpec {
             withCommonPath(serviceDefinition.getCommonPath());
             return this;
         }
+
 
         @Override
         public ContextBuilder withCommonPath(final String commonPath) {

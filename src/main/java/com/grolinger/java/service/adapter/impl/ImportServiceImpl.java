@@ -28,7 +28,7 @@ public class ImportServiceImpl implements ImportService {
     private static final String GLOBAL_FILE_EXPORT_PATH = System.getProperty("user.dir") + File.separator + "target" + File.separator;
 
     @Override
-    public List<ApplicationDefinition> findAllServiceEnpoints() {
+    public List<ApplicationDefinition> findAllServiceEndpoints() {
         List<Path> collect = new LinkedList<>();
         // TODO either open file chooser or use args from console
 
@@ -65,8 +65,10 @@ public class ImportServiceImpl implements ImportService {
                 String alias = StringUtils.isEmpty(importedServices.getCustomAlias()) ?
                         replaceUnwantedCharacters(importedServices.getApplication().toLowerCase(), false) :
                         importedServices.getCustomAlias();
-                pumlComponent = ApplicationDefinition.builder().name(applicationName)
-                        .customAlias(alias)
+                String label = StringUtils.isEmpty(importedServices.getCustomLabel()) ?
+                        replaceUnwantedCharacters(importedServices.getApplication(), false) :
+                        importedServices.getCustomLabel();
+                pumlComponent = ApplicationDefinition.builder().name(applicationName).label(label).alias(alias)
                         .serviceDefinitions(new LinkedList<>())
                         .build();
             }
@@ -79,11 +81,11 @@ public class ImportServiceImpl implements ImportService {
                 // Iterate over the services itself
                 for (Map.Entry<String, String[]> serviceName : serviceList.entrySet()) {
                     String[] services1 = serviceName.getValue();
-                    ServiceDefinition serviceDefinition = new ServiceDefinition(applicationName, serviceName.getKey(), importedServices.getSystemType(), importedServices.getDomainColor(), orderPrio);
+                    ServiceDefinition serviceDefinition = new ServiceDefinition(serviceName.getKey(), importedServices.getSystemType(), importedServices.getDomainColor(), orderPrio);
                     //Interfaces
                     logger().info("Current path: {}", path);
                     for (String interfaceName : services1) {
-                        InterfaceDefinition interfaceDefinition = new InterfaceDefinition(interfaceName, importedServices.getCustomAlias(),  interfacesIntegrationType, importedServices.getLinkToComponent(), importedServices.getLinkToCustomAlias());
+                        InterfaceDefinition interfaceDefinition = new InterfaceDefinition(interfaceName, importedServices.getCustomAlias(), interfacesIntegrationType, importedServices.getLinkToComponent(), importedServices.getLinkToCustomAlias());
                         // ignore call stack information
                         logger().info("Extracted interface: {}", interfaceDefinition.getName());
                         serviceDefinition.getInterfaceDefinitions().add(interfaceDefinition);
@@ -94,7 +96,7 @@ public class ImportServiceImpl implements ImportService {
             pumlComponent.getServiceDefinitions().addAll(serviceDefinitions);
             app.put(applicationName, pumlComponent);
         }
-        // UNwrap from map
+        // Unwrap from map
         return new LinkedList<>(app.values());
     }
 

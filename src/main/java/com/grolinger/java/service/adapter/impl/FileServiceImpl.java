@@ -4,6 +4,7 @@ import com.grolinger.java.controller.templatemodel.Constants;
 import com.grolinger.java.controller.templatemodel.DiagramType;
 import com.grolinger.java.controller.templatemodel.TemplateContent;
 import com.grolinger.java.service.adapter.FileService;
+import com.grolinger.java.service.data.ApplicationDefinition;
 import com.grolinger.java.service.data.export.ComponentFile;
 import com.grolinger.java.service.data.export.ExampleFile;
 import com.grolinger.java.service.data.InterfaceDefinition;
@@ -45,11 +46,11 @@ public class FileServiceImpl implements FileService {
 
 
     @Override
-    public String createServiceDirectory(final String basePath, final ServiceDefinition serviceDefinition) throws IOException {
+    public String createServiceDirectory(final String basePath, final ApplicationDefinition applicationDefinition, final ServiceDefinition serviceDefinition) throws IOException {
         String path;
         String applicationPart = "";
-        if (null != serviceDefinition.getApplicationName()) {
-            applicationPart = serviceDefinition.getApplicationName() + PATH_SEPARATOR.getValue();
+        if (null != applicationDefinition.getName()) {
+            applicationPart = applicationDefinition.getName() + PATH_SEPARATOR.getValue();
         }
         String servicePart = "";
         if (null != serviceDefinition.getServicePath()) {
@@ -89,13 +90,13 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public ExampleFile writeInterfaceFile(final String currentPath, final ServiceDefinition currentService, final InterfaceDefinition currentInterface, final Context context, ExampleFile exampleFile) {
+    public ExampleFile writeInterfaceFile(final String currentPath,final ApplicationDefinition currentApplication, final ServiceDefinition currentService, final InterfaceDefinition currentInterface, final Context context, ExampleFile exampleFile) {
 
         try (Writer writer = new FileWriter(currentPath + currentInterface.getName() + FILE_TYPE_IUML)) {
             // !include file.iuml
             exampleFile.addInclude(currentService, currentInterface);
             // "call" the service
-            exampleFile.addFunction(currentService, currentInterface);
+            exampleFile.addFunction(currentApplication, currentService, currentInterface);
             // Template is saved to exampleFile as it uses the same
             writer.write(templateEngine.process(exampleFile.getTemplate().getTemplateURL(), context));
         } catch (IOException io) {

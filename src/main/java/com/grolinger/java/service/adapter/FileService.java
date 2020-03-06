@@ -2,6 +2,7 @@ package com.grolinger.java.service.adapter;
 
 import com.grolinger.java.config.Loggable;
 import com.grolinger.java.controller.templatemodel.DiagramType;
+import com.grolinger.java.service.data.ApplicationDefinition;
 import com.grolinger.java.service.data.InterfaceDefinition;
 import com.grolinger.java.service.data.ServiceDefinition;
 import com.grolinger.java.service.data.export.ComponentFile;
@@ -23,7 +24,7 @@ public interface FileService extends Loggable {
      * @return returns the path of the created directory
      * @throws IOException
      */
-    String createServiceDirectory(final String basePath, final ServiceDefinition serviceDefinition) throws IOException;
+    String createServiceDirectory(final String basePath, final ApplicationDefinition applicationDefinition, final ServiceDefinition serviceDefinition) throws IOException;
 
     void writeDefaultCommonFile(final String basePath, final DiagramType diagramType) throws IOException;
 
@@ -36,7 +37,7 @@ public interface FileService extends Loggable {
      */
     void writeExampleFile(final String basePath, final String applicationName, final String exampleFile);
 
-    ExampleFile writeInterfaceFile(final String currentPath, final ServiceDefinition serviceDefinition, final InterfaceDefinition currentInterface, Context context, ExampleFile exampleFile);
+    ExampleFile writeInterfaceFile(final String currentPath, final ApplicationDefinition currentApplication, final ServiceDefinition serviceDefinition, final InterfaceDefinition currentInterface, Context context, ExampleFile exampleFile);
 
     /**
      * Method that creates a directory in the local file system.

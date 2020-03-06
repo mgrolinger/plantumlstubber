@@ -12,5 +12,5 @@ public interface ImportService extends Loggable {
      *
      * @return hierarchical definitions of all found application definitions
      */
-    List<ApplicationDefinition> findAllServiceEnpoints();
+    List<ApplicationDefinition> findAllServiceEndpoints();
 }

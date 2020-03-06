@@ -33,7 +33,7 @@ public class MultiExportController implements Loggable {
     @GetMapping("/export/components")
     public void component(Model model) throws IOException {
         // Find all yaml files
-        List<ApplicationDefinition> pumlComponents = new LinkedList<>(importService.findAllServiceEnpoints());
+        List<ApplicationDefinition> pumlComponents = new LinkedList<>(importService.findAllServiceEndpoints());
 
         dataProcessorService.processApplication(pumlComponents, COMPONENT_DIAGRAM_BASE);
         logger().info("Processing components completed.");
@@ -45,7 +45,7 @@ public class MultiExportController implements Loggable {
     @GetMapping("/export/sequences")
     public void sequence(Model model) throws IOException {
         // Find all yaml files
-        List<ApplicationDefinition> pumlComponents = new LinkedList<>(importService.findAllServiceEnpoints());
+        List<ApplicationDefinition> pumlComponents = new LinkedList<>(importService.findAllServiceEndpoints());
 
         dataProcessorService.processApplication(pumlComponents, SEQUENCE_DIAGRAM_BASE);
         logger().info("Processing sequences completed.");

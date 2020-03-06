@@ -19,7 +19,6 @@ import static com.grolinger.java.service.NameService.replaceUnwantedCharacters;
  */
 @Getter
 public class ServiceDefinition {
-    private String applicationName;
     private SystemType systemType;
     private String servicePath;
     private int orderPrio;
@@ -29,8 +28,9 @@ public class ServiceDefinition {
 
     private List<InterfaceDefinition> interfaceDefinitions = new LinkedList<>();
 
-    public ServiceDefinition(final String applicationName, final String serviceName, final String systemType, final String domainColor, final int orderPrio) {
-        this.applicationName = StringUtils.capitalize(replaceUnwantedCharacters(applicationName, false));
+    public ServiceDefinition(final String serviceName, final String systemType, final String domainColor, final int orderPrio) {
+        //this.applicationLabel = applicationName;
+        //this.applicationName = StringUtils.capitalize(replaceUnwantedCharacters(applicationName, false));
         if (StringUtils.isEmpty(systemType)) {
             this.systemType = SystemType.COMPONENT;
         } else {

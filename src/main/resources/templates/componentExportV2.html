@@ -6,13 +6,14 @@
 '!$DETAILED=%true()
 '!define SHOW_TODO
 !assert %variable_exists("$DETAILED") : "Please define !$DETAILED=%false()/%true()"
-!if (%not(%variable_exists("$[[${#strings.toUpperCase(applicationName)}]]_SIMPLE")))
+' This variable can be used to hide everything what whould be called subsequently
+!if (%not(%variable_exists("$[[${#strings.toUpperCase(alias)}]]_SIMPLE")))
     !global $[[${#strings.toUpperCase(alias)}]]_SIMPLE = %false()
 !endif
 'Definition of the components
 !if (%not(%variable_exists("$[[${#strings.toUpperCase(applicationName)}]]_COMPONENT_CREATED")))
     !if (%not(%variable_exists("$[[${#strings.toUpperCase(applicationName)}]]_COMPONENT")))
-        !$[[${#strings.toUpperCase(applicationName)}]]_COMPONENT = 'component "**[[${applicationName}]]**\nPlease define\nthe component \nin **component_definition.iuml**" as [[${alias}]] [(${colorType})] #Red'
+        !$[[${#strings.toUpperCase(applicationName)}]]_COMPONENT = 'component "**[[${applicationLabel}]]**\nPlease define\nthe component \nin **component_definition.iuml**" as [[${alias}]] [(${colorType})] #Red'
     !endif
      $[[${#strings.toUpperCase(applicationName)}]]_COMPONENT
     !global $[[${#strings.toUpperCase(applicationName)}]]_COMPONENT_CREATED=%true()
@@ -33,7 +34,7 @@
     !global $[[${API_CREATED}]] = '[[${COMPLETE_INTERFACE_PATH}]]'
 !endif
 !if ( $[[${#strings.toUpperCase(alias)}]]_SIMPLE == %false() )
-'Includes to subsequent importedServices go here
+    ' Includes to subsequent importedServices go HERE
     <th:block th:each="callIncludes : ${callStackIncludes}" xmlns:th="http://www.w3.org/1999/xhtml">!include [[${commonPath}]][[${callIncludes}]].iuml
     </th:block>
 !endif
@@ -59,13 +60,14 @@
         'More simple call chain with consumer --> PUMLComponent
         $CALLER --[single,dashed,#$CONNECTION_COLOR]-->> [[${alias}]]
     !endif
-    ' subsequent importedServices calls usually go here
-    ' connect with: ("[[${alias}]]",$[[${#strings.toUpperCase(connectionColor)}]])
     !if ( $[[${#strings.toUpperCase(alias)}]]_SIMPLE == %false() )
+        ' subsequent importedServices calls go usually HERE
+        ' connect with: ("[[${alias}]]",$[[${#strings.toUpperCase(connectionColor)}]])
         <th:block th:each="call : ${callStack}" xmlns:th="http://www.w3.org/1999/xhtml">$[[${call}]]("[[${alias}]]",$[[${#strings.toUpperCase(connectionColor)}]])
         </th:block>
     !endif
 !endfunction
+
 
 <th:block th:if="${isLinked}" xmlns:th="http://www.w3.org/1999/xhtml">
 ' Link this application/db to another application/db if the yaml definition said so

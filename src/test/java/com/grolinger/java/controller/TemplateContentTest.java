@@ -9,6 +9,6 @@ public class TemplateContentTest {
 
     @Test
     public void testGetContent() {
-        assertThat(TemplateContent.EOL.getContent()).isEqualTo("\n");
+        assertThat(TemplateContent.CARRIAGE_RETURN.getContent()).isEqualTo("\n");
     }
 }

@@ -4,7 +4,7 @@ public enum TemplateContent {
     START("@startuml\n"),
     END("@enduml"),
     DATE("' generated on "),
-    EOL("\n"),
+    CARRIAGE_RETURN("\n"),
     COMMONV2_FILE("'This file is intentionally blank or consists of elements that are necessary to display generated files\n!if (%not(%variable_exists('$DETAILED')))\n!$DETAILED = %false()\n!endif\n!$SIMPLE=%false()\n!$SHOW_EXCEPTION=%false()\n\n!$INTEGRATION_DOMAIN_COLOR_CONNECTION='red'\n!$RESOURCE_DOMAIN_COLOR_CONNECTION='red'\n!$CUSTOMER_DOMAIN_COLOR_CONNECTION='red'\n!$FINANCIAL_DOMAIN_COLOR_CONNECTION='red'\n!$EXTERNAL_DOMAIN_COLOR_CONNECTION='red'\n!$AUTHENTIFIZIERUNG_DOMAIN_COLOR_CONNECTION='red'\n!$SUCHE_DOMAIN_COLOR_CONNECTION='red'\n!$UEBERMITTLUNG_DOMAIN_COLOR_CONNECTION='red'\n!$BESTAND_DOMAIN_COLOR_CONNECTION='red'\n!$TAA_DOMAIN_COLOR_CONNECTION='red'\n!$RISIKODATEN_DOMAIN_COLOR_CONNECTION='red'\n!$SPEZIFISCHE_DOMAIN_COLOR_CONNECTION='red'\n!if (%not(%variable_exists('$UML_STRICT')))\n!$UML_STRICT = %false()\n!endif"),
     INCLUDE("!include "),
     SEQUENCEV2_HEADER("'!$DETAILED=%true()\n'!$SIMPLE=%true()\n'!$SHOW_SQL=%false()\n'!$SHOW_DOCUMENT_LINK=%false()\n'!$SHOW_EXCEPTIONS=%false()\n\n"),

@@ -29,6 +29,8 @@ public class NameServiceTest {
                 {pathWitDots+"/",   REPLACEDOTSONLY, "test_test/"},
                 {pathWitDots+"/",   REPLACEALL,      "test_test_"},
                 {pathWitDots+"_",   REPLACEALL,      "test_test_"},
+                {"test \n test",   REPLACEALL,      "test___test"},
+                {"test \\ test",   REPLACEALL,      "test___test"},
                 {"",                REPLACEALL,      ""},
                 {null,              REPLACEALL,      ""}
                 //@formatter:on

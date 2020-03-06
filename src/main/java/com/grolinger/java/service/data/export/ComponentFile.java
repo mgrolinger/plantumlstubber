@@ -3,6 +3,7 @@ package com.grolinger.java.service.data.export;
 import com.grolinger.java.config.Loggable;
 import com.grolinger.java.controller.templatemodel.Constants;
 import com.grolinger.java.controller.templatemodel.DiagramType;
+import com.grolinger.java.service.data.ApplicationDefinition;
 import com.grolinger.java.service.data.ServiceDefinition;
 import com.grolinger.java.service.data.mapper.ColorMapper;
 
@@ -34,79 +35,85 @@ public class ComponentFile implements Loggable {
 
         content.append(START.getContent());
         content.append(DATE.getContent()).append(LocalDate.now())
-                .append(EOL.getContent());
+                .append(CARRIAGE_RETURN.getContent());
 
         if (DiagramType.COMPONENT_DIAGRAM_BASE.equals(diagramType)) {
             // Component diagrams need two buckets
             bucket1 = new StringBuilder();
             bucket1.append("!if ($UML_STRICT == %true())")
-                    .append(EOL.getContent());
-            bucket2 = new StringBuilder().append(EOL.getContent());
-            bucket2.append("!else").append(EOL.getContent())
-                    .append("  'use tupadr3/common and tupadr3/font-awesome").append(EOL.getContent())
-                    .append("  !include <tupadr3/common>").append(EOL.getContent())
-                    .append("  !include <tupadr3/font-awesome/server>").append(EOL.getContent())
-                    .append("  !include <tupadr3/font-awesome/database>").append(EOL.getContent())
-                    .append("  !include <tupadr3/font-awesome/archive>").append(EOL.getContent())
-                    .append("  !include <tupadr3/font-awesome/address_book>").append(EOL.getContent())
-                    .append("  !include <tupadr3/font-awesome/file_o>").append(EOL.getContent())
-                    .append("  !include <tupadr3/font-awesome/file_zip_o>").append(EOL.getContent())
-                    .append("  !include <tupadr3/font-awesome/envelope>").append(EOL.getContent())
-                    .append("  !include <tupadr3/font-awesome/users>").append(EOL.getContent())
-                    .append("  !include <tupadr3/font-awesome/user>").append(EOL.getContent())
-                    .append("  !include <tupadr3/font-awesome/folder>").append(EOL.getContent())
-                    .append("  !include <tupadr3/devicons/jenkins>").append(EOL.getContent())
-                    .append("  !include <tupadr3/devicons/terminal>").append(EOL.getContent())
-                    .append("  !include devicons/springboot.puml").append(EOL.getContent())
-                    .append("  !include devicons/btix.puml").append(EOL.getContent())
-                    .append("  !include devicons/solr.puml").append(EOL.getContent())
-                    .append(EOL.getContent());
+                    .append(CARRIAGE_RETURN.getContent());
+            bucket2 = new StringBuilder().append(CARRIAGE_RETURN.getContent());
+            bucket2.append("!else").append(CARRIAGE_RETURN.getContent())
+                    .append("  'use tupadr3/common and tupadr3/font-awesome").append(CARRIAGE_RETURN.getContent())
+                    .append("  !include <tupadr3/common>").append(CARRIAGE_RETURN.getContent())
+                    .append("  !include <tupadr3/font-awesome/server>").append(CARRIAGE_RETURN.getContent())
+                    .append("  !include <tupadr3/font-awesome/database>").append(CARRIAGE_RETURN.getContent())
+                    .append("  !include <tupadr3/font-awesome/archive>").append(CARRIAGE_RETURN.getContent())
+                    .append("  !include <tupadr3/font-awesome/address_book>").append(CARRIAGE_RETURN.getContent())
+                    .append("  !include <tupadr3/font-awesome/file_o>").append(CARRIAGE_RETURN.getContent())
+                    .append("  !include <tupadr3/font-awesome/file_zip_o>").append(CARRIAGE_RETURN.getContent())
+                    .append("  !include <tupadr3/font-awesome/envelope>").append(CARRIAGE_RETURN.getContent())
+                    .append("  !include <tupadr3/font-awesome/users>").append(CARRIAGE_RETURN.getContent())
+                    .append("  !include <tupadr3/font-awesome/user>").append(CARRIAGE_RETURN.getContent())
+                    .append("  !include <tupadr3/font-awesome/folder>").append(CARRIAGE_RETURN.getContent())
+                    .append("  !include <tupadr3/devicons/jenkins>").append(CARRIAGE_RETURN.getContent())
+                    .append("  !include <tupadr3/devicons/terminal>").append(CARRIAGE_RETURN.getContent())
+                    .append("  !include devicons/springboot.puml").append(CARRIAGE_RETURN.getContent())
+                    .append("  !include devicons/btix.puml").append(CARRIAGE_RETURN.getContent())
+                    .append("  !include devicons/solr.puml").append(CARRIAGE_RETURN.getContent())
+                    .append(CARRIAGE_RETURN.getContent());
 
         } else {
-            content.append(EOL.getContent())
-                    .append(getEnableOrderingDefault()).append(EOL.getContent())
-                    .append(getDefaultSequenceHeader()).append(EOL.getContent())
-                    .append(EOL.getContent());
+            content.append(CARRIAGE_RETURN.getContent())
+                    .append(getEnableOrderingDefault()).append(CARRIAGE_RETURN.getContent())
+                    .append(getDefaultSequenceHeader()).append(CARRIAGE_RETURN.getContent())
+                    .append(CARRIAGE_RETURN.getContent());
         }
     }
 
-    public void addComponent(final ServiceDefinition currentService) {
-        if (!doneApplication.contains(currentService.getApplicationName())) {
+    public void addComponent(final ApplicationDefinition currentApplication, final ServiceDefinition currentService) {
+        if (!doneApplication.contains(currentApplication.getName())) {
             if (DiagramType.COMPONENT_DIAGRAM_BASE.equals(diagramType)) {
                 final String componentName = Constants.DEFINE_FUNCTION_PREFIX.getValue() +
-                        currentService.getApplicationName().toUpperCase() + COMPONENT_SUFFIX.getValue();
+                        currentApplication.getName().toUpperCase() + COMPONENT_SUFFIX.getValue();
 
-                content.append(EOL.getContent());
+                content.append(CARRIAGE_RETURN.getContent());
                 // UMLStrict
-                bucket1.append("  ").append(componentName).append(" = '").append(currentService.getSystemType().getUmlStrict()).append(" \"").append(currentService.getApplicationName()).append("\" as ")
-                        .append(currentService.getApplicationName().toLowerCase()).append(" ").append(ColorMapper.getStereotype(currentService.getDomainColor())).append("'").append(EOL.getContent());
+                bucket1.append("  ").append(componentName).append(" = '").append(currentService.getSystemType().getUmlStrict())
+                        .append(" \"").append(currentApplication.getLabel())
+                        .append("\" as ")
+                        .append(currentApplication.getAlias()).append(" ")
+                        .append(ColorMapper.getStereotype(currentService.getDomainColor())).append("'").append(CARRIAGE_RETURN.getContent());
                 // Font-awesome
                 //TODO systeme unterscheiden
                 //Todo auf Template umstellen
-                bucket2.append("  ").append(componentName).append(" = ").append(currentService.getSystemType().getFontAwesome()).append("(\"").append(currentService.getApplicationName().toLowerCase()).append("\",\"").append(currentService.getApplicationName())
-                        .append("\") + '").append(ColorMapper.getStereotype(currentService.getDomainColor())).append("'").append(EOL.getContent());
-                doneApplication.add(currentService.getApplicationName());
+                bucket2.append("  ").append(componentName).append(" = ").append(currentService.getSystemType().getFontAwesome()).append("(\"")
+                        .append(currentApplication.getAlias()).append("\",\"")
+                        .append(currentApplication.getLabel()).append("\") + '")
+                        .append(ColorMapper.getStereotype(currentService.getDomainColor())).append("'").append(CARRIAGE_RETURN.getContent());
+                doneApplication.add(currentApplication.getName());
             } else {
-                String participantName = currentService.getApplicationName();
+                String participantName = currentApplication.getName();
                 // Generate default
                 content.append("!if (%not(%variable_exists(\"").append(Constants.FUNCTION_V2_PREFIX.getValue()).append(participantName.toUpperCase()).append("_ORDER_PRIO\")))")
-                        .append(EOL.getContent())
+                        .append(CARRIAGE_RETURN.getContent())
                         .append("     ")
                         .append(Constants.DEFINE_FUNCTION_PREFIX.getValue()).append(participantName.toUpperCase())
-                        .append("_ORDER_PRIO = $getOrder(").append(currentService.getOrderPrio()).append(")").append(EOL.getContent())
+                        .append("_ORDER_PRIO = $getOrder(").append(currentService.getOrderPrio()).append(")").append(CARRIAGE_RETURN.getContent())
                         .append("!endif")
-                        .append(EOL.getContent());
+                        .append(CARRIAGE_RETURN.getContent());
                 //define the participant
-                content.append(Constants.DEFINE_FUNCTION_PREFIX.getValue()).append(currentService.getApplicationName().toUpperCase())
-                        .append(Constants.PARTICIPANT_SUFFIX.getValue()).append(" = '").append(currentService.getSystemType().getSequenceName()).append(" \"").append(currentService.getApplicationName()).append("\" as ")
-                        .append(currentService.getApplicationName().toLowerCase()).append(ColorMapper.getStereotype(currentService.getDomainColor())).append("' + ")
+                content.append(Constants.DEFINE_FUNCTION_PREFIX.getValue()).append(currentApplication.getName().toUpperCase())
+                        .append(Constants.PARTICIPANT_SUFFIX.getValue()).append(" = '").append(currentService.getSystemType().getSequenceName()).append(" \"")
+                        .append(currentApplication.getLabel()).append("\" as ")
+                        .append(currentApplication.getAlias()).append(ColorMapper.getStereotype(currentService.getDomainColor())).append("' + ")
                         .append(Constants.FUNCTION_V2_PREFIX.getValue()).append(participantName.toUpperCase()).append("_ORDER_PRIO")
-                        .append(EOL.getContent()).append(EOL.getContent());
+                        .append(CARRIAGE_RETURN.getContent()).append(CARRIAGE_RETURN.getContent());
 
-                doneApplication.add(currentService.getApplicationName());
+                doneApplication.add(currentApplication.getName());
             }
         } else {
-            logger().debug("{} is already defined.", currentService.getApplicationName());
+            logger().debug("{} is already defined.", currentApplication.getName());
         }
 
     }
@@ -121,7 +128,7 @@ public class ComponentFile implements Loggable {
         if (DiagramType.COMPONENT_DIAGRAM_BASE.equals(diagramType)) {
             // bucket1 is closed by bucket2 automatically
             // bucket2 close with endif
-            bucket2.append(EOL.getContent()).append("!endif").append(EOL.getContent());
+            bucket2.append(CARRIAGE_RETURN.getContent()).append("!endif").append(CARRIAGE_RETURN.getContent());
             copy = new StringBuilder(bucket1.capacity() + bucket2.capacity());
             copy.append(bucket1);
             copy.append(bucket2);
@@ -135,20 +142,20 @@ public class ComponentFile implements Loggable {
     }
 
     private String getDefaultSequenceHeader() {
-        return "'' !$ENABLE_FEATURE_ORDERING = %true() allows to override the ordering of participant" + EOL.getContent() +
-                "'' which is the order of creation by default" + EOL.getContent() +
-                "!unquoted function $getOrder($ORDER_PRIO)" + EOL.getContent() +
-                "  !if ($ENABLE_FEATURE_ORDERING)" + EOL.getContent() +
-                "    !return ' order '+$ORDER_PRIO" + EOL.getContent() +
-                "  !else" + EOL.getContent() +
-                "    !return ' '" + EOL.getContent() +
-                "  !endif" + EOL.getContent() +
-                "!endfunction" + EOL.getContent();
+        return "'' !$ENABLE_FEATURE_ORDERING = %true() allows to override the ordering of participant" + CARRIAGE_RETURN.getContent() +
+                "'' which is the order of creation by default" + CARRIAGE_RETURN.getContent() +
+                "!unquoted function $getOrder($ORDER_PRIO)" + CARRIAGE_RETURN.getContent() +
+                "  !if ($ENABLE_FEATURE_ORDERING)" + CARRIAGE_RETURN.getContent() +
+                "    !return ' order '+$ORDER_PRIO" + CARRIAGE_RETURN.getContent() +
+                "  !else" + CARRIAGE_RETURN.getContent() +
+                "    !return ' '" + CARRIAGE_RETURN.getContent() +
+                "  !endif" + CARRIAGE_RETURN.getContent() +
+                "!endfunction" + CARRIAGE_RETURN.getContent();
     }
 
     private String getEnableOrderingDefault() {
-        return "!if (%not(%variable_exists(\"$ENABLE_FEATURE_ORDERING\")))" + EOL.getContent() +
-                "  !$ENABLE_FEATURE_ORDERING = %false()" + EOL.getContent() +
-                "!endif" + EOL.getContent();
+        return "!if (%not(%variable_exists(\"$ENABLE_FEATURE_ORDERING\")))" + CARRIAGE_RETURN.getContent() +
+                "  !$ENABLE_FEATURE_ORDERING = %false()" + CARRIAGE_RETURN.getContent() +
+                "!endif" + CARRIAGE_RETURN.getContent();
     }
 }

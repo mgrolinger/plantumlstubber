@@ -14,7 +14,7 @@
 !if ($SIMPLE == %false() && $[[${#strings.toUpperCase(applicationName)}]]_SIMPLE == %false())
     !if (%not(%variable_exists("$[[${#strings.toUpperCase(applicationName)}]]_PARTICIPANT_CREATED")))
         !if (%not(%variable_exists("$[[${#strings.toUpperCase(applicationName)}]]_PARTICIPANT")))
-            !$[[${#strings.toUpperCase(applicationName)}]]_PARTICIPANT = 'participant "<b>[[${applicationName}]]</b>\nPlease define\nthe participant \nin <b>participant_definition.iuml</b>" as [[${alias}]] [(${colorType})] order [[${sequenceOrderPrio}]] #Red'
+            !$[[${#strings.toUpperCase(applicationName)}]]_PARTICIPANT = 'participant "<b>[[${applicationLabel}]]</b>\nPlease define\nthe participant \nin <b>participant_definition.iuml</b>" as [[${alias}]] [(${colorType})] order [[${sequenceOrderPrio}]] #Red'
         !endif
         $[[${#strings.toUpperCase(applicationName)}]]_PARTICIPANT
         !global $[[${#strings.toUpperCase(applicationName)}]]_PARTICIPANT_CREATED='[[${alias}]]'

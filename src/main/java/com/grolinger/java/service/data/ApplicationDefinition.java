@@ -12,6 +12,7 @@ import java.util.List;
 @Builder
 public class ApplicationDefinition {
     private String name;
-    private String customAlias;
+    private String label;
+    private String alias;
     private List<ServiceDefinition> serviceDefinitions;
 }
