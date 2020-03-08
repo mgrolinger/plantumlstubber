@@ -1,6 +1,8 @@
 package com.grolinger.java.controller;
 
 import org.springframework.beans.BeansException;
+import org.springframework.boot.ExitCodeGenerator;
+import org.springframework.boot.SpringApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -15,11 +17,11 @@ public class ShutdownController implements ApplicationContextAware {
     @PostMapping("/shutdownContext")
     public void shutdownContext() {
         ((ConfigurableApplicationContext) context).close();
+        SpringApplication.exit(context, () -> 0);
     }
 
     @Override
     public void setApplicationContext(ApplicationContext ctx) throws BeansException {
         this.context = ctx;
-
     }
 }

@@ -5,11 +5,11 @@ import com.grolinger.java.controller.MultiExportController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.Banner;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.SpringApplication;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
@@ -22,7 +22,7 @@ import org.springframework.context.annotation.Profile;
 @SpringBootApplication
 @Configuration
 @EnableConfigurationProperties(value = {PlantumlStubberConfiguration.class})
-public class ServiceGeneratorConsole implements CommandLineRunner {
+public class PlantumlStubberConsole implements CommandLineRunner {
 
     private enum CommandArg {
         COMP,
@@ -33,12 +33,13 @@ public class ServiceGeneratorConsole implements CommandLineRunner {
     private MultiExportController multiExportController;
 
     public static void main(String[] args) {
-        SpringApplicationBuilder app = new SpringApplicationBuilder(ServiceGeneratorConsole.class)
+        SpringApplicationBuilder app = new SpringApplicationBuilder(PlantumlStubberConsole.class)
                 .web(WebApplicationType.NONE)
                 .bannerMode(Banner.Mode.OFF);
 
         app.run(args);
-        app.application().exit(app.context(), () -> 0);
+        app.application();
+        SpringApplication.exit(app.context(), () -> 0);
     }
 
     @Override

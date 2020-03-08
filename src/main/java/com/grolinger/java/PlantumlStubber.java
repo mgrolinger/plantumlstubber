@@ -11,13 +11,13 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @EnableConfigurationProperties(value = {PlantumlStubberConfiguration.class})
 @SpringBootApplication(scanBasePackages = {"com.grolinger.java"})
-public class ServiceGenerator {
-    private static final Logger logger = LoggerFactory.getLogger(ServiceGenerator.class);
+public class PlantumlStubber {
+    private static final Logger logger = LoggerFactory.getLogger(PlantumlStubber.class);
 
     public static void main(String[] args) {
 
         //TODO JCommander etc
-        SpringApplication.run(ServiceGenerator.class, args);
+        SpringApplication.run(PlantumlStubber.class, args);
         logger.info("Swagger accessible via http://localhost:19191/swagger-ui.html#/");
     }
 
