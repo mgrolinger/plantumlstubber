@@ -7,8 +7,12 @@ import org.thymeleaf.context.Context;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * Service Processor
+ */
 public interface DataProcessorService {
-    Context processContextOfApplication(String colorName, String integrationType,  String systemType, String applicationName, String serviceName, String interfaceName, Integer orderPrio);
+
+    Context processContextOfApplication(String colorName, String integrationType, String applicationName, String serviceName, String interfaceName, Integer orderPrio);
 
     void processApplication(final List<ApplicationDefinition> applicationList, final DiagramType diagramType) throws IOException;
 }

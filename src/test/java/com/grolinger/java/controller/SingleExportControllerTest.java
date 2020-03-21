@@ -54,7 +54,7 @@ public class SingleExportControllerTest {
         context.setVariable(ContextVariables.PATH_TO_COMMON_FILE, commonPath);
 
 
-        when(dataProcessorService.processContextOfApplication(eq(colorName), eq(integrationType), anyString(), eq(applicationName), eq(serviceName), eq(interfaceName), eq(1))).thenReturn(context);
+        when(dataProcessorService.processContextOfApplication(eq(colorName), anyString(), eq(applicationName), eq(serviceName), eq(interfaceName), eq(1))).thenReturn(context);
 
         cut.prepareModel(model, applicationName, serviceName, interfaceName, colorName, integrationType, 1);
 

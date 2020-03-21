@@ -5,7 +5,7 @@ package com.grolinger.java.controller.templatemodel;
  * in sync with the templates.
  */
 public final class ContextVariables {
-    public static final String ALIAS = "alias";
+    public static final String ALIAS = "ALIAS";
     public static final String API_CREATED = "API_CREATED";
     public static final String APPLICATION_LABEL = "applicationLabel";
     public static final String APPLICATION_NAME = "applicationName";
@@ -30,7 +30,9 @@ public final class ContextVariables {
     public static final String REST = "REST";
     public static final String SEQUENCE_PARTICIPANT_ORDER = "sequenceOrderPrio";
     public static final String SERVICE_NAME = "serviceName";
+    public static final String SERVICE_LABEL = "SERVICE_LABEL";
     public static final String SOAP = "Soap";
+
     private ContextVariables() {
         // hide
     }

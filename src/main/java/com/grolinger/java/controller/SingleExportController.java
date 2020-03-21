@@ -79,8 +79,7 @@ public class SingleExportController {
         model.addAttribute(DATE_CREATED, LocalDate.now());
         //TODO Call Stack
         // TODO fix all
-        String systemType = "application";
-        Context context = dataProcessorService.processContextOfApplication(colorName, integrationType, systemType, applicationName, serviceName, interfaceName, orderPrio);
+        Context context = dataProcessorService.processContextOfApplication(colorName, integrationType, applicationName, serviceName, interfaceName, orderPrio);
 
         model.addAttribute(PATH_TO_COMMON_FILE, context.getVariable(PATH_TO_COMMON_FILE));
         model.addAttribute(APPLICATION_NAME, context.getVariable(APPLICATION_NAME));

@@ -3,7 +3,6 @@ package com.grolinger.java.service.impl;
 import com.grolinger.java.service.data.ApplicationDefinition;
 import com.grolinger.java.service.data.InterfaceDefinition;
 import com.grolinger.java.service.data.ServiceDefinition;
-import com.grolinger.java.service.data.mapper.SystemType;
 import org.testng.annotations.Test;
 import org.thymeleaf.context.Context;
 
@@ -14,9 +13,18 @@ public class ContextSpecTest {
 
     @Test
     public void testMinObject() {
-        ApplicationDefinition applicationDefinition = ApplicationDefinition.builder().name("MinApp").label("MinLabel").alias("customAlias").build();
+        ApplicationDefinition applicationDefinition = ApplicationDefinition.builder()
+                .name("MinApp")
+                .label("MinLabel")
+                .alias("customAlias")
+                .systemType("application")
+                .build();
         Context result = new ContextSpec().builder()
-                .withColorName("test").withApplication(applicationDefinition).withCommonPath("commonPath").withOrderPrio(99).getContext();
+                .withColorName("test")
+                .withApplication(applicationDefinition)
+                .withCommonPath("commonPath")
+                .withOrderPrio(99)
+                .getContext();
         assertThat(result.getVariable(APPLICATION_NAME)).isEqualTo("MinApp");
         assertThat(result.getVariable(APPLICATION_LABEL)).isEqualTo("MinLabel");
         assertThat(result.getVariable(ALIAS)).isEqualTo("customAlias");
@@ -30,7 +38,8 @@ public class ContextSpecTest {
     @Test
     public void testNull() {
         Context result = new ContextSpec().builder()
-                .withColorName(null).withApplication(ApplicationDefinition.builder().build()).getContext();
+                .withColorName(null)
+                .withApplication(ApplicationDefinition.builder().build()).getContext();
 
         assertThat(result.getVariable(APPLICATION_NAME)).isEqualTo("Undefined");
         assertThat(result.getVariable(APPLICATION_LABEL)).isEqualTo("Undefined");
@@ -52,7 +61,10 @@ public class ContextSpecTest {
         ApplicationDefinition applicationDefinition = ApplicationDefinition.builder().name("MinApp").label("MinLabel").build();
         InterfaceDefinition interfaceDefinition = new InterfaceDefinition("/api/rest/interface->Call_sub", "customAlias", "foo::bar", "linkedComponent", "linkedAlias");
         Context result = new ContextSpec().builder()
-                .withColorName("test").withApplication(applicationDefinition).withInterfaceDefinition(interfaceDefinition).getContext();
+                .withColorName("test")
+                .withApplication(applicationDefinition)
+                .withInterfaceDefinition(interfaceDefinition)
+                .getContext();
 
         assertThat(result.getVariable(CALL_INTERFACE_BY)).isEqualTo("$fooCall");
         assertThat(result.getVariable(INTERFACE_NAME)).isEqualTo("_api_rest_interface");
@@ -73,12 +85,26 @@ public class ContextSpecTest {
 
     @Test
     public void testServiceDefinition() {
-        ApplicationDefinition applicationDefinition = ApplicationDefinition.builder().name("MinApp").label("MinLabel").build();
-        ServiceDefinition serviceDefinition = new ServiceDefinition("serviceName.v2", SystemType.COMPONENT.name(), "domainColor", 98);
+        final String name = "MinApp";
+        final String label = "MinLabel";
+        ApplicationDefinition applicationDefinition = ApplicationDefinition.builder()
+                .name(name)
+                .label(label)
+                .build();
+
+        final String sname = "serviceName.v2";
+        ServiceDefinition serviceDefinition = ServiceDefinition.builder()
+                .serviceName(sname)
+                .orderPrio(98)
+                .build();
         Context result = new ContextSpec().builder()
                 .withColorName("test").withApplication(applicationDefinition).withServiceDefinition(serviceDefinition).getContext();
 
+        assertThat(result.getVariable(APPLICATION_NAME)).isEqualTo(name);
+        assertThat(result.getVariable(APPLICATION_LABEL)).isEqualTo(label);
         assertThat(result.getVariable(SERVICE_NAME)).isEqualTo("serviceName_v2");
+        assertThat(result.getVariable(SERVICE_LABEL)).isEqualTo(sname);
+        assertThat(result.getVariable(COLOR_NAME)).isEqualTo("TEST_DOMAIN_COLOR");
         assertThat(result.getVariable(IS_ROOT_SERVICE)).isEqualTo(false);
         assertThat(result.getVariable(PATH_TO_COMMON_FILE)).isEqualTo("../../");
     }

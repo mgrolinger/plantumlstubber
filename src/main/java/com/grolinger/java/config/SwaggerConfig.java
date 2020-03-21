@@ -27,11 +27,11 @@ public class SwaggerConfig {
 
     private ApiInfo apiInfo() {
         return new ApiInfo(
-                "Service Stub Generator",
+                "PlantumlStubber",
                 "Generator for PlantUML service stubs.",
                 "API TOS",
                 "Terms of service",
-                new Contact("Michael Grolinger", "https://de.linkedin.com/in/mgrolinger", "m.grolinger+serviceGenerator@gmail.com"),
+                new Contact("Michael Grolinger", "https://de.linkedin.com/in/mgrolinger", "m.grolinger+plantuml@gmail.com"),
                 "Apache V2.0", "http://www.apache.org/licenses/LICENSE-2.0", Collections.emptyList());
     }
 }

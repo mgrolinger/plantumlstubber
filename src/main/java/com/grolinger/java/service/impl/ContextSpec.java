@@ -132,14 +132,16 @@ public final class ContextSpec {
             return this;
         }
 
-        private void setPreformattedServiceName(final String serviceName) {
+        private void setServiceName(final ServiceDefinition serviceDefinition) {
+            String serviceName = serviceDefinition.getServiceCallName();
             if (StringUtils.isEmpty(serviceName) || EMPTY.getValue().equalsIgnoreCase(serviceName)) {
                 context.setVariable(SERVICE_NAME, "");
+                context.setVariable(SERVICE_LABEL, "");
                 context.setVariable(IS_ROOT_SERVICE, true);
             } else {
                 //ServiceName containing dot (.) seems to cause syntax error in generated iuml file
                 context.setVariable(SERVICE_NAME, serviceName);
-
+                context.setVariable(SERVICE_LABEL, serviceDefinition.getServiceLabel());
                 context.setVariable(IS_ROOT_SERVICE, false);
             }
         }
@@ -171,7 +173,7 @@ public final class ContextSpec {
 
         @Override
         public ContextBuilder withServiceDefinition(ServiceDefinition serviceDefinition) {
-            setPreformattedServiceName(serviceDefinition.getServiceCallName());
+            setServiceName(serviceDefinition);
             withCommonPath(serviceDefinition.getCommonPath());
             return this;
         }

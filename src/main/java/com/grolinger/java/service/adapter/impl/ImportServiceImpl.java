@@ -68,7 +68,11 @@ public class ImportServiceImpl implements ImportService {
                 String label = StringUtils.isEmpty(importedServices.getCustomLabel()) ?
                         replaceUnwantedCharacters(importedServices.getApplication(), false) :
                         importedServices.getCustomLabel();
-                pumlComponent = ApplicationDefinition.builder().name(applicationName).label(label).alias(alias)
+                pumlComponent = ApplicationDefinition.builder()
+                        .name(applicationName)
+                        .label(label)
+                        .alias(alias)
+                        .systemType(importedServices.getSystemType())
                         .serviceDefinitions(new LinkedList<>())
                         .build();
             }
@@ -81,7 +85,10 @@ public class ImportServiceImpl implements ImportService {
                 // Iterate over the services itself
                 for (Map.Entry<String, String[]> serviceName : serviceList.entrySet()) {
                     String[] services1 = serviceName.getValue();
-                    ServiceDefinition serviceDefinition = new ServiceDefinition(serviceName.getKey(), importedServices.getSystemType(), importedServices.getDomainColor(), orderPrio);
+                    ServiceDefinition serviceDefinition = ServiceDefinition.builder()
+                            .serviceName(serviceName.getKey())
+                            .domainColor(importedServices.getDomainColor())
+                            .orderPrio(orderPrio).build();
                     //Interfaces
                     logger().info("Current path: {}", path);
                     for (String interfaceName : services1) {

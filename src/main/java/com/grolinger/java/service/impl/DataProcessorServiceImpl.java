@@ -24,12 +24,17 @@ public class DataProcessorServiceImpl implements Loggable, com.grolinger.java.se
     private final FileService fileService;
 
     @Override
-    public Context processContextOfApplication(String colorName, String integrationType, String systemType, String applicationName, String serviceName, String interfaceName, Integer orderPrio) {
+    public Context processContextOfApplication(String colorName, String integrationType, String applicationName, String serviceName, String interfaceName, Integer orderPrio) {
         // Fixme: missing all new features for multi-service
         ApplicationDefinition applicationDefinition = ApplicationDefinition.builder()
                 .name(applicationName).alias(applicationName.toLowerCase()).label(applicationName)
                 .build();
-        ServiceDefinition serviceDefinition = new ServiceDefinition(serviceName, systemType, colorName, orderPrio);
+        ServiceDefinition serviceDefinition = ServiceDefinition.builder()
+                .serviceName(serviceName)
+                .domainColor(colorName)
+                .orderPrio(orderPrio)
+                .build();
+
         return new ContextSpec().builder()
                 .withColorName(colorName)
                 .withApplication(applicationDefinition)
@@ -71,7 +76,7 @@ public class DataProcessorServiceImpl implements Loggable, com.grolinger.java.se
     }
 
     private String createDirectoryForService(String basePath, Map<String, String> dirsCreate, ApplicationDefinition applicationDefinition, ServiceDefinition serviceDefinition) throws IOException {
-        logger().info("Processing service:{}_{}", applicationDefinition.getName(), serviceDefinition.getServiceCallName());
+        logger().info("Processing service:{} {}", applicationDefinition.getName(), serviceDefinition.getServiceCallName());
         String pathForReturnValue;
 
         if (!dirsCreate.containsKey(applicationDefinition.getName() + serviceDefinition.getServiceCallName())) {

@@ -6,6 +6,8 @@ import com.grolinger.java.controller.templatemodel.DiagramType;
 import com.grolinger.java.service.data.ApplicationDefinition;
 import com.grolinger.java.service.data.ServiceDefinition;
 import com.grolinger.java.service.data.mapper.ColorMapper;
+import com.grolinger.java.service.impl.ColorGenerator;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
@@ -19,13 +21,13 @@ import static com.grolinger.java.controller.templatemodel.TemplateContent.*;
  * Exporter for the automatic component/participant initialization from
  * either component_definition.iuml or aprticipant_definition.iuml
  */
+@Slf4j
 public class ComponentFile implements Loggable {
     private DiagramType diagramType;
     private StringBuilder content;
     private StringBuilder bucket1;
     private StringBuilder bucket2;
     private Set<String> doneApplication;
-
 
     @NotNull
     public ComponentFile(final DiagramType diagramType) {
@@ -79,15 +81,16 @@ public class ComponentFile implements Loggable {
 
                 content.append(CARRIAGE_RETURN.getContent());
                 // UMLStrict
-                bucket1.append("  ").append(componentName).append(" = '").append(currentService.getSystemType().getUmlStrict())
+                bucket1.append("  ").append(componentName).append(" = '").append(currentApplication.getSystemType().getUmlStrict())
                         .append(" \"").append(currentApplication.getLabel())
                         .append("\" as ")
                         .append(currentApplication.getAlias()).append(" ")
                         .append(ColorMapper.getStereotype(currentService.getDomainColor())).append("'").append(CARRIAGE_RETURN.getContent());
+                log.info("ColorShema: {} -> {}", currentService.getDomainColor(), ColorGenerator.getColorCode(currentService.getDomainColor()));
                 // Font-awesome
                 //TODO systeme unterscheiden
                 //Todo auf Template umstellen
-                bucket2.append("  ").append(componentName).append(" = ").append(currentService.getSystemType().getFontAwesome()).append("(\"")
+                bucket2.append("  ").append(componentName).append(" = ").append(currentApplication.getSystemType().getFontAwesome()).append("(\"")
                         .append(currentApplication.getAlias()).append("\",\"")
                         .append(currentApplication.getLabel()).append("\") + '")
                         .append(ColorMapper.getStereotype(currentService.getDomainColor())).append("'").append(CARRIAGE_RETURN.getContent());
@@ -104,7 +107,7 @@ public class ComponentFile implements Loggable {
                         .append(CARRIAGE_RETURN.getContent());
                 //define the participant
                 content.append(Constants.DEFINE_FUNCTION_PREFIX.getValue()).append(currentApplication.getName().toUpperCase())
-                        .append(Constants.PARTICIPANT_SUFFIX.getValue()).append(" = '").append(currentService.getSystemType().getSequenceName()).append(" \"")
+                        .append(Constants.PARTICIPANT_SUFFIX.getValue()).append(" = '").append(currentApplication.getSystemType().getSequenceName()).append(" \"")
                         .append(currentApplication.getLabel()).append("\" as ")
                         .append(currentApplication.getAlias()).append(ColorMapper.getStereotype(currentService.getDomainColor())).append("' + ")
                         .append(Constants.FUNCTION_V2_PREFIX.getValue()).append(participantName.toUpperCase()).append("_ORDER_PRIO")

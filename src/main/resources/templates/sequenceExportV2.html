@@ -7,14 +7,14 @@
 !assert %variable_exists("$SIMPLE") : "Please define !$SIMPLE=%false()/%true()"
 !assert %variable_exists("$DETAILED") : "Please define !$DETAILED=%false()/%true()"
 !assert %variable_exists("$SHOW_EXCEPTION") : "Please define !$SHOW_EXCEPTION=%false()/%true()"
-!if (%not(%variable_exists("$[[${#strings.toUpperCase(applicationName)}]]_SIMPLE")))
-    !$[[${#strings.toUpperCase(applicationName)}]]_SIMPLE=%false()
+!if (%not(%variable_exists("$[[${#strings.toUpperCase(ALIAS)}]]_SIMPLE")))
+    !$[[${#strings.toUpperCase(ALIAS)}]]_SIMPLE=%false()
 !endif
 'Definition of participants
-!if ($SIMPLE == %false() && $[[${#strings.toUpperCase(applicationName)}]]_SIMPLE == %false())
+!if ($SIMPLE == %false() && $[[${#strings.toUpperCase(ALIAS)}]]_SIMPLE == %false())
     !if (%not(%variable_exists("$[[${#strings.toUpperCase(applicationName)}]]_PARTICIPANT_CREATED")))
         !if (%not(%variable_exists("$[[${#strings.toUpperCase(applicationName)}]]_PARTICIPANT")))
-            !$[[${#strings.toUpperCase(applicationName)}]]_PARTICIPANT = 'participant "<b>[[${applicationLabel}]]</b>\nPlease define\nthe participant \nin <b>participant_definition.iuml</b>" as [[${alias}]] [(${colorType})] order [[${sequenceOrderPrio}]] #Red'
+            !$[[${#strings.toUpperCase(applicationName)}]]_PARTICIPANT = 'participant "<b>[[${applicationLabel}]]</b>\nPlease define\nthe participant \nin <b>participant_definition.iuml</b>" as [[${ALIAS}]] [(${colorType})] order [[${sequenceOrderPrio}]] #Red'
         !endif
         $[[${#strings.toUpperCase(applicationName)}]]_PARTICIPANT
         !global $[[${#strings.toUpperCase(applicationName)}]]_PARTICIPANT_CREATED='[[${alias}]]'
@@ -24,18 +24,17 @@
     </th:block>
 !endif
 
-
 '
 [(${isSoapService} ? '\' Define soap method here' : '\' Define CRUD methods here')]
 [(${isRestService} ? '\' Crud - Create' : '\'' )]
 [(${isRestService} ? '\' cRud - Read/Get' :  '\'')]
 !function $[(${isRootService} ?  ${applicationName} : ${applicationName}+'_'+${serviceName})]_[[${interfaceName}]]($CALLER="consumer",$REQ_PARAM='Todo')
     ' Either everything is configured to SIMPLE view or only this PUMLComponent and everything behind it
-    !if ($SIMPLE || $[[${#strings.toUpperCase(applicationName)}]]_SIMPLE)
+    !if ($SIMPLE || $[[${#strings.toUpperCase(ALIAS)}]]_SIMPLE)
         $referenceBox($CALLER,$[[${#strings.toUpperCase(colorName)}]],"Todo")
     !else
         'Business and technical view
-        $CALLER -> [[${alias}]] ++ : [[${callInterfaceBy}]]("Todo","[[${#strings.capitalize(serviceName)}]]","[[${interfaceName}]]("+$REQ_PARAM+")")
+        $CALLER -> [[${ALIAS}]] ++ : [[${callInterfaceBy}]]("Todo","[[${#strings.capitalize(serviceName)}]]","[[${interfaceName}]]("+$REQ_PARAM+")")
         ' subsequent calls
         ' fachliche Hinweise $businessBox("CALLER","SIDE","TEXT") oder
         ' technische Hinweise $technicalBox("CALLER","SIDE","TEXT")
@@ -43,16 +42,16 @@
         </th:block>
         ' response
         ' success case
-        $CALLER <--  [[${alias}]] : $businessAndTechnicalResponse("businessTodo","ToDoResponseObj","[[${interfaceResponseType}]]") [(${isRestService} ? '$http200' :  '' )]
+        $CALLER <--  [[${ALIAS}]] : $businessAndTechnicalResponse("businessTodo","ToDoResponseObj","[[${interfaceResponseType}]]") [(${isRestService} ? '$http200' :  '' )]
 
         !if ($SHOW_EXCEPTION)
             'add else failed clauses here
             alt error
                 note over [[${alias}]] #Red
-                    Possible errors
-                    not yet defined
+                    Possible errors not yet defined
                 end note
-                $CALLER <-- [[${alias}]] : [(${isSoapService} ? '$soapFault("ERROR-Code","ERROR-Message")' : '' )] [(${isRestService} ? '$http500' : '' )]
+                else
+                    $CALLER <-- [[${alias}]] : [(${isSoapService} ? '$soapFault("ERROR-Code","ERROR-Message")' : '' )] [(${isRestService} ? '$http500' : '' )]
             end
         !endif
         deactivate [[${alias}]]

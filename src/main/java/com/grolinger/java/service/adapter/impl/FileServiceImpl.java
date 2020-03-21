@@ -30,11 +30,12 @@ import static com.grolinger.java.controller.templatemodel.Constants.*;
 public class FileServiceImpl implements FileService {
     private static final String GLOBAL_FILE_EXPORT_PATH = System.getProperty("user.dir") + File.separator + "target" + File.separator;
     private static final String COMMON_PATH = "common/";
-    private static final String COMMON_FILE = "common.iuml";
+    private static final String COMMON_FILE = "common/common.iuml";
     private static final String COMPONENT_DEFINITION_FILE = "component_definition.iuml";
     private static final String PARTICIPANT_DEFINITION_FILE = "participant_definition.iuml";
     public static final String FILE_TYPE_IUML = ".iuml";
     private static final String EXAMPLE_FILE_SUFFIX = "_example.puml";
+
     private final SpringTemplateEngine templateEngine;
 
 
@@ -71,7 +72,7 @@ public class FileServiceImpl implements FileService {
             include += PARTICIPANT_DEFINITION_FILE;
         }
         Files.createDirectories(Paths.get(GLOBAL_FILE_EXPORT_PATH + basePath + COMMON_PATH));
-        try (Writer writer = new FileWriter(GLOBAL_FILE_EXPORT_PATH + basePath + COMMON_PATH + COMMON_FILE)) {
+        try (Writer writer = new FileWriter(GLOBAL_FILE_EXPORT_PATH + basePath + COMMON_FILE)) {
             writer.write(TemplateContent.COMMONV2_FILE.getContent() + "\n" + include);
         } catch (IOException e) {
             // do nothing
