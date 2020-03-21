@@ -1,0 +1,11 @@
+#Mailserver
+application: Mailserver
+systemType: email
+#integrationType: SMTP|IMAP4|POP3
+domainColor: resource
+orderPrio: 99
+services:
+    SMTP:
+        EMPTY: [sendEmail]
+    IMAP4:
+        EMPTY: [receiveEmail]

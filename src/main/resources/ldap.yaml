@@ -1,0 +1,10 @@
+#Active Directory
+application: ActiveDirectory
+# the type: application or database
+systemType: user
+#integrationType: LDAP
+domainColor: customer
+orderPrio: 400
+services:
+    LDAP:
+        EMPTY: [user]

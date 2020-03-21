@@ -1,0 +1,10 @@
+#Filesystem
+application: Filesystem
+# the type: application or database
+systemType: folder
+#integrationType: FILE
+domainColor: resource
+orderPrio: 99
+services:
+    FILE:
+        EMPTY: [readFile,writeFile]
