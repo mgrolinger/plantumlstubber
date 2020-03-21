@@ -80,7 +80,7 @@ public class ImportServiceImpl implements ImportService {
             List<ServiceDefinition> serviceDefinitions = new LinkedList<>();
             // Iterate over Services.<REST|SOAP|...>
             for (String interfacesIntegrationType : importedServices.getServices().keySet()) {
-                String path = "";
+
                 LinkedHashMap<String, String[]> serviceList = importedServices.getServices().get(interfacesIntegrationType);
                 // Iterate over the services itself
                 for (Map.Entry<String, String[]> serviceName : serviceList.entrySet()) {
@@ -90,11 +90,10 @@ public class ImportServiceImpl implements ImportService {
                             .domainColor(importedServices.getDomainColor())
                             .orderPrio(orderPrio).build();
                     //Interfaces
-                    logger().info("Current path: {}", path);
                     for (String interfaceName : services1) {
                         InterfaceDefinition interfaceDefinition = new InterfaceDefinition(interfaceName, importedServices.getCustomAlias(), interfacesIntegrationType, importedServices.getLinkToComponent(), importedServices.getLinkToCustomAlias());
                         // ignore call stack information
-                        logger().info("Extracted interface: {}", interfaceDefinition.getName());
+                        logger().debug("Extracted interface: {}", interfaceDefinition.getName());
                         serviceDefinition.getInterfaceDefinitions().add(interfaceDefinition);
                     }
                     serviceDefinitions.add(serviceDefinition);

@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import org.springframework.util.StringUtils;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import static com.grolinger.java.controller.templatemodel.Constants.*;
@@ -26,8 +27,8 @@ public class ServiceDefinition {
     private String commonPath;
     private String serviceLabel;
     private String serviceCallName;
-
-    private List<InterfaceDefinition> interfaceDefinitions;
+    @Builder.Default
+    private List<InterfaceDefinition> interfaceDefinitions = new LinkedList<>();
 
     /**
      * Override Builder method to set servicePath, serviceLabel and serviceCallName
