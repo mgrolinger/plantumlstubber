@@ -13,4 +13,4 @@ http://localhost:19191/swagger-ui.html#/
 
 Todo
 ====
-- Rückbau der V1 Version, da funktional nicht mehr gewünscht
+
