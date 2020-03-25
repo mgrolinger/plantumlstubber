@@ -2,6 +2,7 @@
 ' generated on [[${dateCreated}]]
 !include [[${commonPath}]]common/common.iuml
 '!$DETAILED=%true()
+'!$[[${#strings.toUpperCase(ALIAS)}]]_SIMPLE=%true()
 '!$SIMPLE=%true()
 '!$SHOW_EXCEPTION=%true()
 !assert %variable_exists("$SIMPLE") : "Please define !$SIMPLE=%false()/%true()"
@@ -34,10 +35,11 @@
         $referenceBox($CALLER,$[[${#strings.toUpperCase(colorName)}]],"Todo")
     !else
         'Business and technical view
-        $CALLER -> [[${ALIAS}]] ++ : [[${callInterfaceBy}]]("Todo","[[${#strings.capitalize(serviceName)}]]","[[${interfaceName}]]("+$REQ_PARAM+")")
+        <th:block th:if="${isRestService}" xmlns:th="http://www.w3.org/1999/xhtml">$CALLER -> [[${ALIAS}]] ++ : [[${callInterfaceBy}]]("Todo","GET","[[${serviceName}]]/[[${interfaceName}]]<U+003F>"+$REQ_PARAM)</th:block>
+        <th:block th:unless ="${isRestService}" xmlns:th="http://www.w3.org/1999/xhtml">$CALLER -> [[${ALIAS}]] ++ : [[${callInterfaceBy}]]("Todo","[[${#strings.capitalize(serviceName)}]]","[[${interfaceName}]]($REQ_PARAM)")</th:block>
         ' subsequent calls
-        ' fachliche Hinweise $businessBox("CALLER","SIDE","TEXT") oder
-        ' technische Hinweise $technicalBox("CALLER","SIDE","TEXT")
+        ' business notes $bBox/$businessBox("CALLER","SIDE","TEXT") oder
+        ' technical notes $tBox/$technicalBox("CALLER","SIDE","TEXT")
         <th:block th:each="call : ${callStack}" xmlns:th="http://www.w3.org/1999/xhtml">$[[${call}]]("[[${alias}]]",$REQ_PARAM+"ToDo")
         </th:block>
         ' response
@@ -47,11 +49,11 @@
         !if ($SHOW_EXCEPTION)
             'add else failed clauses here
             alt error
-                note over [[${alias}]] #Red
+                note over [[${ALIAS}]] #Red
                     Possible errors not yet defined
                 end note
-                else
-                    $CALLER <-- [[${alias}]] : [(${isSoapService} ? '$soapFault("ERROR-Code","ERROR-Message")' : '' )] [(${isRestService} ? '$http500' : '' )]
+            else
+                $CALLER <-- [[${ALIAS}]] : [(${isSoapService} ? '$soapFault("ERROR-Code","ERROR-Message")' : '' )] [(${isRestService} ? '$http500' : '' )]
             end
         !endif
         deactivate [[${alias}]]

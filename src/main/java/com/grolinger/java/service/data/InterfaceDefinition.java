@@ -21,7 +21,7 @@ import static com.grolinger.java.service.NameService.replaceUnwantedCharacters;
  */
 public class InterfaceDefinition {
     private static Map<String, String> DEFAULT_MAPPER_RESPONSE = new HashMap<>();
-    private static Map<String, String> DEFAULT_MAPPER_INEGRATION = new HashMap<>();
+    private static Map<String, String> DEFAULT_MAPPER_INTEGRATION = new HashMap<>();
 
     static {
         // e.g. a SOAP request gets a XML response, a db call a resultset
@@ -29,9 +29,9 @@ public class InterfaceDefinition {
         DEFAULT_MAPPER_RESPONSE.put("SOAP", "XML");
         DEFAULT_MAPPER_RESPONSE.put("REST", "JSON");
         // e.g. SOAP -> SOAP::XML
-        DEFAULT_MAPPER_INEGRATION.put("DB", "::JDBC");
-        DEFAULT_MAPPER_INEGRATION.put("REST", "::JSON");
-        DEFAULT_MAPPER_INEGRATION.put("SOAP", "::XML");
+        DEFAULT_MAPPER_INTEGRATION.put("DB", "::JDBC");
+        DEFAULT_MAPPER_INTEGRATION.put("REST", "::JSON");
+        DEFAULT_MAPPER_INTEGRATION.put("SOAP", "::XML");
     }
 
     private String originalInterface;
@@ -141,9 +141,9 @@ public class InterfaceDefinition {
             result = type;
         } else {
             String dataType = "";
-            if (DEFAULT_MAPPER_INEGRATION.containsKey(type)) {
+            if (DEFAULT_MAPPER_INTEGRATION.containsKey(type)) {
                 // this is already combined with :: in the map
-                dataType = DEFAULT_MAPPER_INEGRATION.get(type);
+                dataType = DEFAULT_MAPPER_INTEGRATION.get(type);
             }
             // e.g. SOAP -> SOAP::XML
             result = type + dataType;
