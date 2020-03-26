@@ -18,7 +18,7 @@
             !$[[${#strings.toUpperCase(applicationName)}]]_PARTICIPANT = 'participant "<b>[[${applicationLabel}]]</b>\nPlease define\nthe participant \nin <b>participant_definition.iuml</b>" as [[${ALIAS}]] [(${colorType})] order [[${sequenceOrderPrio}]] #Red'
         !endif
         $[[${#strings.toUpperCase(applicationName)}]]_PARTICIPANT
-        !global $[[${#strings.toUpperCase(applicationName)}]]_PARTICIPANT_CREATED='[[${alias}]]'
+        !global $[[${#strings.toUpperCase(applicationName)}]]_PARTICIPANT_CREATED='[[${ALIAS}]]'
     !endif
     'Includes to subsequent importedServices go here
     <th:block th:each="callIncludes : ${callStackIncludes}" xmlns:th="http://www.w3.org/1999/xhtml">!include [[${commonPath}]][[${callIncludes}]].iuml
@@ -40,7 +40,7 @@
         ' subsequent calls
         ' business notes $bBox/$businessBox("CALLER","SIDE","TEXT") oder
         ' technical notes $tBox/$technicalBox("CALLER","SIDE","TEXT")
-        <th:block th:each="call : ${callStack}" xmlns:th="http://www.w3.org/1999/xhtml">$[[${call}]]("[[${alias}]]",$REQ_PARAM+"ToDo")
+        <th:block th:each="call : ${callStack}" xmlns:th="http://www.w3.org/1999/xhtml">$[[${call}]]("[[${ALIAS}]]",$REQ_PARAM+"ToDo")
         </th:block>
         ' response
         ' success case
@@ -56,7 +56,7 @@
                 $CALLER <-- [[${ALIAS}]] : [(${isSoapService} ? '$soapFault("ERROR-Code","ERROR-Message")' : '' )] [(${isRestService} ? '$http500' : '' )]
             end
         !endif
-        deactivate [[${alias}]]
+        deactivate [[${ALIAS}]]
     !endif
 !endfunction
 [(${isRestService} ? '\' crUd - Update' : '\'' )]
