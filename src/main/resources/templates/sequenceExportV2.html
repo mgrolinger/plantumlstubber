@@ -35,7 +35,7 @@
         $referenceBox($CALLER,$[[${#strings.toUpperCase(colorName)}]],"Todo")
     !else
         'Business and technical view
-        <th:block th:if="${isRestService}" xmlns:th="http://www.w3.org/1999/xhtml">$CALLER -> [[${ALIAS}]] ++ : [[${callInterfaceBy}]]("Todo","GET","[[${serviceName}]]/[[${interfaceName}]]<U+003F>"+$REQ_PARAM)</th:block>
+        <th:block th:if="${isRestService}" xmlns:th="http://www.w3.org/1999/xhtml">$CALLER -> [[${ALIAS}]] ++ : [[${callInterfaceBy}]]("Todo","GET","[[${serviceName}]]/[[${interfaceName}]]?"+$REQ_PARAM)</th:block>
         <th:block th:unless ="${isRestService}" xmlns:th="http://www.w3.org/1999/xhtml">$CALLER -> [[${ALIAS}]] ++ : [[${callInterfaceBy}]]("Todo","[[${#strings.capitalize(serviceName)}]]","[[${interfaceName}]]($REQ_PARAM)")</th:block>
         ' subsequent calls
         ' business notes $bBox/$businessBox("CALLER","SIDE","TEXT") oder
