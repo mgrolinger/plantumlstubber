@@ -32,6 +32,7 @@ public final class ContextVariables {
     public static final String SERVICE_NAME = "serviceName";
     public static final String SERVICE_LABEL = "SERVICE_LABEL";
     public static final String SOAP = "Soap";
+    public static final String HTTP_METHODS = "HTTP_METHODS";
 
     private ContextVariables() {
         // hide

@@ -4,12 +4,10 @@ import com.grolinger.java.controller.templatemodel.Constants;
 import lombok.Getter;
 import org.springframework.util.StringUtils;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import static com.grolinger.java.controller.templatemodel.Constants.SLASH;
-import static com.grolinger.java.service.NameService.replaceUnwantedCharacters;
+import static com.grolinger.java.service.NameConverter.replaceUnwantedCharacters;
 
 
 /**
@@ -63,12 +61,15 @@ public class InterfaceDefinition {
     private String pumlFunctionType;
     @Getter
     private String responseType;
+    @Getter
+    private MethodDefinition methodDefinition;
 
     public InterfaceDefinition(final String originalInterfaceName, final String customAlias, final String integrationType, final String linkToComponent, final String linkToCustomAlias) {
         this.originalInterface = originalInterfaceName;
         this.name = extractInterfaceName(originalInterfaceName);
         this.methodName = getMethodName(name);
         this.formattedName = replaceUnwantedCharacters(name, false);
+        this.methodDefinition = extractMethods(originalInterfaceName);
         StringBuilder relativeCommonPathBuilder = new StringBuilder();
         for (int i = 0; i < name.chars().filter(ch -> ch == SLASH.getFirstChar()).count(); i++) {
             relativeCommonPathBuilder.append(Constants.DIR_UP.getValue());
@@ -85,8 +86,27 @@ public class InterfaceDefinition {
         this.integrationType = getIntegrationType(integrationType);
         this.pumlFunctionType = getFunctionType(integrationType);
         this.responseType = getResponseType(integrationType);
+
     }
 
+    private MethodDefinition extractMethods(final String originalInterfaceName) {
+        List<String> currentMethods = new LinkedList<>();
+        if (originalInterfaceName.contains(Constants.INTERFACE_INTEGRATION_SEPARATOR.getValue())) {
+            // interface::POST,GET
+            String[] interfaceMethods = originalInterfaceName.split(Constants.INTERFACE_INTEGRATION_SEPARATOR.getValue());
+            if (interfaceMethods.length != 2) {
+
+                //FIXME
+                //throw new RuntimeException("Wrong size please correct.");
+            }
+            //FIXME
+            String[] singleMethod = interfaceMethods[1].split("->")[0].split(":");
+
+            // ignore call stack information
+            currentMethods.addAll(Arrays.asList(singleMethod));
+        }
+        return MethodDefinition.builder().methods(currentMethods).build();
+    }
 
     public boolean containsPath() {
         return name.contains(SLASH.getValue());
@@ -105,6 +125,10 @@ public class InterfaceDefinition {
         if (interfaceName.contains("->")) {
             String[] currentCallStack = interfaceName.split("->");
             calledInterfaceName = currentCallStack[0];
+            if (interfaceName.contains("::")) {
+                //Fixme
+                calledInterfaceName = interfaceName.split("::")[0];
+            }
             this.callStack = Arrays.copyOfRange(currentCallStack, 1, currentCallStack.length);
             int i = 0;
             callStackForIncludes = new String[currentCallStack.length - 1];
@@ -115,7 +139,12 @@ public class InterfaceDefinition {
                 i++;
             }
         } else {
-            calledInterfaceName = interfaceName;
+            if (interfaceName.contains("::")) {
+                //Fixme
+                calledInterfaceName = interfaceName.split("::")[0];
+            } else {
+                calledInterfaceName = interfaceName;
+            }
         }
         return calledInterfaceName;
     }

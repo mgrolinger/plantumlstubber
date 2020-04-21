@@ -4,7 +4,7 @@ import org.springframework.util.StringUtils;
 
 import static com.grolinger.java.controller.templatemodel.Constants.NAME_SEPARATOR;
 
-public class NameService {
+public class NameConverter {
 
     public static String replaceUnwantedCharacters(final String name, final boolean replaceDotsOnly) {
         String newName = "";

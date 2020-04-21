@@ -14,7 +14,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.2.5.RELEASE</version>
+        <version>2.2.6.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -28,6 +28,7 @@
         <commons.version>3.7</commons.version>
         <testng.version>7.1.0</testng.version>
         <springboot.version>2.2.5.RELEASE</springboot.version>
+        <picoli.version>4.2.0</picoli.version>
     </properties>
 
     <dependencies>
@@ -86,6 +87,11 @@
             <version>1.2.0.RELEASE</version>
         </dependency>
         -->
+        <dependency>
+            <groupId>info.picocli</groupId>
+            <artifactId>picocli</artifactId>
+            <version>${picoli.version}</version>
+        </dependency>
         <!-- Swagger IO-->
         <dependency>
             <groupId>io.springfox</groupId>
@@ -132,7 +138,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>3.1.2</version>
+                <version>3.2.0</version>
                 <configuration>
                     <archive>
                         <manifest>

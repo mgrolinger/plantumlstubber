@@ -21,7 +21,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.grolinger.java.service.NameService.replaceUnwantedCharacters;
+import static com.grolinger.java.service.NameConverter.replaceUnwantedCharacters;
 
 @Service
 public class ImportServiceImpl implements ImportService {
@@ -63,7 +63,7 @@ public class ImportServiceImpl implements ImportService {
                 pumlComponent = app.get(applicationName);
             } else {
                 String alias = StringUtils.isEmpty(importedServices.getCustomAlias()) ?
-                        replaceUnwantedCharacters(importedServices.getApplication().toLowerCase(), false) :
+                        replaceUnwantedCharacters(importedServices.getApplication().toLowerCase(), false).replaceAll("_","") :
                         importedServices.getCustomAlias();
                 String label = StringUtils.isEmpty(importedServices.getCustomLabel()) ?
                         replaceUnwantedCharacters(importedServices.getApplication(), false) :
@@ -91,10 +91,10 @@ public class ImportServiceImpl implements ImportService {
                             .orderPrio(orderPrio).build();
                     //Interfaces
                     for (String interfaceName : services1) {
-                        InterfaceDefinition interfaceDefinition = new InterfaceDefinition(interfaceName, importedServices.getCustomAlias(), interfacesIntegrationType, importedServices.getLinkToComponent(), importedServices.getLinkToCustomAlias());
-                        // ignore call stack information
-                        logger().debug("Extracted interface: {}", interfaceDefinition.getName());
-                        serviceDefinition.getInterfaceDefinitions().add(interfaceDefinition);
+                            InterfaceDefinition interfaceDefinition = new InterfaceDefinition(interfaceName, importedServices.getCustomAlias(), interfacesIntegrationType, importedServices.getLinkToComponent(), importedServices.getLinkToCustomAlias());
+                            // ignore call stack information
+                            logger().debug("Extracted interface: {}", interfaceDefinition.getName());
+                            serviceDefinition.getInterfaceDefinitions().add(interfaceDefinition);
                     }
                     serviceDefinitions.add(serviceDefinition);
                 }

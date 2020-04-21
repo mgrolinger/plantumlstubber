@@ -2,6 +2,7 @@ package com.grolinger.java.service.impl;
 
 import com.grolinger.java.config.Loggable;
 import com.grolinger.java.controller.templatemodel.Constants;
+import com.grolinger.java.service.NameConverter;
 import com.grolinger.java.service.data.ApplicationDefinition;
 import com.grolinger.java.service.data.InterfaceDefinition;
 import com.grolinger.java.service.data.ServiceDefinition;
@@ -13,7 +14,7 @@ import java.time.LocalDate;
 
 import static com.grolinger.java.controller.templatemodel.Constants.EMPTY;
 import static com.grolinger.java.controller.templatemodel.ContextVariables.*;
-import static com.grolinger.java.service.NameService.replaceUnwantedCharacters;
+import static com.grolinger.java.service.NameConverter.replaceUnwantedCharacters;
 
 public final class ContextSpec {
 
@@ -97,7 +98,10 @@ public final class ContextSpec {
             // set an alias
             String alias = application.getAlias();
             // Set alias only if not yet defined, e.g. by the method withCustomAlias
-            if (StringUtils.isEmpty(alias)) alias = name.toLowerCase();
+            //Todo: awefull
+            if (StringUtils.isEmpty(alias)) alias = NameConverter
+                    .replaceUnwantedCharacters(name.toLowerCase(),false)
+                    .replaceAll("_","");
 
             context.setVariable(ALIAS, alias);
 
@@ -128,7 +132,9 @@ public final class ContextSpec {
             context.setVariable(IS_LINKED, interfaceDefinition.isLinked());
             context.setVariable(LINKED_TO_COMPONENT, interfaceDefinition.getLinkToComponent());
             context.setVariable(LINK_TO_CUSTOM_ALIAS, interfaceDefinition.getLinkToCustomAlias());
+            context.setVariable(HTTP_METHODS, interfaceDefinition.getMethodDefinition().getMethods());
 
+            logger().info("Methods: {}", interfaceDefinition.getMethodDefinition().getMethods());
             return this;
         }
 

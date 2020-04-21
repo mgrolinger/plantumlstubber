@@ -9,8 +9,7 @@ import org.testng.annotations.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Test
-@ContextConfiguration(locations = {"classpath:spring-test-config.xml"})
-public class NameServiceTest {
+public class NameConverterTest {
 
     @BeforeTest
     public void setUp() {
@@ -40,7 +39,7 @@ public class NameServiceTest {
     @Test(dataProvider = "testGetReplaceUnwantedCharactersDataProvider")
     public void testGetReplaceUnwantedCharacters(final String startValue, final boolean dots,
                                                  final String expectedValue) {
-        String result = NameService.replaceUnwantedCharacters(startValue, dots);
+        String result = NameConverter.replaceUnwantedCharacters(startValue, dots);
         assertThat(result).isEqualTo(expectedValue);
     }
 

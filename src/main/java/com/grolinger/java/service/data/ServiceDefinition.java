@@ -1,7 +1,7 @@
 package com.grolinger.java.service.data;
 
 import com.grolinger.java.controller.templatemodel.Constants;
-import com.grolinger.java.service.NameService;
+import com.grolinger.java.service.NameConverter;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.util.StringUtils;
@@ -10,7 +10,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static com.grolinger.java.controller.templatemodel.Constants.*;
-import static com.grolinger.java.service.NameService.replaceUnwantedCharacters;
+import static com.grolinger.java.service.NameConverter.replaceUnwantedCharacters;
 
 /**
  * Container for a service definition.
@@ -46,7 +46,7 @@ public class ServiceDefinition {
                     this.servicePath = this.servicePath + SLASH.getValue();
                 }
                 this.serviceLabel = serviceName;
-                this.serviceCallName = NameService.replaceUnwantedCharacters(serviceName, false);
+                this.serviceCallName = NameConverter.replaceUnwantedCharacters(serviceName, false);
                 commonPath = getRelativeCommonPath(serviceName);
             }
             return this;

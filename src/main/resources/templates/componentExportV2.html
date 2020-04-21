@@ -4,11 +4,12 @@
 '!$UML_STRICT=%true()
 !include [[${commonPath}]]common/common.iuml
 '!$DETAILED=%true()
+'!$[[${#strings.toUpperCase(applicationName)}]]_SIMPLE=%true()
 '!define SHOW_TODO
 !assert %variable_exists("$DETAILED") : "Please define !$DETAILED=%false()/%true()"
 ' This variable can be used to hide everything what whould be called subsequently
-!if (%not(%variable_exists("$[[${#strings.toUpperCase(alias)}]]_SIMPLE")))
-    !global $[[${#strings.toUpperCase(alias)}]]_SIMPLE = %false()
+!if (%not(%variable_exists("$[[${#strings.toUpperCase(applicationName)}]]_SIMPLE")))
+    !global $[[${#strings.toUpperCase(applicationName)}]]_SIMPLE = %false()
 !endif
 'Definition of the components
 !if (%not(%variable_exists("$[[${#strings.toUpperCase(applicationName)}]]_COMPONENT_CREATED")))
@@ -26,8 +27,8 @@
     ' Variable does not contain a $ sign to catch the alias above
     ![[${COMPLETE_INTERFACE_PATH}]]='[[${ALIAS}]]'
 !endif
-' Include call stack information only if not disabled by ALIAS_SIMPLE=%false()
-!if ( $[[${#strings.toUpperCase(ALIAS)}]]_SIMPLE == %false() )
+' Include call stack information only if not disabled by APPLICATIONNAME_SIMPLE=%false()
+!if ( $[[${#strings.toUpperCase(applicationName)}]]_SIMPLE == %false() )
     ' Includes to subsequent importedServices go HERE
     <th:block th:each="callIncludes : ${callStackIncludes}" xmlns:th="http://www.w3.org/1999/xhtml">!include [[${commonPath}]][[${callIncludes}]].iuml
     </th:block>
@@ -45,16 +46,16 @@
     [[${ALIAS}]] .. implNote[(${applicationName})][(${serviceName})][(${interfaceName})]
 !endif
 
-' Methods go here
+' Methods go here  [[${HTTP_METHODS}]]
 !function $[(${isRootService} ?  ${applicationName} : ${applicationName}+'_'+${serviceName})]_[[${interfaceName}]]($CALLER="consumer",$CONNECTION_COLOR="DarkSlateGrey")
     !if ($DETAILED == %true())
         ' Detailed call chain with consumer -> Interface --> PUMLComponent
         $CALLER ..[single,#$CONNECTION_COLOR]..> [[${COMPLETE_INTERFACE_PATH}]]
     !else
-        'More simple call chain with consumer --> PUMLComponent
+        'Simple call chain with consumer --> PUMLComponent
         $CALLER --[single,dashed,#$CONNECTION_COLOR]-->> [[${ALIAS}]]
     !endif
-    !if ( $[[${#strings.toUpperCase(ALIAS)}]]_SIMPLE == %false() )
+    !if ($[[${#strings.toUpperCase(applicationName)}]]_SIMPLE == %false())
         ' subsequent importedServices calls go usually HERE
         ' connect with: ("[[${ALIAS}]]",$[[${#strings.toUpperCase(connectionColor)}]])
         <th:block th:each="call : ${callStack}" xmlns:th="http://www.w3.org/1999/xhtml">$[[${call}]]("[[${ALIAS}]]",$[[${#strings.toUpperCase(connectionColor)}]])

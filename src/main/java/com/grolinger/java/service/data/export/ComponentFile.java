@@ -86,7 +86,7 @@ public class ComponentFile implements Loggable {
                         .append("\" as ")
                         .append(currentApplication.getAlias()).append(" ")
                         .append(ColorMapper.getStereotype(currentService.getDomainColor())).append("'").append(CARRIAGE_RETURN.getContent());
-                log.info("ColorShema: {} -> {}", currentService.getDomainColor(), ColorGenerator.getColorCode(currentService.getDomainColor()));
+                log.info("Color schema: {} -> {}", currentService.getDomainColor(), ColorGenerator.getColorCode(currentService.getDomainColor()));
                 // Font-awesome
                 //TODO systeme unterscheiden
                 //Todo auf Template umstellen

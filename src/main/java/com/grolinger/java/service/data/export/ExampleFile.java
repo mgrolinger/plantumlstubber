@@ -18,7 +18,7 @@ import static com.grolinger.java.service.adapter.impl.FileServiceImpl.FILE_TYPE_
 /**
  * Exporter for the example file that is generated for every application to ease
  * the visual check of new services. It can be found in the root folder of each
- * application with <name_of_appplication>_example.puml
+ * application with <name_of_application>_example.puml
  */
 public class ExampleFile implements Loggable {
     private Template template;
@@ -52,7 +52,9 @@ public class ExampleFile implements Loggable {
                 //append separator only when service is not EMPTY otherwise we end up in double underscore App__interface() instead of App_interface()
                 .append(StringUtils.isEmpty(currentService.getServiceCallName()) ? "" : Constants.NAME_SEPARATOR.getValue())
                 .append(currentInterface.getFormattedName())
-                .append("()")
+                .append("(\"")
+                .append("consumer").append(currentApplication.getAlias().toLowerCase())
+                .append("\")")
                 .append(CARRIAGE_RETURN.getContent()).append(CARRIAGE_RETURN.getContent());
         logger().info("Write {}_{}_{} to {}{}", currentApplication.getName(), currentService.getServiceCallName(), currentInterface.getFormattedName(), currentInterface.getMethodName(), FILE_TYPE_IUML);
     }

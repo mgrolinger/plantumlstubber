@@ -30,7 +30,7 @@ services:
     # Service calls are generated as $<application>_<service>_<interface>() except for EMPTY which results in $<application>_<interface>()
     REST::JSON:
         EMPTY: [newService->NewApplication_access,newService2]
-        serviceLess/serviceMore: [intMore/withCallStack->Filesystem_readFile]
+        serviceLess/serviceMore: [intMore/withCallStack::POST:GET->Filesystem_readFile]
     SOAP:
         serviceMore.andMore : [interface]
         serviceLess.intMore.intMore2: [noCallStack]
