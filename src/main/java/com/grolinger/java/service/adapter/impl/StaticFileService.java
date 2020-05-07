@@ -16,7 +16,7 @@ public class StaticFileService {
 
     public static void readFile(final String inputFileName, final Path outputFile) {
         try (Stream<String> stream = Files.lines(Paths.get(inputFileName))) {
-            log.info("Read file:{} and output it to: {}", inputFileName, outputFile);
+            log.info("Feature not yet implemented; Read file:{} and output it to: {}", inputFileName, outputFile);
             stream.forEach(System.out::println);
         } catch (IOException e) {
             e.printStackTrace();

@@ -19,7 +19,7 @@ import static com.grolinger.java.controller.templatemodel.TemplateContent.*;
 
 /**
  * Exporter for the automatic component/participant initialization from
- * either component_definition.iuml or aprticipant_definition.iuml
+ * either component_definition.iuml or participant_definition.iuml
  */
 @Slf4j
 public class ComponentFile implements Loggable {
@@ -86,10 +86,10 @@ public class ComponentFile implements Loggable {
                         .append("\" as ")
                         .append(currentApplication.getAlias()).append(" ")
                         .append(ColorMapper.getStereotype(currentService.getDomainColor())).append("'").append(CARRIAGE_RETURN.getContent());
-                log.info("Color schema: {} -> {}", currentService.getDomainColor(), ColorGenerator.getColorCode(currentService.getDomainColor()));
+                log.info("Feature not yet used; Color schema: {} -> {}", currentService.getDomainColor(), ColorGenerator.getColorCode(currentService.getDomainColor()));
                 // Font-awesome
                 //TODO systeme unterscheiden
-                //Todo auf Template umstellen
+                //Todo maybe this should be switched to a template
                 bucket2.append("  ").append(componentName).append(" = ").append(currentApplication.getSystemType().getFontAwesome()).append("(\"")
                         .append(currentApplication.getAlias()).append("\",\"")
                         .append(currentApplication.getLabel()).append("\") + '")
@@ -102,7 +102,7 @@ public class ComponentFile implements Loggable {
                         .append(CARRIAGE_RETURN.getContent())
                         .append("     ")
                         .append(Constants.DEFINE_FUNCTION_PREFIX.getValue()).append(participantName.toUpperCase())
-                        .append("_ORDER_PRIO = $getOrder(").append(currentService.getOrderPrio()).append(")").append(CARRIAGE_RETURN.getContent())
+                        .append("_ORDER_PRIO = $getOrder(").append(currentApplication.getOrderPrio()).append(")").append(CARRIAGE_RETURN.getContent())
                         .append("!endif")
                         .append(CARRIAGE_RETURN.getContent());
                 //define the participant

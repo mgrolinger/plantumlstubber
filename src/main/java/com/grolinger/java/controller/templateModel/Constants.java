@@ -13,6 +13,7 @@ public enum Constants {
     PATH_SEPARATOR(File.separator),
     DOT_SEPARATOR("."),
     INTERFACE_INTEGRATION_SEPARATOR("::"),
+    INTERFACE_METHOD_SEPARATOR(":"),
     DIR_UP("../"),
     DEFAULT_ROOT_SERVICE_NAME(""),
     DEFINE_FUNCTION_PREFIX("!$"),

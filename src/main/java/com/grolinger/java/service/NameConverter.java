@@ -6,7 +6,7 @@ import static com.grolinger.java.controller.templatemodel.Constants.NAME_SEPARAT
 
 public class NameConverter {
 
-    public static String replaceUnwantedCharacters(final String name, final boolean replaceDotsOnly) {
+    public static String replaceUnwantedPlantUMLCharacters(final String name, final boolean replaceDotsOnly) {
         String newName = "";
         if (!StringUtils.isEmpty(name)) {
             String stringsToReplace = "(\\.|\\n|\\s|-)";

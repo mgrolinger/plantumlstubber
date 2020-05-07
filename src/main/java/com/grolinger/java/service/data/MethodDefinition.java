@@ -13,6 +13,4 @@ public class MethodDefinition {
     @Builder.Default
     @Getter
     private List<String> methods = new LinkedList<>();
-
-
 }

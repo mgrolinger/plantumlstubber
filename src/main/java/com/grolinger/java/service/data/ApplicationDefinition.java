@@ -17,6 +17,8 @@ public class ApplicationDefinition {
     private String label;
     private SystemType systemType;
     private String alias;
+    @Builder.Default
+    private int orderPrio=1;
     private List<ServiceDefinition> serviceDefinitions;
 
     /**

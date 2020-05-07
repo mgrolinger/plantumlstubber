@@ -90,12 +90,13 @@ public class ContextSpecTest {
         ApplicationDefinition applicationDefinition = ApplicationDefinition.builder()
                 .name(name)
                 .label(label)
+                .orderPrio(98)
                 .build();
 
         final String sname = "serviceName.v2";
         ServiceDefinition serviceDefinition = ServiceDefinition.builder()
                 .serviceName(sname)
-                .orderPrio(98)
+
                 .build();
         Context result = new ContextSpec().builder()
                 .withColorName("test").withApplication(applicationDefinition).withServiceDefinition(serviceDefinition).getContext();

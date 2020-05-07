@@ -23,11 +23,11 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
         <swagger.version>2.9.2</swagger.version>
-        <jackson.version>2.9.6</jackson.version>
+        <jackson.version>2.11.0</jackson.version>
         <lombok.version>1.18.12</lombok.version>
-        <commons.version>3.7</commons.version>
+        <commons.version>3.10</commons.version>
         <testng.version>7.1.0</testng.version>
-        <springboot.version>2.2.5.RELEASE</springboot.version>
+        <springboot.version>2.2.6.RELEASE</springboot.version>
         <picoli.version>4.2.0</picoli.version>
     </properties>
 

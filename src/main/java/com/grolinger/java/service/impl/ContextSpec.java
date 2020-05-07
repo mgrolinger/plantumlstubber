@@ -14,7 +14,7 @@ import java.time.LocalDate;
 
 import static com.grolinger.java.controller.templatemodel.Constants.EMPTY;
 import static com.grolinger.java.controller.templatemodel.ContextVariables.*;
-import static com.grolinger.java.service.NameConverter.replaceUnwantedCharacters;
+import static com.grolinger.java.service.NameConverter.replaceUnwantedPlantUMLCharacters;
 
 public final class ContextSpec {
 
@@ -77,7 +77,7 @@ public final class ContextSpec {
             context.setVariable(IS_SOAP_SERVICE, false);
             context.setVariable(IS_REST_SERVICE, false);
             if (!StringUtils.isEmpty(integrationType)) {
-                formattedIntegrationType = "INTEGRATION_TYPE(" + integrationType + ")";
+                formattedIntegrationType = "$INTEGRATION_TYPE(" + integrationType + ")";
                 context.setVariable(IS_SOAP_SERVICE, integrationType.toUpperCase().contains(SOAP.toUpperCase()));
                 context.setVariable(IS_REST_SERVICE, integrationType.toUpperCase().contains(REST.toUpperCase()));
             }
@@ -100,8 +100,8 @@ public final class ContextSpec {
             // Set alias only if not yet defined, e.g. by the method withCustomAlias
             //Todo: awefull
             if (StringUtils.isEmpty(alias)) alias = NameConverter
-                    .replaceUnwantedCharacters(name.toLowerCase(),false)
-                    .replaceAll("_","");
+                    .replaceUnwantedPlantUMLCharacters(name.toLowerCase(), false)
+                    .replaceAll("_", "");
 
             context.setVariable(ALIAS, alias);
 
@@ -132,7 +132,11 @@ public final class ContextSpec {
             context.setVariable(IS_LINKED, interfaceDefinition.isLinked());
             context.setVariable(LINKED_TO_COMPONENT, interfaceDefinition.getLinkToComponent());
             context.setVariable(LINK_TO_CUSTOM_ALIAS, interfaceDefinition.getLinkToCustomAlias());
-            context.setVariable(HTTP_METHODS, interfaceDefinition.getMethodDefinition().getMethods());
+            if (!interfaceDefinition.getMethodDefinition().getMethods().isEmpty()) {
+                context.setVariable(HTTP_METHODS, "$INDIVIDUAL_METHODS(" + interfaceDefinition.getMethodDefinition().getMethods() + ")");
+            } else {
+                context.setVariable(HTTP_METHODS, "");
+            }
 
             logger().info("Methods: {}", interfaceDefinition.getMethodDefinition().getMethods());
             return this;
@@ -146,6 +150,7 @@ public final class ContextSpec {
                 context.setVariable(IS_ROOT_SERVICE, true);
             } else {
                 //ServiceName containing dot (.) seems to cause syntax error in generated iuml file
+                logger().info("Service Name:{}, Label:{}", serviceName, serviceDefinition.getServiceLabel());
                 context.setVariable(SERVICE_NAME, serviceName);
                 context.setVariable(SERVICE_LABEL, serviceDefinition.getServiceLabel());
                 context.setVariable(IS_ROOT_SERVICE, false);
@@ -153,7 +158,8 @@ public final class ContextSpec {
         }
 
         private ContextBuilder withInterfaceName(final String interfaceName) {
-            final String cleanedInterfaceName = replaceUnwantedCharacters(interfaceName, false);
+            final String cleanedInterfaceName = replaceUnwantedPlantUMLCharacters(interfaceName, false);
+            logger().info("Interface Name b4:{},after:{}", interfaceName, cleanedInterfaceName);
             context.setVariable(INTERFACE_NAME, cleanedInterfaceName);
             String applicationName = (String) context.getVariable(APPLICATION_NAME);
             String serviceName = (String) context.getVariable(SERVICE_NAME);

@@ -25,7 +25,7 @@ public class ServiceDefinitionTest {
     public void testGetServiceCallNameDataProvider(final String serviceName,
                                                    final String expectedValue) {
         ServiceDefinition cut = ServiceDefinition.builder()
-                .serviceName(serviceName).domainColor("intefration").orderPrio(0).build();
+                .serviceName(serviceName).domainColor("integration").build();
         String result = cut.getServiceCallName();
         assertThat(result).isEqualTo(expectedValue);
     }
@@ -53,7 +53,7 @@ public class ServiceDefinitionTest {
     public void testGetFormattedServiceName(final String serviceName, final String expectedResult) {
         // FixmE
         ServiceDefinition cut = ServiceDefinition.builder()
-                .serviceName(serviceName).domainColor("integration").orderPrio(0).build();
+                .serviceName(serviceName).domainColor("integration").build();
         String result = cut.getServiceCallName();
         assertThat(result).isNotNull().isEqualTo(expectedResult);
 

@@ -1,7 +1,6 @@
 package com.grolinger.java.service;
 
 import org.mockito.MockitoAnnotations;
-import org.springframework.test.context.ContextConfiguration;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -39,7 +38,7 @@ public class NameConverterTest {
     @Test(dataProvider = "testGetReplaceUnwantedCharactersDataProvider")
     public void testGetReplaceUnwantedCharacters(final String startValue, final boolean dots,
                                                  final String expectedValue) {
-        String result = NameConverter.replaceUnwantedCharacters(startValue, dots);
+        String result = NameConverter.replaceUnwantedPlantUMLCharacters(startValue, dots);
         assertThat(result).isEqualTo(expectedValue);
     }
 

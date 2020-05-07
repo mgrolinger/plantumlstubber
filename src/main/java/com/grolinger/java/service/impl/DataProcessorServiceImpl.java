@@ -28,11 +28,12 @@ public class DataProcessorServiceImpl implements Loggable, com.grolinger.java.se
         // Fixme: missing all new features for multi-service
         ApplicationDefinition applicationDefinition = ApplicationDefinition.builder()
                 .name(applicationName).alias(applicationName.toLowerCase()).label(applicationName)
+                .orderPrio(orderPrio)
                 .build();
         ServiceDefinition serviceDefinition = ServiceDefinition.builder()
                 .serviceName(serviceName)
                 .domainColor(colorName)
-                .orderPrio(orderPrio)
+
                 .build();
 
         return new ContextSpec().builder()
@@ -61,7 +62,7 @@ public class DataProcessorServiceImpl implements Loggable, com.grolinger.java.se
                         .withColorName(serviceDefinition.getDomainColor())
                         .withApplication(currentApplication)
                         .withServiceDefinition(serviceDefinition)
-                        .withOrderPrio(serviceDefinition.getOrderPrio());
+                        .withOrderPrio(currentApplication.getOrderPrio());
 
                 path = createDirectoryForService(diagramType.getBasePath(), dirsCreate, currentApplication, serviceDefinition);
 

@@ -10,7 +10,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static com.grolinger.java.controller.templatemodel.Constants.*;
-import static com.grolinger.java.service.NameConverter.replaceUnwantedCharacters;
+import static com.grolinger.java.service.NameConverter.replaceUnwantedPlantUMLCharacters;
 
 /**
  * Container for a service definition.
@@ -21,8 +21,6 @@ import static com.grolinger.java.service.NameConverter.replaceUnwantedCharacters
 @Getter
 public class ServiceDefinition {
     private String servicePath;
-    @Builder.Default
-    private int orderPrio = 0;
     private String domainColor;
     private String commonPath;
     private String serviceLabel;
@@ -41,12 +39,15 @@ public class ServiceDefinition {
                 this.serviceCallName = DEFAULT_ROOT_SERVICE_NAME.getValue();
                 commonPath = DIR_UP.getValue();
             } else {
-                this.servicePath = replaceUnwantedCharacters(serviceName, true);
+                this.servicePath = replaceUnwantedPlantUMLCharacters(serviceName, true);
                 if (!servicePath.endsWith(SLASH.getValue())) {
                     this.servicePath = this.servicePath + SLASH.getValue();
                 }
-                this.serviceLabel = serviceName;
-                this.serviceCallName = NameConverter.replaceUnwantedCharacters(serviceName, false);
+                // Set if not yet set by builder method
+                if (StringUtils.isEmpty(this.serviceLabel)) {
+                    this.serviceLabel = serviceName;
+                }
+                this.serviceCallName = NameConverter.replaceUnwantedPlantUMLCharacters(serviceName, false);
                 commonPath = getRelativeCommonPath(serviceName);
             }
             return this;

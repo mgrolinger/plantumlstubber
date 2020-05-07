@@ -21,8 +21,11 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.grolinger.java.service.NameConverter.replaceUnwantedCharacters;
+import static com.grolinger.java.service.NameConverter.replaceUnwantedPlantUMLCharacters;
 
+/**
+ * This service maps information from the yaml files to internal *definitions.
+ */
 @Service
 public class ImportServiceImpl implements ImportService {
     private static final String GLOBAL_FILE_EXPORT_PATH = System.getProperty("user.dir") + File.separator + "target" + File.separator;
@@ -57,53 +60,98 @@ public class ImportServiceImpl implements ImportService {
             }
             int orderPrio = Integer.parseInt(importedServices.getOrderPrio());
             logger().debug("{}, {}, {}", importedServices.getApplication(), importedServices.getSystemType(), importedServices.getOrderPrio());
-            final String applicationName = replaceUnwantedCharacters(importedServices.getApplication(), false);
+            final String applicationName = replaceUnwantedPlantUMLCharacters(importedServices.getApplication(), false);
             ApplicationDefinition pumlComponent;
+            // Do we know this application already from before, reuse it.
             if (app.containsKey(applicationName)) {
                 pumlComponent = app.get(applicationName);
             } else {
+                // we use the specified alias or the application name cleaned from some special characters that make problems in plantuml
                 String alias = StringUtils.isEmpty(importedServices.getCustomAlias()) ?
-                        replaceUnwantedCharacters(importedServices.getApplication().toLowerCase(), false).replaceAll("_","") :
+                        replaceUnwantedPlantUMLCharacters(importedServices.getApplication().toLowerCase(), false)
+                                .replaceAll("_", "") :
                         importedServices.getCustomAlias();
+                // we use the specified label or the application name cleaned from some special characters that make problems in plantuml
                 String label = StringUtils.isEmpty(importedServices.getCustomLabel()) ?
-                        replaceUnwantedCharacters(importedServices.getApplication(), false) :
+                        replaceUnwantedPlantUMLCharacters(importedServices.getApplication(), false) :
                         importedServices.getCustomLabel();
+
                 pumlComponent = ApplicationDefinition.builder()
                         .name(applicationName)
                         .label(label)
                         .alias(alias)
                         .systemType(importedServices.getSystemType())
+                        .orderPrio(orderPrio)
                         .serviceDefinitions(new LinkedList<>())
                         .build();
             }
-
-            List<ServiceDefinition> serviceDefinitions = new LinkedList<>();
-            // Iterate over Services.<REST|SOAP|...>
-            for (String interfacesIntegrationType : importedServices.getServices().keySet()) {
-
-                LinkedHashMap<String, String[]> serviceList = importedServices.getServices().get(interfacesIntegrationType);
-                // Iterate over the services itself
-                for (Map.Entry<String, String[]> serviceName : serviceList.entrySet()) {
-                    String[] services1 = serviceName.getValue();
-                    ServiceDefinition serviceDefinition = ServiceDefinition.builder()
-                            .serviceName(serviceName.getKey())
-                            .domainColor(importedServices.getDomainColor())
-                            .orderPrio(orderPrio).build();
-                    //Interfaces
-                    for (String interfaceName : services1) {
-                            InterfaceDefinition interfaceDefinition = new InterfaceDefinition(interfaceName, importedServices.getCustomAlias(), interfacesIntegrationType, importedServices.getLinkToComponent(), importedServices.getLinkToCustomAlias());
-                            // ignore call stack information
-                            logger().debug("Extracted interface: {}", interfaceDefinition.getName());
-                            serviceDefinition.getInterfaceDefinitions().add(interfaceDefinition);
-                    }
-                    serviceDefinitions.add(serviceDefinition);
-                }
-            }
-            pumlComponent.getServiceDefinitions().addAll(serviceDefinitions);
+            mapIntegrationTypes(importedServices, pumlComponent);
             app.put(applicationName, pumlComponent);
         }
         // Unwrap from map
         return new LinkedList<>(app.values());
+    }
+
+    private void mapIntegrationTypes(ImportedServices importedServices, ApplicationDefinition pumlComponent) {
+        // Iterate over Services.<REST|SOAP|...>
+        for (String interfacesIntegrationType : importedServices.getServices().keySet()) {
+            LinkedHashMap<String, String[]> serviceList = importedServices.getServices().get(interfacesIntegrationType);
+            // Iterate over the services itself
+            List<ServiceDefinition> serviceDefinitions = mapServiceDefinitions(importedServices, interfacesIntegrationType, serviceList);
+            pumlComponent.getServiceDefinitions().addAll(serviceDefinitions);
+        }
+    }
+
+    /**
+     * Extracts the services from yaml file
+     * @param importedServices
+     * @param interfacesIntegrationType
+     * @param serviceList
+     * @return
+     */
+    private List<ServiceDefinition> mapServiceDefinitions(ImportedServices importedServices, String interfacesIntegrationType, LinkedHashMap<String, String[]> serviceList) {
+        List<ServiceDefinition> serviceDefinitions = new LinkedList<>();
+        for (Map.Entry<String, String[]> serviceName : serviceList.entrySet()) {
+            String[] interfaceNames = serviceName.getValue();
+            String clearServiceName= serviceName.getKey();
+            if (clearServiceName.startsWith("_") || clearServiceName.startsWith("/")) {
+                clearServiceName = clearServiceName.substring(1);
+            }
+            ServiceDefinition serviceDefinition = ServiceDefinition.builder()
+                    .serviceLabel(serviceName.getKey())
+                    .serviceName(clearServiceName)
+                    .domainColor(importedServices.getDomainColor())
+                    .build();
+            //Interfaces
+            List<InterfaceDefinition> interfaceDefinitionsList = mapInterfaces(importedServices, interfacesIntegrationType, interfaceNames);
+            serviceDefinition.getInterfaceDefinitions().addAll(interfaceDefinitionsList);
+            serviceDefinitions.add(serviceDefinition);
+        }
+        return serviceDefinitions;
+    }
+
+    /**
+     * Extracts the interfaces from the yaml file
+     * @param importedServices
+     * @param interfacesIntegrationType
+     * @param interfaceNames
+     * @return
+     */
+    private List<InterfaceDefinition> mapInterfaces(ImportedServices importedServices, String interfacesIntegrationType, String[] interfaceNames) {
+        List<InterfaceDefinition> interfaceDefinitions = new LinkedList<>();
+        for (String interfaceName : interfaceNames) {
+            InterfaceDefinition interfaceDefinition = InterfaceDefinition.builder()
+                    .originalInterfaceName(interfaceName)
+                    .customAlias(importedServices.getCustomAlias())
+                    .integrationType(interfacesIntegrationType)
+                    .linkToComponent(importedServices.getLinkToComponent())
+                    .linkToCustomAlias(importedServices.getLinkToCustomAlias())
+                    .build();
+            // ignore call stack information
+            logger().debug("Extracted interface: {}", interfaceDefinition.getName());
+            interfaceDefinitions.add(interfaceDefinition);
+        }
+        return interfaceDefinitions;
     }
 
     private List<ImportedServices> mapYamls(final Path path) {

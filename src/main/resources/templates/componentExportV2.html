@@ -7,7 +7,7 @@
 '!$[[${#strings.toUpperCase(applicationName)}]]_SIMPLE=%true()
 '!define SHOW_TODO
 !assert %variable_exists("$DETAILED") : "Please define !$DETAILED=%false()/%true()"
-' This variable can be used to hide everything what whould be called subsequently
+' This variable can be used to hide everything what would be called subsequently
 !if (%not(%variable_exists("$[[${#strings.toUpperCase(applicationName)}]]_SIMPLE")))
     !global $[[${#strings.toUpperCase(applicationName)}]]_SIMPLE = %false()
 !endif
@@ -20,14 +20,14 @@
     !global $[[${#strings.toUpperCase(applicationName)}]]_COMPONENT_CREATED=%true()
 !endif
 !if ($DETAILED == %true())
-    interface "$[(${componentIntegrationType})] <font size=8><i>[[${SERVICE_LABEL}]] </i></font>\n[[${interfaceName}]]" as [[${COMPLETE_INTERFACE_PATH}]] [(${colorType})]
+    interface "[(${componentIntegrationType})] [[${HTTP_METHODS}]] <font size=8><i>[[${SERVICE_LABEL}]] </i></font>\n[[${interfaceName}]]" as [[${COMPLETE_INTERFACE_PATH}]] [(${colorType})]
     [[${ALIAS}]] -[single,#$[[${#strings.toUpperCase(connectionColor)}]]]- [[${COMPLETE_INTERFACE_PATH}]]
 !else
     ' define PUMLComponent as interface endpoint for mixed detailed/non-detailed views.
     ' Variable does not contain a $ sign to catch the alias above
     ![[${COMPLETE_INTERFACE_PATH}]]='[[${ALIAS}]]'
 !endif
-' Include call stack information only if not disabled by APPLICATIONNAME_SIMPLE=%false()
+' Include call stack information only if not disabled by !$APPLICATIONNAME_SIMPLE=%false()
 !if ( $[[${#strings.toUpperCase(applicationName)}]]_SIMPLE == %false() )
     ' Includes to subsequent importedServices go HERE
     <th:block th:each="callIncludes : ${callStackIncludes}" xmlns:th="http://www.w3.org/1999/xhtml">!include [[${commonPath}]][[${callIncludes}]].iuml
