@@ -2,7 +2,7 @@
 
 This project can be used to generate stubs for component diagrams and sequence diagrams.
 The generator provides a swagger ui on http://localhost:19191/swagger-ui.html#/
-The files contain "todo" marker that are supposed to be filled in by you.
+The stubber will generate files in the target/ directory. These files are either puml or iuml files. The iuml-files contain "todo" marker that are supposed to be filled in by you.
 
 ### Basic notation
 
@@ -27,5 +27,3 @@ e.g. `$MODULE_WORKING_DIR$` in Intellij: ![](Intellij_Config.png)
 
 
 ## Todo
-
-* finish Readme 
