@@ -1,0 +1,58 @@
+@startuml
+' Snow Background to see the border of interfaces'
+!global $GENERAL_BACKGROUND_COLOR = "FAFBFB"
+skinparam BackgroundColor #$GENERAL_BACKGROUND_COLOR
+
+'BiPRO specific colors
+!global $AUTHENTIFIZIERUNG_DOMAIN_COLOR = "537499"
+!global $SUCHE_DOMAIN_COLOR = "4CA8FF"
+!global $UEBERMITTLUNG_DOMAIN_COLOR = "96e8c3"
+!global $BESTAND_DOMAIN_COLOR = "5C98E1"
+!global $TAA_DOMAIN_COLOR = "15c6f2"
+!global $RISIKODATEN_DOMAIN_COLOR = "ffc042"
+!global $SPEZIFISCHE_DOMAIN_COLOR = "LightGrey"
+
+!global $AUTHENTIFIZIERUNG_DOMAIN_COLOR_CONNECTION = "537499"
+!global $SUCHE_DOMAIN_COLOR_CONNECTION = "4CA8FF"
+!global $UEBERMITTLUNG_DOMAIN_COLOR_CONNECTION = "96e8c3"
+!global $BESTAND_DOMAIN_COLOR_CONNECTION = "5C98E1"
+!global $TAA_DOMAIN_COLOR_CONNECTION = "15c6f2"
+!global $RISIKODATEN_DOMAIN_COLOR_CONNECTION = "ffc042"
+!global $SPEZIFISCHE_DOMAIN_COLOR_CONNECTION = "LightGrey"
+
+' SID specific colors
+!global $DEFAULT_FONT_COLOR = "Black"
+!global $CUSTOMER_DOMAIN_COLOR = "Orange"
+' name for historic reasons
+!global $EXTERNAL_INTERFACE_COLOR = "D4D4CD"
+!global $EXTERNAL_DOMAIN_COLOR = "D4D4CD"
+!global $FINANCIAL_DOMAIN_COLOR = "Gold"
+' name for historic reasons
+!global $INTEGRATION_COLOR = "DeepSkyBlue"
+!global $INTEGRATION_DOMAIN_COLOR = "DeepSkyBlue"
+!global $RESOURCE_DOMAIN_COLOR = "LightGreen"
+'
+!global $CUSTOMER_DOMAIN_COLOR_CONNECTION = "Orange"
+' name for historic reasons
+!global $EXTERNAL_INTERFACE_COLOR_CONNECTION = "DimGrey"
+!global $EXTERNAL_DOMAIN_COLOR_CONNECTION = "DimGrey"
+!global $FINANCIAL_DOMAIN_COLOR_CONNECTION = "GoldenRod"
+' name for historic reasons
+!global $INTEGRATION_COLOR_CONNECTION = "DeepSkyBlue"
+!global $INTEGRATION_DOMAIN_COLOR_CONNECTION = "DeepSkyBlue"
+!global $RESOURCE_DOMAIN_COLOR_CONNECTION = "SeaGreen"
+
+'COMPONENTS'
+!global $DEFAULT_CONNECTION_COLOR = "DarkSlateGray"
+!global $DEFAULT_BORDER_COLOR = "DarkSlateGray"
+!global $DEFAULT_INTERFACE_BORDER_COLOR = "White"
+!global $DEFAULT_COMPONENT_COLOR = "WhiteSmoke"
+!global $DEFAULT_ACTOR_BORDER_COLOR = "DarkSlateGrey"
+
+!global $GENERAL_NOTE_COLOR = "WhiteSmoke"
+!global $DOCUMENT_BOX_COLOR = "Linen"
+!global $WARNING_BOX_COLOR = "Red"
+!global $WARNING_BOX_TEXT_COLOR = "White"
+!global $WARNING_BOX_BORDER_COLOR = "F11717"
+
+@enduml

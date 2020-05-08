@@ -1,0 +1,14 @@
+@startuml
+sprite $solr [48x48/16z] {
+pPK7RWGn30FfjZRr__-cUGL2mHQX9fDSzSYYV0r_GAEHHcGeT0P8o-j4upV7KmvCwV1x1TUG5NRXtwHoHxguqADaqRSBFVY_TRlIPQtWBymOwHopmIt0f1_e
+7Ydw0AX2fwASgwAVpuoGAsx2kt6bnFiDqJVbcXUw6bH0gUNeRlHjxetLfbteEY8QqBKgAUXgi1VyUhebFVhbN35LUVDeJ_mmJwS1TR_PNJTITA0qvJ6gz9kW
+-pOJS7LuaOOGszB0VkKfEe0Zd68ye0x0l70thvI24IRUNWUWJ9009QlO30XAwP2jE17jg4-6_1jy2OjC-Fx6Qeoi6rrTKjjVsyQEUqpUh7XZaiQ1G5b8e_Jv
+tuELKONbrLIQcTV5OI5CjcY-PT5BbCJV0WDPJ3--_vfF
+}
+
+!define FA_SOLR(_alias) ENTITY(rectangle,black,solr,_alias,FA_SOLR)
+!define FA_SOLR(_alias, _label) ENTITY(rectangle,black,solr,_label, _alias,FA_SOLR)
+!define FA_SOLR(_alias, _label, _shape) ENTITY(_shape,black,solr,_label, _alias,FA_SOLR)
+!define FA_SOLR(_alias, _label, _shape, _color) ENTITY(_shape,_color,solr,_label, _alias,FA_SOLR)
+skinparam folderBackgroundColor<<FA_SOLR>> white
+@enduml

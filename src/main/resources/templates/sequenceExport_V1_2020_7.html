@@ -1,0 +1,65 @@
+@startuml [(${isRootService} ?  ${applicationName} : ${applicationName}+'_'+${serviceName})]_[[${interfaceName}]]
+' generated on [[${dateCreated}]]
+!include [[${commonPath}]]common/common.iuml
+'!$DETAILED=%true()
+'!$[[${#strings.toUpperCase(applicationName)}]]_SIMPLE=%true()
+'!$SIMPLE=%true()
+'!$SHOW_EXCEPTION=%true()
+!assert %variable_exists("$SIMPLE") : "Please define !$SIMPLE=%false()/%true()"
+!assert %variable_exists("$DETAILED") : "Please define !$DETAILED=%false()/%true()"
+!assert %variable_exists("$SHOW_EXCEPTION") : "Please define !$SHOW_EXCEPTION=%false()/%true()"
+!if (%not(%variable_exists("$[[${#strings.toUpperCase(applicationName)}]]_SIMPLE")))
+    !$[[${#strings.toUpperCase(applicationName)}]]_SIMPLE=%false()
+!endif
+'Definition of participants
+!if ($SIMPLE == %false() && $[[${#strings.toUpperCase(applicationName)}]]_SIMPLE == %false())
+    !if (%not(%variable_exists("$[[${#strings.toUpperCase(applicationName)}]]_PARTICIPANT_CREATED")))
+        !if (%not(%variable_exists("$[[${#strings.toUpperCase(applicationName)}]]_PARTICIPANT")))
+            !$[[${#strings.toUpperCase(applicationName)}]]_PARTICIPANT = 'participant "<b>[[${applicationLabel}]]</b>\nPlease define\nthe participant \nin <b>participant_definition.iuml</b>" as [[${ALIAS}]] [(${colorType})] order [[${sequenceOrderPrio}]] #Red'
+        !endif
+        $[[${#strings.toUpperCase(applicationName)}]]_PARTICIPANT
+        !global $[[${#strings.toUpperCase(applicationName)}]]_PARTICIPANT_CREATED='[[${ALIAS}]]'
+    !endif
+    'Includes to subsequent importedServices go here
+    <th:block th:each="callIncludes : ${callStackIncludes}" xmlns:th="http://www.w3.org/1999/xhtml">!include [[${commonPath}]][[${callIncludes}]].iuml
+    </th:block>
+!endif
+
+'
+[(${isSoapService} ? '\' Define soap method here' : '\' Define CRUD methods here')]
+[(${isRestService} ? '\' Crud - Create' : '\'' )]
+[(${isRestService} ? '\' cRud - Read/Get' :  '\'')]
+!procedure $[(${isRootService} ?  ${applicationName} : ${applicationName}+'_'+${serviceName})]_[[${interfaceName}]]($CALLER="consumer",$REQ_PARAM='Todo')
+    ' Either everything is configured to SIMPLE view or only this PUMLComponent and everything behind it
+    !if ($SIMPLE || $[[${#strings.toUpperCase(applicationName)}]]_SIMPLE)
+        $referenceBox($CALLER,$[[${#strings.toUpperCase(colorName)}]],"Todo")
+    !else
+        'Business and technical view
+        <th:block th:if="${isRestService}" xmlns:th="http://www.w3.org/1999/xhtml">$CALLER -> [[${ALIAS}]] ++ : [[${callInterfaceBy}]]("Todo","GET","[[${serviceName}]]/[[${interfaceName}]]?"+$REQ_PARAM)</th:block>
+        <th:block th:unless ="${isRestService}" xmlns:th="http://www.w3.org/1999/xhtml">$CALLER -> [[${ALIAS}]] ++ : [[${callInterfaceBy}]]("Todo","[[${#strings.capitalize(serviceName)}]]","[[${interfaceName}]]($REQ_PARAM)")</th:block>
+        ' subsequent calls
+        ' business notes $bBox/$businessBox("CALLER","SIDE","TEXT") oder
+        ' technical notes $tBox/$technicalBox("CALLER","SIDE","TEXT")
+        <th:block th:each="call : ${callStack}" xmlns:th="http://www.w3.org/1999/xhtml">$[[${call}]]("[[${ALIAS}]]",$REQ_PARAM+"ToDo")
+        </th:block>
+        ' response
+        ' success case
+        $CALLER <--  [[${ALIAS}]] : $businessAndTechnicalResponse("businessTodo","ToDoResponseObj","[[${interfaceResponseType}]]") [(${isRestService} ? '$http200' :  '' )]
+
+        !if ($SHOW_EXCEPTION)
+            'add else failed clauses here
+            alt error
+                note over [[${ALIAS}]] #Red
+                    Possible errors not yet defined
+                end note
+            else
+                $CALLER <-- [[${ALIAS}]] : [(${isSoapService} ? '$soapFault("ERROR-Code","ERROR-Message")' : '' )] [(${isRestService} ? '$http500' : '' )]
+            end
+        !endif
+        deactivate [[${ALIAS}]]
+    !endif
+!endprocedure
+[(${isRestService} ? '\' crUd - Update' : '\'' )]
+[(${isRestService} ? '\' cruD - Delete' : '\'' )]
+@enduml
+

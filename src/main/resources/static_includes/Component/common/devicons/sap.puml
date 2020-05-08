@@ -1,0 +1,13 @@
+@startuml
+sprite $sap [48x48/16z] {
+xSk5WgKW643XyoUuWhx_sovwkxPpPZw3El0pFdpmxo4mVuS0lZFdEtDQQrEOUKvjdqRa66jiihQBPDTcuq373MEOMmiE9Evocd8ahJKsSUd1RdCgWxa9fVTa
+exq782OCKn-Iam2y3tLyocxQ--ZTWRZ9IGQR-cO65F1JNm2_oPdPYS_B4a0Ha4E_TDk7X8kbS5GM0Re3DG0HDf-IctwPZ8C2s5812quykUs7bigHrS8G74Lo
+txTbC6ueO9cr9tVMn4ijmeDOrpMvjzoK8g2NFdbGEHA6jWvwwfD7QmiL4OsYghvkYkvAygn_AVckFa73lxbFmCBq6_jaK0_-eWyVFWC
+}
+
+!define FA_SAP(_alias) ENTITY(rectangle,black,sap,_alias,FA_SAP)
+!define FA_SAP(_alias, _label) ENTITY(rectangle,black,sap,_label, _alias,FA_SAP)
+!define FA_SAP(_alias, _label, _shape) ENTITY(_shape,black,sap,_label, _alias,FA_SAP)
+!define FA_SAP(_alias, _label, _shape, _color) ENTITY(_shape,_color,sap,_label, _alias,FA_SAP)
+skinparam folderBackgroundColor<<FA_SAP>> white
+@enduml

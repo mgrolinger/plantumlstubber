@@ -1,0 +1,59 @@
+@startuml
+' domain colors
+!global $CUSTOMER_DOMAIN_COLOR = "Orange"
+!global $EXTERNAL_INTERFACE_COLOR = "D4D4CD"
+!global $FINANCIAL_DOMAIN_COLOR = "Gold"
+!global $INTEGRATION_DOMAIN_COLOR = "SkyBlue"
+!global $RESOURCE_DOMAIN_COLOR = "LightGreen"
+' Connection colors
+!global $CUSTOMER_DOMAIN_COLOR_CONNECTION = "Orange"
+!global $EXTERNAL_DOMAIN_COLOR_CONNECTION = "DimGrey"
+!global $FINANCIAL_DOMAIN_COLOR_CONNECTION = "GoldenRod"
+!global $INTEGRATION_DOMAIN_COLOR_CONNECTION = "SkyBlue"
+!global $RESOURCE_DOMAIN_COLOR_CONNECTION = "SeaGreen"
+'default color definitions
+!global $DEFAULT_CONNECTION_COLOR = "LightGrey"
+!global $DEFAULT_BORDER_COLOR = "DarkSlateGray"
+!global $DEFAULT_INTERFACE_BORDER_COLOR = "DarkSlateGray"
+!global $DEFAULT_COMPONENT_COLOR = "DarkGrey"
+!global $DEFAULT_FONT_COLOR = "AAAAAA"
+!global $DEFAULT_STEREOTYPE_FONT_COLOR = "222222"
+!global $DEFAULT_ACTOR_BORDER_COLOR = "222222"
+
+!global $GENERAL_NOTE_COLOR = "727072"
+!global $DOCUMENT_BOX_COLOR = "DarkYellow"
+!global $WARNING_BOX_COLOR = "Red"
+!global $WARNING_BOX_BORDER_COLOR = "E80000"
+!global $WARNING_BOX_TEXT_COLOR = "222222"
+
+'Background
+!global $GENERAL_BACKGROUND_COLOR = "222222"
+skinparam BackgroundColor #$GENERAL_BACKGROUND_COLOR
+'Border
+skinparam FrameBorderColor #LightGrey
+skinparam PackageBorderColor #LightGrey
+'Font
+skinparam ComponentFontColor #222222
+skinparam InterfaceFontColor #$DEFAULT_FONT_COLOR
+skinparam FrameFontColor #$DEFAULT_FONT_COLOR
+skinparam FolderFontColor #$DEFAULT_FONT_COLOR
+skinparam DatabaseFontColor #222222
+skinparam BoundaryFontColor #$DEFAULT_FONT_COLOR
+skinparam ObjectFontColor #222222
+skinparam RectangleFontColor #222222
+skinparam NoteFontColor #222222
+skinparam PackageFontColor #$DEFAULT_FONT_COLOR
+skinparam ArrowFontColor #$DEFAULT_FONT_COLOR
+'Stereotype
+skinparam RectangleStereotypeFontColor #222222
+skinparam DatabaseStereoTypeFontColor #$DEFAULT_STEREOTYPE_FONT_COLOR
+skinparam FolderStereoTypeFontColor #$DEFAULT_STEREOTYPE_FONT_COLOR
+skinparam ComponentStereoTypeFontColor #$DEFAULT_STEREOTYPE_FONT_COLOR
+skinparam InterfaceStereoTypeFontColor #$DEFAULT_STEREOTYPE_FONT_COLOR
+skinparam PackageStereoTypeFontColor #$DEFAULT_STEREOTYPE_FONT_COLOR
+skinparam ActorStereoTypeFontColor #$DEFAULT_STEREOTYPE_FONT_COLOR
+skinparam ParticipantStereoTypeFontColor #$DEFAULT_STEREOTYPE_FONT_COLOR
+skinparam RectangleStereoTypeFontColor #$DEFAULT_STEREOTYPE_FONT_COLOR
+skinparam FrameStereotypeFontColor #$DEFAULT_STEREOTYPE_FONT_COLOR
+skinparam PackageStereotypeFontColor #$DEFAULT_STEREOTYPE_FONT_COLOR
+@enduml

@@ -1,0 +1,14 @@
+@startuml
+sprite $springboot [48x48/16z] {
+tPG5ZWCn34N3dFZ-fosbgdyopcg52q_GpimtMrQ_6YrmLfj40jcSv8r4XfNrXGuqCITFHw9KQgSpGWcHlY1VYnsh8DF2fUIqolTuTPDRMd2NDtxLLtgJZ9jw
+yyo29zYrsCiuRQU-OHkYrClqU43_ZySiz3J283snVZZmLQx5-kT_riy87femoL1JM_KL0jHtoOuuUqUhdXoK76Qn3GAcNPyXeM6WbpFPjklR_0SzBR25cdPz
+H_sOesN_cYi9WfvM_vQDO-H5M_HSFlS2YLXWNZS_y-WmPi87XVtIF3jseOddWmEOmKtVBqEyhBJZZgvNg1giDYXU85WHdJxndqzLk4Bie-ZdOoYzbs2UkNAt
+dNXCgbM0hV99qGCwRZvXSHhcV0nhSCwwK8yd4VEKwLewG6UysicoK3vlt5CPfwx4RvzdNYEPOPI4E-c3ad5TzExL2Msjsx1Mg__47G
+}
+
+!define FA_SPRINGBOOT(_alias) ENTITY(rectangle,black,springboot,_alias,FA_SPRINGBOOT)
+!define FA_SPRINGBOOT(_alias, _label) ENTITY(rectangle,black,springboot,_label, _alias,FA_SPRINGBOOT)
+!define FA_SPRINGBOOT(_alias, _label, _shape) ENTITY(_shape,black,springboot,_label, _alias,FA_SPRINGBOOT)
+!define FA_SPRINGBOOT(_alias, _label, _shape, _color) ENTITY(_shape,_color,springboot,_label, _alias,FA_SPRINGBOOT)
+skinparam folderBackgroundColor<<FA_SPRINGBOOT>> white
+@enduml
