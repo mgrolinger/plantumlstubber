@@ -17,7 +17,7 @@ import java.util.Map;
  */
 public interface FileService extends Loggable {
     /**
-     * Creates a directory for a ervice
+     * Creates a directory for a service
      *
      * @param basePath          the path from where the repository is starting
      * @param serviceDefinition the service definition
@@ -26,7 +26,20 @@ public interface FileService extends Loggable {
      */
     String createServiceDirectory(final String basePath, final ApplicationDefinition applicationDefinition, final ServiceDefinition serviceDefinition) throws IOException;
 
+    /**
+     * Writes the important common.iuml file that contains a lot of the common definitions, such as functions or skinparams
+     *
+     * @param basePath    To where the file(s) will be exported
+     * @param diagramType For which diagram type (component/sequence) the specific common.iuml is exported
+     */
     void writeDefaultCommonFile(final String basePath, final DiagramType diagramType) throws IOException;
+
+    /**
+     * Writes skin files to the export directory.
+     *
+     * @throws IOException
+     */
+    void writeDefaultSkinFiles() throws IOException;
 
     /**
      * Writes the example file after all interface files are exported

@@ -1,10 +1,48 @@
-#Active Directory
+# Name of the application
+# Usually this is used as Name in a component "name" as alias <<domainColor>>,
+# as well as the name of the exported folder, beware of any special characters.
+# You may customize by: component "customLabel" as customAlias <<domainColor>>
 application: ActiveDirectory
-# the type: application or database
+# customLabel defines the visual name of an component
+#    e.g. customLabel foo would result in component "foo" as
+customLabel: ActiveDirectory
+# The name of the alias that can be used to connect to a component, default is applicationName. to lower case and no special characters
+# e.g. newApplication -> newapplication
+customAlias:
+# the type of application (default is application which means component for component diagrams and participant for sequences):
+#   values:  application or component, database, springboot, archive, zip, user, address_book, email, folder, documents, jenkins
 systemType: user
-#integrationType: LDAP
+# what kind of interface HTTPS::XML, HTTP::JSON, SOAP::HTTP, SOAP (as synonym for (HTTP and JMS Endpoints))
+#integrationType: REST::JSON
+# Domain values:
+#    BiPRO(authentifizierung, suche, uebermittlung, bestand, taa, risikodaten, spezifisches),
+#    SID(customer, integration, resource, financial, external),
+#    or own Domains that additionally need to be added to the file default.skin
+#
 domainColor: customer
+# sequence diagram position, default=1, negative numbers move the participant more left and positive numbers move a participant more right
 orderPrio: 400
+# Whether or not this application should automatically linked to another component such as the own db
+linkToComponent:
+# linked to a specific alias or the alias is the lower case "linkedToComponent" name
+linkToCustomAlias:
 services:
+    # services and their interface e.g. for SOAP e.g.:  Service : [method], for REST e.g.:  /api/path: [interface]
+    # Integration
+    ## integrationType::integrationDataType: or just integrationType:, such as REST::JSON: or SOAP:
     LDAP:
+        # Services
+        ## Service calls are generated as $<application>_<service>_<interface>()
+        #  Keyword EMPTY
+        ## except for keyword EMPTY which results in $<application>_<interface>()
         EMPTY: [user]
+        # Interfaces
+        ## interfaces are either listed as coma-separated array [interface,interface2]
+        ## or as list items - interface
+        ##                  - interface2
+        ## and may be followed by either specific Rest-Methods, like this interface::POST:GET, for a rest interface
+        ## that has the two HTTP methods POST and GET
+        ## CallStack
+        ## or/and a call stack that is identified by "->", like this: interface->Application2_service_interface2
+        ## this will result in subsequent !includes ../Application2/service/interface2.iuml and Plantuml-Function calls
+        ## in the generated plantuml, such as $Application2_service_interface2()

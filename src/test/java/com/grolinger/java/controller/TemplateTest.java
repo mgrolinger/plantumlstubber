@@ -10,7 +10,7 @@ public class TemplateTest {
     @Test
     public void testGetContent() {
 
-        assertThat(Template.COMPONENT_V2.getTemplateURL()).isEqualTo("componentExportV2.html");
-        assertThat(Template.SEQUENCE_V2.getTemplateURL()).isEqualTo("sequenceExportV2.html");
+        assertThat(Template.COMPONENT_V1_2019_6.getTemplateURL()).isEqualTo("componentExport_V1_2019_6.html");
+        assertThat(Template.SEQUENCE_V1_2019_6.getTemplateURL()).isEqualTo("sequenceExport_V1_2019_6.html");
     }
 }

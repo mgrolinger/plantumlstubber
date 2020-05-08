@@ -2,16 +2,16 @@ package com.grolinger.java.service.adapter.impl;
 
 import com.grolinger.java.controller.templatemodel.Constants;
 import com.grolinger.java.controller.templatemodel.DiagramType;
-import com.grolinger.java.controller.templatemodel.TemplateContent;
 import com.grolinger.java.service.adapter.FileService;
 import com.grolinger.java.service.data.ApplicationDefinition;
-import com.grolinger.java.service.data.export.ComponentFile;
-import com.grolinger.java.service.data.export.ExampleFile;
 import com.grolinger.java.service.data.InterfaceDefinition;
 import com.grolinger.java.service.data.ServiceDefinition;
+import com.grolinger.java.service.data.export.ComponentFile;
+import com.grolinger.java.service.data.export.ExampleFile;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ResourceUtils;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 
@@ -22,18 +22,20 @@ import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 import static com.grolinger.java.controller.templatemodel.Constants.*;
 
 @Service
 public class FileServiceImpl implements FileService {
+    public static final String FILE_TYPE_IUML = ".iuml";
     private static final String GLOBAL_FILE_EXPORT_PATH = System.getProperty("user.dir") + File.separator + "target" + File.separator;
     private static final String COMMON_PATH = "common/";
     private static final String COMMON_FILE = "common/common.iuml";
     private static final String COMPONENT_DEFINITION_FILE = "component_definition.iuml";
     private static final String PARTICIPANT_DEFINITION_FILE = "participant_definition.iuml";
-    public static final String FILE_TYPE_IUML = ".iuml";
     private static final String EXAMPLE_FILE_SUFFIX = "_example.puml";
 
     private final SpringTemplateEngine templateEngine;
@@ -64,19 +66,61 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public void writeDefaultCommonFile(final String basePath, final DiagramType diagramType) throws IOException {
-        //write a pseudo common
-        String include = TemplateContent.INCLUDE.getContent() + " ";
-        if (DiagramType.COMPONENT_DIAGRAM_BASE.equals(diagramType)) {
-            include += COMPONENT_DEFINITION_FILE;
+        List<String> filesToExport;
+        if (DiagramType.COMPONENT_V1_2019_6_DIAGRAM_BASE.equals(diagramType) ||
+                DiagramType.COMPONENT_V1_2020_7_DIAGRAM_BASE.equals(diagramType)) {
+            filesToExport = Arrays.asList(
+                    COMMON_FILE,
+                    COMMON_PATH + "domain_legend.iuml",
+                    COMMON_PATH + "devicons/springBoot.puml",
+                    COMMON_PATH + "devicons/salesforce.puml",
+                    COMMON_PATH + "devicons/sap.puml",
+                    COMMON_PATH + "devicons/solr.puml",
+                    COMMON_PATH + "devicons/tibco.puml");
+            // FIXME: better solution than hardcoding here
+            Files.createDirectories(Paths.get(GLOBAL_FILE_EXPORT_PATH + basePath + COMMON_PATH));
+            Files.createDirectories(Paths.get(GLOBAL_FILE_EXPORT_PATH + basePath + COMMON_PATH + "devicons/"));
         } else {
-            include += PARTICIPANT_DEFINITION_FILE;
+            filesToExport = Arrays.asList(
+                    COMMON_FILE,
+                    COMMON_PATH + "bipro_messageIds.iuml",
+                    COMMON_PATH + "http_statuscodes.iuml");
+            Files.createDirectories(Paths.get(GLOBAL_FILE_EXPORT_PATH + basePath + COMMON_PATH));
         }
-        Files.createDirectories(Paths.get(GLOBAL_FILE_EXPORT_PATH + basePath + COMMON_PATH));
-        try (Writer writer = new FileWriter(GLOBAL_FILE_EXPORT_PATH + basePath + COMMON_FILE)) {
-            writer.write(TemplateContent.COMMONV2_FILE.getContent() + "\n" + include);
-        } catch (IOException e) {
-            // do nothing
-            logger().error("Exception occurred: {}", e.getMessage());
+
+        for (String currentFileName : filesToExport) {
+            File currentFile = ResourceUtils.getFile("classpath:static_includes/" + diagramType.getBasePath() + currentFileName);
+
+            //Read File Content
+            String content = new String(Files.readAllBytes(currentFile.toPath()));
+            try (Writer writer = new FileWriter(GLOBAL_FILE_EXPORT_PATH + basePath + currentFileName)) {
+                writer.write(content);
+            } catch (IOException e) {
+                // do nothing
+                logger().error("Exception occurred: {}", e.getMessage());
+            }
+        }
+    }
+
+    @Override
+    public void writeDefaultSkinFiles() throws IOException {
+        List<String> filesToExport = Arrays.asList(
+                "skin/ci_company_colors.iuml",
+                "skin/default.skin",
+                "skin/darcula.skin");
+        Files.createDirectories(Paths.get(GLOBAL_FILE_EXPORT_PATH + "skin/"));
+        //skin
+        for (String currentFileName : filesToExport) {
+            File currentFile = ResourceUtils.getFile("classpath:static_includes/" + currentFileName);
+
+            //Read File Content
+            String content = new String(Files.readAllBytes(currentFile.toPath()));
+            try (Writer writer = new FileWriter(GLOBAL_FILE_EXPORT_PATH + currentFileName)) {
+                writer.write(content);
+            } catch (IOException e) {
+                // do nothing
+                logger().error("Exception occurred: {}", e.getMessage());
+            }
         }
     }
 
@@ -91,7 +135,7 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public ExampleFile writeInterfaceFile(final String currentPath,final ApplicationDefinition currentApplication, final ServiceDefinition currentService, final InterfaceDefinition currentInterface, final Context context, ExampleFile exampleFile) {
+    public ExampleFile writeInterfaceFile(final String currentPath, final ApplicationDefinition currentApplication, final ServiceDefinition currentService, final InterfaceDefinition currentInterface, final Context context, ExampleFile exampleFile) {
 
         try (Writer writer = new FileWriter(currentPath + currentInterface.getName() + FILE_TYPE_IUML)) {
             // !include file.iuml
@@ -155,7 +199,8 @@ public class FileServiceImpl implements FileService {
 
         //write a pseudo common
         Files.createDirectories(Paths.get(GLOBAL_FILE_EXPORT_PATH + diagramType.getBasePath() + COMMON_PATH));
-        final String fileName = DiagramType.COMPONENT_DIAGRAM_BASE.equals(diagramType) ?
+        final String fileName = (DiagramType.COMPONENT_V1_2019_6_DIAGRAM_BASE.equals(diagramType) ||
+                DiagramType.COMPONENT_V1_2020_7_DIAGRAM_BASE.equals(diagramType)) ?
                 COMPONENT_DEFINITION_FILE :
                 PARTICIPANT_DEFINITION_FILE;
         try (Writer writer = new FileWriter(GLOBAL_FILE_EXPORT_PATH + diagramType.getBasePath() + COMMON_PATH + fileName)) {

@@ -39,7 +39,7 @@ public class ComponentFile implements Loggable {
         content.append(DATE.getContent()).append(LocalDate.now())
                 .append(CARRIAGE_RETURN.getContent());
 
-        if (DiagramType.COMPONENT_DIAGRAM_BASE.equals(diagramType)) {
+        if (DiagramType.COMPONENT_V1_2019_6_DIAGRAM_BASE.equals(diagramType) || DiagramType.COMPONENT_V1_2020_7_DIAGRAM_BASE.equals(diagramType)) {
             // Component diagrams need two buckets
             bucket1 = new StringBuilder();
             bucket1.append("!if ($UML_STRICT == %true())")
@@ -61,8 +61,9 @@ public class ComponentFile implements Loggable {
                     .append("  !include <tupadr3/devicons/jenkins>").append(CARRIAGE_RETURN.getContent())
                     .append("  !include <tupadr3/devicons/terminal>").append(CARRIAGE_RETURN.getContent())
                     .append("  !include devicons/springboot.puml").append(CARRIAGE_RETURN.getContent())
-                    .append("  !include devicons/btix.puml").append(CARRIAGE_RETURN.getContent())
                     .append("  !include devicons/solr.puml").append(CARRIAGE_RETURN.getContent())
+                    .append("  !include devicons/sap.puml").append(CARRIAGE_RETURN.getContent())
+                    .append("  !include devicons/salesforce.puml").append(CARRIAGE_RETURN.getContent())
                     .append(CARRIAGE_RETURN.getContent());
 
         } else {
@@ -75,7 +76,7 @@ public class ComponentFile implements Loggable {
 
     public void addComponent(final ApplicationDefinition currentApplication, final ServiceDefinition currentService) {
         if (!doneApplication.contains(currentApplication.getName())) {
-            if (DiagramType.COMPONENT_DIAGRAM_BASE.equals(diagramType)) {
+            if (DiagramType.COMPONENT_V1_2019_6_DIAGRAM_BASE.equals(diagramType) || DiagramType.COMPONENT_V1_2020_7_DIAGRAM_BASE.equals(diagramType)) {
                 final String componentName = Constants.DEFINE_FUNCTION_PREFIX.getValue() +
                         currentApplication.getName().toUpperCase() + COMPONENT_SUFFIX.getValue();
 
@@ -128,7 +129,7 @@ public class ComponentFile implements Loggable {
      */
     public String getFullFileContent() {
         StringBuilder copy;
-        if (DiagramType.COMPONENT_DIAGRAM_BASE.equals(diagramType)) {
+        if (DiagramType.COMPONENT_V1_2019_6_DIAGRAM_BASE.equals(diagramType) || DiagramType.COMPONENT_V1_2020_7_DIAGRAM_BASE.equals(diagramType)) {
             // bucket1 is closed by bucket2 automatically
             // bucket2 close with endif
             bucket2.append(CARRIAGE_RETURN.getContent()).append("!endif").append(CARRIAGE_RETURN.getContent());

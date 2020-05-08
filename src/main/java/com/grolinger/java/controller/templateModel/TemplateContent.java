@@ -28,12 +28,12 @@ public enum TemplateContent {
             "!$UML_STRICT = %false()\n" +
             "!endif"),
     INCLUDE("!include "),
-    SEQUENCEV2_HEADER("'!$DETAILED=%true()\n" +
+    SEQUENCE_HEADER_VARIABLES("'!$DETAILED=%true()\n" +
             "'!$SIMPLE=%true()\n" +
             "'!$SHOW_SQL=%false()\n" +
             "'!$SHOW_DOCUMENT_LINK=%false()\n" +
             "'!$SHOW_EXCEPTION=%false()\n\n"),
-    COMPONENTV2_HEADER("'!$DETAILED=%true()\n" +
+    COMPONENT_HEADER_VARIABLES("'!$DETAILED=%true()\n" +
             "'!$UML_STRICT=%false()\n" +
             "!$SHOW_TODO=%false()\n\n\n");
 

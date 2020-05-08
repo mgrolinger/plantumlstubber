@@ -51,11 +51,11 @@ public class PlantumlStubberConsole implements CommandLineRunner {
         String diagramType = args[0];
 
         if (diagramType.equalsIgnoreCase(CommandArg.COMP.name())) {
-            this.multiExportController.component(null);
+            this.multiExportController.component(null,"1.2020.7");
         } else if (diagramType.equalsIgnoreCase(CommandArg.SEQ.name())) {
-            this.multiExportController.sequence(null);
+            this.multiExportController.sequence(null,"1.2020.7");
         } else {
-            throw new IllegalArgumentException("No diagramme type matched. Please review the command line arguments. App exiting...");
+            throw new IllegalArgumentException("No diagram type matched. Please review the command line arguments. App exiting...");
         }
     }
 }

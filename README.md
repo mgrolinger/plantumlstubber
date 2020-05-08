@@ -2,6 +2,16 @@
 
 This project can be used to generate stubs for component diagrams and sequence diagrams.
 The generator provides a swagger ui on http://localhost:19191/swagger-ui.html#/
+The files contain "todo" marker that are supposed to be filled in by you.
+
+### Basic notation
+
+That is how I do it:
+
+*.iuml are includible files that contain a re-usable service definition and may be used with !include
+*.puml are plantuml files that are self-sufficient and should not be !included in other files. These files, however, may include .iuml files
+
+This maybe your understanding as well or not, but the stubber will mostly generate .iuml files. 
 
 ## YAML configuration
 
