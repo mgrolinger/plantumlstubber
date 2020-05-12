@@ -1,0 +1,546 @@
+@startuml common
+'
+' Define this variable to set it to the right starting point from your plantuml repository
+'
+/'
+' Domain color & general color definitions
+'/
+skinparam shadowing false
+
+' Globals, need to be defined here to be usable with the repository
+!if (%not(%variable_exists("$DETAILED")))
+    !global $DETAILED=%false()
+!endif
+!if (%not(%variable_exists("$SIMPLE")))
+    !global $SIMPLE=%false()
+!endif
+!if (%not(%variable_exists("$ENABLE_FEATURE_ORDERING")))
+    !global $ENABLE_FEATURE_ORDERING=%false()
+!endif
+!if (%not(%variable_exists("$SHOW_EXCEPTION")))
+    !global $SHOW_EXCEPTION=%false()
+!endif
+!if (%not(%variable_exists("$DOCUMENT_LINK")))
+    !global $DOCUMENT_LINK=%false()
+!endif
+
+
+!include ../../skin/ci_company_colors.iuml
+!include ../../skin/default.skin
+' Override default with other color values
+!ifdef DARCULA
+    !include ../../skin/darcula.skin
+    'SEQUENCES'
+    skinparam SequenceGroupBodyBackgroundColor  transparent
+    skinparam SequenceReferenceBackgroundColor  #White
+    skinparam SequenceLifelineBorderColor       #LightGrey
+    skinparam SequenceStereotypeFontColor       #LightGrey
+    skinparam ArrowFontColor                    #WhiteSmoke
+!endif
+
+skinparam ArrowColor                        #$DEFAULT_CONNECTION_COLOR
+skinparam ParticipantBorderColor            #$DEFAULT_BORDER_COLOR
+skinparam QueueBorderColor                  #$DEFAULT_BORDER_COLOR
+skinparam EntityBorderColor                 #$DEFAULT_BORDER_COLOR
+skinparam DatabaseBorderColor               #$DEFAULT_BORDER_COLOR
+skinparam SequenceLifelineBorderColor       #$DEFAULT_BORDER_COLOR
+
+!procedure DRAFT()
+    skinparam handwritten true
+!endfunction
+
+/' Defining stereotype for documentBox and general notes
+'/
+
+hide <<authentifizierung>> stereotype
+hide <<suche>> stereotype
+hide <<uebermittlung>> stereotype
+hide <<bestand>> stereotype
+hide <<taa>> stereotype
+hide <<risikodaten>> stereotype
+hide <<spezifische>> stereotype
+
+hide <<integration>> stereotype
+hide <<resource>> stereotype
+hide <<financial>> stereotype
+hide <<customer>> stereotype
+hide <<user>> stereotype
+hide <<external>> stereotype
+
+skinparam participant {
+    'BiPRO
+    BackgroundColor<<authentifizierung>>  #$AUTHENTIFIZIERUNG_DOMAIN_COLOR
+    BackgroundColor<<suche>>          #$SUCHE_DOMAIN_COLOR
+    BackgroundColor<<uebermittlung>>  #$UEBERMITTLUNG_DOMAIN_COLOR
+    BackgroundColor<<bestand>>        #$BESTAND_DOMAIN_COLOR
+    BackgroundColor<<taa>>            #$TAA_DOMAIN_COLOR
+    BackgroundColor<<risikodaten>>    #$RISIKODATEN_DOMAIN_COLOR
+    BackgroundColor<<spezifische>>    #$SPEZIFISCHE_DOMAIN_COLOR
+    'SID
+    BackgroundColor<<integration>>  #$INTEGRATION_DOMAIN_COLOR
+    BackgroundColor<<resource>>     #$RESOURCE_DOMAIN_COLOR
+    BackgroundColor<<financial>>    #$FINANCIAL_DOMAIN_COLOR
+    BackgroundColor<<customer>>     #$CUSTOMER_DOMAIN_COLOR
+    BackgroundColor<<user>>         #$CUSTOMER_DOMAIN_COLOR
+    BackgroundColor<<external>>     #$EXTERNAL_DOMAIN_COLOR
+    BackgroundColor<<warning>>      #$WARNING_BOX_COLOR
+}
+skinparam database {
+    'BiPRO
+    BackgroundColor<<authentifizierung>>  #$AUTHENTIFIZIERUNG_DOMAIN_COLOR
+    BackgroundColor<<suche>>          #$SUCHE_DOMAIN_COLOR
+    BackgroundColor<<uebermittlung>>  #$UEBERMITTLUNG_DOMAIN_COLOR
+    BackgroundColor<<bestand>>        #$BESTAND_DOMAIN_COLOR
+    BackgroundColor<<taa>>            #$TAA_DOMAIN_COLOR
+    BackgroundColor<<risikodaten>>    #$RISIKODATEN_DOMAIN_COLOR
+    BackgroundColor<<spezifische>>    #$SPEZIFISCHE_DOMAIN_COLOR
+    'SID
+    BackgroundColor<<integration>>  #$INTEGRATION_DOMAIN_COLOR
+    BackgroundColor<<resource>>     #$RESOURCE_DOMAIN_COLOR
+    BackgroundColor<<financial>>    #$FINANCIAL_DOMAIN_COLOR
+    BackgroundColor<<customer>>     #$CUSTOMER_DOMAIN_COLOR
+    BackgroundColor<<user>>         #$CUSTOMER_DOMAIN_COLOR
+    BackgroundColor<<external>>     #$EXTERNAL_DOMAIN_COLOR
+    BackgroundColor<<warning>>      #$WARNING_BOX_COLOR
+}
+skinparam note {
+	BackgroundColor<<doc>> #DOCUMENT_BOX_COLOR|White
+	BorderColor<<doc>> #Black
+	FontColor<<doc>> #Black
+	NoteBorderThickness<<doc>> 1
+	shadowing<<doc>> false
+
+    BackgroundColor<<general>> #GENERAL_NOTE_COLOR
+    shadowing<<general>> false
+    BorderColor<<general>> #Silver
+    FontColor<<general>> #DarkSlateGray
+    shadowing<<general>> false
+
+    BackgroundColor<<warning>> #Red
+    FontColor<<warning>> #White
+    NoteBorderThickness<<warning>> 1
+    shadowing<<warning>> false
+
+    BackgroundColor<<technical>> #474C52
+    shadowing<<technical>> false
+    BorderColor<<technical>> #3C3F44
+    FontColor<<technical>> #E3E9F0
+    shadowing<<technical>> false
+
+    BackgroundColor<<business>> #CCD7E4
+    shadowing<<business>> false
+    BorderColor<<business>> #BAC4D0
+    FontColor<<business>> #DarkSlateGray
+    shadowing<<business>> false
+    ' Yellow #FFAE19
+}
+
+'
+' General Utils
+'
+!final procedure $referenceBox($CALLER,$COLOR,$TEXT)
+        ref#$COLOR over $CALLER : $TEXT
+!endprocedure
+
+!final procedure $documentBox($CALLER="consumer",$DOCUMENT="n.a.",$PAGE="n.a.")
+	!ifdef SHOW_DOCUMENT_LINK
+	 rnote<<doc>> over $CALLER
+		<&document>**Documentation**
+		----
+		For details please look at
+		**$DOCUMENT**
+		on page **$PAGE**.
+		end note
+    !else
+        ' This else and space is necessary, otherwise you will get a syntax error.
+    !endif
+!endprocedure
+
+!define EXCEPTION_NOTE note right #Snow: <color:DarkRed><U+26A0> Possible errors/exceptions</color>
+
+!final function $determine_note_placement($SIDE="right")
+    !if ($SIDE == "over")
+        !return "over"
+    !else
+        !if ($SIDE == "left")
+            !return "left of"
+        !endif
+    !endif
+    'Default is right case
+    !return "right of"
+!endfunction
+
+' generelle Hinweise
+!final procedure $hintBox($CALLER,$SIDE,$TEXT)
+    note <<general>> $determine_note_placement($SIDE) $CALLER: $TEXT
+!endprocedure
+!final procedure $hintBox($CALLER,$TEXT)
+     $hintBox($CALLER,"left",$TEXT)
+!endprocedure
+
+' Implementierungshinweise
+!final procedure $tBox($CALLER,$TEXT)
+    $technicalBox($CALLER,$TEXT)
+!endprocedure
+!final procedure $tBox($CALLER,$SIDE,$TEXT)
+    $technicalBox($CALLER,$SIDE,$TEXT)
+!endprocedure
+!final procedure $technicalBox($CALLER,$SIDE,$TEXT)
+    !if ($DETAILED)
+        note <<technical>> $determine_note_placement($SIDE) $CALLER: $TEXT
+    !endif
+!endprocedure
+!final procedure $technicalBox($CALLER,$TEXT)
+    !if ($DETAILED)
+        $technicalBox($CALLER,"left",$TEXT)
+    !endif
+!endprocedure
+
+' Fachliche Hinweise
+!final procedure $bBox($CALLER,$TEXT)
+    $businessBox($CALLER,$TEXT)
+!endprocedure
+!final procedure $bBox($CALLER,$SIDE,$TEXT)
+    $businessBox($CALLER,$SIDE,$TEXT)
+!endprocedure
+!final procedure $businessBox($CALLER,$SIDE,$TEXT)
+    !if (%not($DETAILED))
+        note <<business>> $determine_note_placement($SIDE) $CALLER: $TEXT
+    !endif
+!endprocedure
+!final procedure $businessBox($CALLER,$TEXT)
+    !if (%not($DETAILED))
+        $businessBox($CALLER,"left",$TEXT)
+    !endif
+!endprocedure
+
+' Warnings
+!final procedure $warningBox($CALLER,$SIDE,$TEXT)
+    note <<warning>>$determine_note_placement($SIDE) $CALLER: $TEXT
+!endprocedure
+!final procedure $warningBox($CALLER,$TEXT)
+    note <<warning>> left of $CALLER: $TEXT
+!endprocedure
+
+
+' participants and their ordering in the sequence diagrams
+!include participant_definition.iuml
+
+
+' limit length of messages in sequence diagrams
+' skinparam maxMessageSize 200
+
+' UNICODE characters that may be useful in texts
+!$SYM_EMPTY='<U+0020>'
+!$SYM_SUBSET='<U+2286>'
+!$SYM_COMMA='<U+002C>'
+!$SYM_ETC="<U+002C><U+2026>"
+!$SYM_D_UNDERSCORE_="<U+0332><U+005F><U+0332>"
+!$SYM_JOIN="<U+2A1D>"
+
+
+' Rest
+'Helper
+!final function $serviceCallDescription($DESCRIPTIVE_LINE="")
+  !if (%strlen($DESCRIPTIVE_LINE) > 0)
+    !return "<i>"+$DESCRIPTIVE_LINE+"</i>"
+  !else
+    !return ""
+  !endif
+!endfunction
+
+
+' Rest
+!unquoted function $restCallMethod($HTTP_METHOD,$REST_ROUTE,$USED_PROTOCOL="HTTP<i>s</i>)")
+	!return "\n[Rest:"+$USED_PROTOCOL+":<b>"+$HTTP_METHOD+"</b> "+$REST_ROUTE+"]"
+!endfunction
+
+' SOAP
+!unquoted function $soapCallMethod($SERVICE_DOMAIN,$SERVICE_METHOD,$USED_PROTOCOL="XML")
+	!return "\n[SOAP::"+$USED_PROTOCOL+": <b>"+$SERVICE_DOMAIN+".</b>"+$SERVICE_METHOD+"]"
+!endfunction
+!unquoted function $soapCallMethod($SERVICE_METHOD,$USED_PROTOCOL="XML")
+	!return "\n[SOAP::"+$USED_PROTOCOL+":"+$SERVICE_METHOD+"]"
+!endfunction
+!final function $soapCallMethod($SERVICE_METHOD)
+	!return $soapCallMethod($SERVICE_METHOD,"XML")
+!endfunction
+
+!final function $httpCallMethod($SERVICE_METHOD="GET",$SERVICE_URL)
+	!return "\n[HTTP::<b>"+$SERVICE_METHOD+"</b> "+$SERVICE_URL+"]"
+!endfunction
+!final function $httpCallMethod($SERVICE_METHOD="GET",$SERVICE_URL,$USED_PROTOCOL='')
+	!return "\n["+$USED_PROTOCOL+"::<b>"+$SERVICE_METHOD+"</b> "+$SERVICE_URL+"]"
+!endfunction
+!final function $httpCallMethod($SERVICE_URL)
+	!return $httpCallMethod("GET",$SERVICE_URL)
+!endfunction
+
+!final function $httpsCallMethod($SERVICE_METHOD="GET",$SERVICE_URL)
+	!return "\n[HTTPs::<b>"+$SERVICE_METHOD+"</b> "+$SERVICE_URL+"]"
+!endfunction
+!final function $httpsCallMethod($SERVICE_METHOD="GET",$SERVICE_URL,$USED_PROTOCOL='')
+	!return "\n["+$USED_PROTOCOL+"::<b>"+$SERVICE_METHOD+"</b> "+$SERVICE_URL+"]"
+!endfunction
+!final function $httpsCallMethod($SERVICE_URL)
+	!return $httpsCallMethod("GET",$SERVICE_URL)
+!endfunction
+
+!final function $payload($PAYLOAD_TYPE, $PAYLOAD_VALUE)
+	!return "\n[Payload:**"+$PAYLOAD_TYPE+"** <&data-transfer-upload>: "+$PAYLOAD_VALUE+"]"
+!endfunction
+
+!final function $payload($PAYLOAD_TYPE,$PAYLOAD_VALUE,$PAYLOAD_TYPE2,$PAYLOAD_VALUE2)
+	!return "\n[Payload <&data-transfer-upload>:**"+$PAYLOAD_TYPE+"**: "+$PAYLOAD_VALUE+", **"+$PAYLOAD_TYPE2+"**: "+$PAYLOAD_VALUE2+"]"
+!endfunction
+
+!final function $contentType($CONTENT_TYPE)
+	!return "\n[Content-Type:**"+$CONTENT_TYPE+"**]"
+!endfunction
+
+!function $consumes($MEDIA_TYPE,$MEDIA_VALUE)
+	!return "\n[Consumes:<b>"+$MEDIA_TYPE+"</b>: "+$MEDIA_VALUE+"]"
+!endfunction
+
+!final function $produces($MEDIA_TYPE, $MEDIA_VALUE)
+	!return "\n[Produces:<b>"+$MEDIA_TYPE+"</b> <&file>: "+$MEDIA_VALUE+"]"
+!endfunction
+
+!final function $produces($DESCRIPTIVE_LINE='', $MEDIA_TYPE, $MEDIA_VALUE)
+	!return "<i>"+$DESCRIPTIVE_LINE+"</i>\n[Produces:<b>"+$MEDIA_TYPE+"</b> <&file>: "+$MEDIA_VALUE+"]"
+!endfunction
+
+!final function $response($MEDIA_TYPE,$MEDIA_VALUE)
+    !if ($DETAILED)
+	    !return $produces($MEDIA_TYPE,$MEDIA_VALUE)
+	!else
+	    !return $serviceCallDescription("Response: ")
+	!endif
+!endfunction
+
+!final function $response($MEDIA_VALUE)
+    !if ($DETAILED)
+	    !return $produces("XML",$MEDIA_VALUE)
+	!else
+	    !return $serviceCallDescription("Response: ")
+	!endif
+!endfunction
+
+!final function $businessResponse($BUSINESS_TEXT)
+    !if ($DETAILED)
+        !return ""
+    !else
+        !return "<i> "+$BUSINESS_TEXT+"</i>"
+    !endif
+!endfunction
+
+!final function $businessAndTechnicalResponse($BUSINESS_TEXT,$TECHNICAL_RESPONSE_TYPE,$MEDIA_VALUE="XML")
+    !if ($DETAILED)
+       !return $produces($BUSINESS_TEXT,$MEDIA_VALUE,$TECHNICAL_RESPONSE_TYPE)
+    !else
+        !return "<i> "+$BUSINESS_TEXT+"</i>"
+    !endif
+!endfunction
+
+!final function $responseEmpty()
+    !if ($DETAILED)
+	    !return "[<i>Empty</i>]"
+	!else
+	    !return "<i>leere Antwort</i>"
+	!endif
+!endfunction
+
+!final function $button($BUTTONTEXT)
+	!return "\n[Element:<b>Button</b> <&arrow-circle-right>: "+$BUTTONTEXT+"]"
+!endfunction
+
+!final function $html($PAGENAME)
+	!return "\n[Produces:<b>HTML</b> <U+1F4F0>: "+$PAGENAME+"]"
+!endfunction
+
+!final function $cookie($COOKIEVALUE)
+	!return "\n[Header:<b>Cookie</b> <U+1f365>: "+$COOKIEVALUE+"]"
+!endfunction
+
+!final function $header($HEADERKEY, $HEADERVALUE)
+    !if ($DETAILED)
+        !return "\n[Header:<b>"+$HEADERKEY+"</b> : "+$HEADERVALUE+"]"
+    !else
+        !return ""
+    !endif
+!endfunction
+
+!final function $redirect($PAGENAME)
+	!return "\n[Produces:**Redirect** <&reload>: "+$PAGENAME+"]"
+!endfunction
+
+
+!final function $ajax($METHOD, $URL)
+	!return "[XHR:**"+$METHOD+"** "+$URL+"]"
+!endfunction
+
+!final function $guiEvent($EVENTNAME)
+	!return "[GUI-Event:<b>"+$EVENTNAME+"</b>]"
+!endfunction
+
+'
+' Methods
+' creates a participant
+!final function $CREATE_PARTICIPANT($NAME,$ALIAS,$COLOR="Red",$PRIO="0")
+    !ifdef ENABLE_FEATURE_ORDERING
+    	!return participant $NAME as $ALIAS order $PRIO #$COLOR
+    !else
+    	!return participant $NAME as $ALIAS #$COLOR
+    !endif
+!endfunction
+
+'' Rest Calls
+!final function $restCall($DESCRIPTIVE_LINE,$HTTP_METHOD,$REST_ROUTE,$USED_PROTOCOL="HTTP")
+    !if ($DETAILED)
+        !return $serviceCallDescription($DESCRIPTIVE_LINE) + $restCallMethod($HTTP_METHOD,$REST_ROUTE,$USED_PROTOCOL)
+    !else
+        !return $serviceCallDescription($DESCRIPTIVE_LINE)
+    !endif
+
+!endfunction
+
+!final function $restCallWithPayload($DESCRIPTIVE_LINE,$HTTP_METHOD,$REST_ROUTE,$MEDIATYPE,$MEDIAVALUE,$USED_PROTOCOL="HTTP")
+    !if ($DETAILED)
+        !return $serviceCallDescription($DESCRIPTIVE_LINE) + $restCallMethod($HTTP_METHOD,$REST_ROUTE,$USED_PROTOCOL) + $payload($MEDIATYPE, $MEDIAVALUE)
+    !else
+        !return $serviceCallDescription($DESCRIPTIVE_LINE)
+    !endif
+  !return
+!endfunction
+
+'HTTP:GET
+!final function $restGET($DESCRIPTIVE_LINE,$REST_ROUTE,$USED_PROTOCOL="HTTP")
+	!return $restCall($DESCRIPTIVE_LINE,"GET",$REST_ROUTE,$USED_PROTOCOL)
+!endfunction
+
+!final function $restGET($DESCRIPTIVE_LINE,$REST_ROUTE,$MEDIATYPE,$MEDIAVALUE) 
+	!return $restCallWithPayload($DESCRIPTIVE_LINE,"GET",$REST_ROUTE,$MEDIATYPE,$MEDIAVALUE,"HTTP")
+!endfunction
+
+
+'HTTP:PUT
+!final function $restPUT($DESCRIPTIVE_LINE,$REST_ROUTE,$USED_PROTOCOL="HTTP")
+	!return $restCall($DESCRIPTIVE_LINE,"PUT",$REST_ROUTE,$USED_PROTOCOL)
+!endfunction
+
+!final function $restPUT($DESCRIPTIVE_LINE,$REST_ROUTE,$MEDIATYPE,$MEDIAVALUE) 
+	!return $restCallWithPayload($DESCRIPTIVE_LINE,"PUT",$REST_ROUTE,$MEDIATYPE,$MEDIAVALUE,"HTTP")
+!endfunction
+
+'HTTP:POST
+!final function $restPOST($DESCRIPTIVE_LINE,$REST_ROUTE,$USED_PROTOCOL="HTTP")
+	!return $restCall($DESCRIPTIVE_LINE,"POST",$REST_ROUTE,$USED_PROTOCOL)
+!endfunction
+
+!final function $restPOST($DESCRIPTIVE_LINE,$REST_ROUTE,$MEDIATYPE,$MEDIAVALUE) 
+	!return $restCallWithPayload($DESCRIPTIVE_LINE,"POST",$REST_ROUTE,$MEDIATYPE,$MEDIAVALUE,"HTTP")
+!endfunction
+
+'HTTP:DELETE
+!final function $restDELETE($DESCRIPTIVE_LINE,$REST_ROUTE,$USED_PROTOCOL="HTTP")
+	!return $restCall($DESCRIPTIVE_LINE,"DELETE",$REST_ROUTE,$USED_PROTOCOL)
+!endfunction
+
+!final function $restDELETE($DESCRIPTIVE_LINE,$REST_ROUTE,$MEDIATYPE,$MEDIAVALUE) 
+	!return $restCallWithPayload($DESCRIPTIVE_LINE,"DELETE",$REST_ROUTE,$MEDIATYPE,$MEDIAVALUE,"HTTP")
+!endfunction
+'
+'' HTTP
+!final function $httpCall($DESCRIPTIVE_LINE,$SERVICE_URL)
+  !return $httpCall($DESCRIPTIVE_LINE,"GET",$SERVICE_URL)
+!endfunction
+!final function $httpCall($DESCRIPTIVE_LINE,$SERVICE_METHOD="GET",$SERVICE_URL)
+  !return $serviceCallDescription($DESCRIPTIVE_LINE) + $httpCallMethod($SERVICE_METHOD,$SERVICE_URL)
+!endfunction
+!final function $httpCallWithPayload($DESCRIPTIVE_LINE,$SERVICE_METHOD,$SERVICE_URL,$MEDIATYPE,$MEDIAVALUE)
+	!return $serviceCallDescription($DESCRIPTIVE_LINE) + $httpCallMethod($SERVICE_METHOD,$SERVICE_URL) + $consumes($MEDIATYPE,$MEDIAVALUE)
+!endfunction
+!final function $httpCallWithPayload($DESCRIPTIVE_LINE,$SERVICE_URL,$MEDIATYPE,$MEDIAVALUE)
+	!return $httpCallWithPayload($DESCRIPTIVE_LINE,"GET",$SERVICE_URL,$MEDIATYPE,$MEDIAVALUE)
+!endfunction
+'
+''HTTPs
+!final function $httpsCall($DESCRIPTIVE_LINE,$SERVICE_URL)
+  !return $httpsCall($DESCRIPTIVE_LINE,"GET",$SERVICE_URL)
+!endfunction
+!final function $httpsCall($DESCRIPTIVE_LINE,$SERVICE_METHOD="GET",$SERVICE_URL)
+  !return $serviceCallDescription($DESCRIPTIVE_LINE) + $httpsCallMethod($SERVICE_METHOD,$SERVICE_URL)
+!endfunction
+!final function $httpsCallWithPayload($DESCRIPTIVE_LINE,$SERVICE_METHOD,$SERVICE_URL,$MEDIATYPE,$MEDIAVALUE)
+	!return $serviceCallDescription($DESCRIPTIVE_LINE) + $httpsCallMethod($SERVICE_METHOD,$SERVICE_URL) + $consumes($MEDIATYPE,$MEDIAVALUE)
+!endfunction
+!final function $httpsCallWithPayload($DESCRIPTIVE_LINE,$SERVICE_URL,$MEDIATYPE,$MEDIAVALUE)
+	!return $httpsCallWithPayload($DESCRIPTIVE_LINE,"GET",$SERVICE_URL,$MEDIATYPE,$MEDIAVALUE)
+!endfunction
+
+'
+'' SOAP
+!final function $soapCall($DESCRIPTIVE_LINE,$SERVICE_DOMAIN,$SERVICE_METHOD,$USED_PROTOCOL)
+    !if ($DETAILED)
+	    !return $serviceCallDescription($DESCRIPTIVE_LINE) + $soapCallMethod($SERVICE_DOMAIN,$SERVICE_METHOD,$USED_PROTOCOL)
+	!else
+	    !return $serviceCallDescription($DESCRIPTIVE_LINE)
+	!endif
+!endfunction
+
+!final function $soapCall($DESCRIPTIVE_LINE,$SERVICE_DOMAIN,$SERVICE_METHOD)
+    !if ($DETAILED)
+	    !return $serviceCallDescription($DESCRIPTIVE_LINE) + $soapCallMethod($SERVICE_DOMAIN,$SERVICE_METHOD,"XML")
+	!else
+	    !return $serviceCallDescription($DESCRIPTIVE_LINE)
+	!endif
+!endfunction
+
+!final function $soapCall($DESCRIPTIVE_LINE,$SERVICE_METHOD)
+    !if ($DETAILED)
+	    !return $serviceCallDescription($DESCRIPTIVE_LINE) + $soapCallMethod($SERVICE_METHOD)
+	!else
+	    !return $serviceCallDescription($DESCRIPTIVE_LINE)
+	!endif
+!endfunction
+
+'
+'' DB
+!final function $databaseCall($DESCRIPTIVE_LINE,$TABLE)
+    !if ($DETAILED)
+	    !return "<i>"+$DESCRIPTIVE_LINE+"</i>\n[JDBC::**SQL**: "+$TABLE+"]"
+	!else
+	    !return "<i>"+$DESCRIPTIVE_LINE+"</i>"
+	!endif
+!endfunction
+!final function $dbCall($DESCRIPTIVE_LINE,$TABLE)
+    !return $databaseCall($DESCRIPTIVE_LINE,$TABLE)
+!endfunction
+
+!final function $databaseCall($DESCRIPTIVE_LINE,$DB,$TABLE)
+    !if ($DETAILED)
+	    !return "<i>"+$DESCRIPTIVE_LINE+"</i>\n[JDBC::**SQL**: "+$DB+"."+$TABLE+"]"
+	!else
+	    !return "<i>"+$DESCRIPTIVE_LINE+"</i>"
+	!endif
+!endfunction
+!final function $dbCall($DESCRIPTIVE_LINE,$DB,$TABLE)
+    !return $databaseCall($DESCRIPTIVE_LINE,$DB,$TABLE)
+!endfunction
+
+!final function $databaseCall($DESCRIPTIVE_LINE,$DB,$TABLE,$REFERENCE)
+    !if ($DETAILED)
+	    !return "<i>"+$DESCRIPTIVE_LINE+"</i>\n<i>(see chapter SQL: "+$REFERENCE+")</i>\n[JDBC:**SQL**: "+$DB+"."+$TABLE+"]"
+	!else
+	    !return "<i>"+$DESCRIPTIVE_LINE+"</i>\n<i>(see chapter SQL: "+$REFERENCE+")</i>"
+	!endif
+!endfunction
+!final function $dbCall($DESCRIPTIVE_LINE,$DB,$TABLE,$REFERENCE)
+    !return $databaseCall($DESCRIPTIVE_LINE,$DB,$TABLE,$REFERENCE)
+!endfunction
+
+' HTTP Status Codes
+!include http_statuscodes.iuml
+' BiPRO Status Codes
+!include bipro_messageids.iuml
+@enduml

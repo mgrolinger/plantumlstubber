@@ -1,0 +1,3 @@
+@startuml ci_company_colors
+' define company colors here
+@enduml

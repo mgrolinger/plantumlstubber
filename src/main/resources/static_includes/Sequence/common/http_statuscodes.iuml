@@ -1,0 +1,101 @@
+'
+' Error handling
+!final function $statusResponse($PROTOCOL,$STATUS_CODE,$STATUS_DESCR)
+    !if ($DETAILED || $SHOW_EXCEPTION)
+        !return "\n["+$PROTOCOL+"::<b>"+$STATUS_CODE+"</b>:"+$STATUS_DESCR+"]"
+    !else
+        !return "("+$STATUS_DESCR+")"
+    !end
+!endfunction
+
+!final function $errorResponse($PROTOCOL,$ERROR_CODE,$ERROR_DESCR)
+	!return "\n["+$PROTOCOL+"::<b>"+$ERROR_CODE+"</b>:"+$ERROR_DESCR+"]"
+!endfunction
+!final function $httpError($ERROR_CODE,$ERROR_DESCR)
+	!return $errorResponse("HTTP",$ERROR_CODE,$ERROR_DESCR)
+!endfunction
+!final function $soapFault($ERROR_CODE,$ERROR_DESCR)
+    !return $errorResponse("SOAP",$ERROR_CODE,$ERROR_DESCR)
+!endfunction
+!final function $soapError($ERROR_CODE,$ERROR_DESCR)
+	!return $errorResponse("SOAP",$ERROR_CODE,$ERROR_DESCR)
+!endfunction
+
+' HTTP Status Codes
+!final function $http100() !return $statusResponse("HTTP","100","Continue")
+!final function $http101() !return $statusResponse("HTTP","101","Switching Protocols")
+!final function $http102() !return $statusResponse("HTTP","102","Processing")
+'old deprecated 100 status
+!$http100 =	$statusResponse("HTTP","100","Continue")
+!$http101 =	$statusResponse("HTTP","101","Switching Protocols")
+!$http102 =	$statusResponse("HTTP","102","Processing")
+
+!final function $http200() !return $statusResponse("HTTP","200","OK")
+!final function $http201() !return $statusResponse("HTTP","201","Created")
+!final function $http202() !return $statusResponse("HTTP","202","Accepted")
+!final function $http203() !return $statusResponse("HTTP","203","Non-Authoritative Information")
+!final function $http204() !return $statusResponse("HTTP","204","No Content")
+!final function $http205() !return $statusResponse("HTTP","205","Reset Content")
+!final function $http206() !return $statusResponse("HTTP","206","Partial Content")
+
+'old deprecated 200 status
+!$http200 = $statusResponse("HTTP","200","OK")
+!$http201 = $statusResponse("HTTP","201","Created")
+!$http202 =	$statusResponse("HTTP","202","Accepted")
+!$http203 =	$statusResponse("HTTP","203","Non-Authoritative Information")
+!$http204 = $statusResponse("HTTP","204","No Content")
+!$http205 =	$statusResponse("HTTP","205","Reset Content")
+!$http206 =	$statusResponse("HTTP","206","Partial Content")
+
+' 300
+!$http301 =	$httpError("301","Moved Permanently")
+!$http302 =	$httpError("302","Found (Moved Temporarily)")
+!$http303 =	$httpError("303","See Other")
+!$http304 =	$httpError("304","Not Modified")
+!$http305 =	$httpError("305","Use Proxy")
+!$http306 =	$httpError("306","Switch Proxy")
+!$http307 =	$httpError("307","Temporary Redirect")
+!$http308 =	$httpError("308","Permanent Redirect")
+
+' Client error
+!$http400 = $httpError("400","Bad Request")
+!$http401 = $httpError("401","Unauthorized")
+!$http403 = $httpError("403","Forbidden")
+!$http404 = $httpError("404","Not Found")
+!$http405 = $httpError("405","Method Not Allowed")
+!$http406 = $httpError("406","Not Acceptable")
+!$http408 =	$httpError("408","Request Timeout")
+!$http409 = $httpError("409","Conflict")
+!$http410 = $httpError("410","Gone")
+!$http412 = $httpError("412","Precondition Failed")
+!$http413 = $httpError("413","Payload Too Large")
+!$http414 = $httpError("414","URI Too Long")
+!$http415 = $httpError("415","Unsupported Media Type")
+!$http416 = $httpError("416","Range Not Satisfiable")
+!$http417 = $httpError("417","Expectation Failed")
+!$http420 = $httpError("420","Policy Not Fulfilled")
+!$http421 = $httpError("421","Misdirected Request")
+!$http422 = $httpError("422","Unprocessable Entity")
+!$http423 = $httpError("423","Locked")
+!$http424 = $httpError("424","Failed Dependency")
+!$http425 = $httpError("425","Too Early")
+!$http426 = $httpError("426","Upgrade Required")
+!$http428 = $httpError("428","Precondition Required")
+!$http429 = $httpError("429","Too Many Requests")
+!$http444 = $httpError("444","No Response")
+!$http431 = $httpError("431","Request Header Fields Too Large")
+!$http451 = $httpError("451","Unavailable For Legal Reasons")
+
+' Server error
+!$http500 = $httpError("500","Internal Server Error")
+!$http501 = $httpError("501","Not Implemented")
+!$http502 = $httpError("502","Bad Gateway")
+!$http503 = $httpError("503","Service Unavailable")
+!$http504 = $httpError("504","Gateway Timeout")
+!$http505 = $httpError("505","HTTP Version not supported")
+!$http506 = $httpError("506","Variant Also Negotiates")
+!$http507 = $httpError("507","Insufficient Storage")
+!$http505 = $httpError("508","Loop Detected")
+!$http509 = $httpError("509","Bandwidth Limit Exceeded")
+!$http510 = $httpError("510","Not Extended")
+!$http511 = $httpError("511","Network Authentication Required")

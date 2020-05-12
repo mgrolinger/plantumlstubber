@@ -1,0 +1,27 @@
+' Legend BiPRO Domain Colors
+!final function $DISPLAY_BIPRO_LEGEND()
+  note as biproLegend #$GENERAL_NOTE_COLOR
+  |= Color |= Domain |
+  |<#$AUTHENTIFIZIERUNG_DOMAIN_COLOR>            | Authentifizierung |
+  |<#$BESTAND_DOMAIN_COLOR>            | Bestand |
+  |<#$UEBERMITTLUNG_DOMAIN_COLOR>            | Uebermittlung |
+  |<#$SUCHE_DOMAIN_COLOR>            | Suche |
+  |<#$TAA_DOMAIN_COLOR>            | Tarifierung, Angebot, Antrag |
+  |<#$RISIKODATEN_DOMAIN_COLOR>            | Risiko |
+  |<#$SPEZIFISCHE_DOMAIN_COLOR>            | Spezifische Services |
+  end note
+  !return ""
+!endfunction
+
+' Legend SID Domain Colors
+!final function $DISPLAY_SID_LEGEND()
+  note as sidLegend #$GENERAL_NOTE_COLOR
+  |= Color |= Domain |
+  |<#$INTEGRATION_DOMAIN_COLOR>            | Integration |
+  |<#$RESOURCE_DOMAIN_COLOR>            | Resource |
+  |<#$CUSTOMER_DOMAIN_COLOR>            | Customer |
+  |<#$FINANCIAL_DOMAIN_COLOR>            | Financial |
+  |<#$EXTERNAL_DOMAIN_COLOR>            | External |
+  end note
+  !return ""
+!endfunction

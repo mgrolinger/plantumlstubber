@@ -1,0 +1,500 @@
+@startuml common
+'!preprocessorV2
+' Define this variable to set it to the right starting point from your plantuml repository
+'
+'!pragma graphviz_dot jdot
+
+'skinparam Nodesep 10
+'skinparam Ranksep 20
+
+' Globals, need to be defined here to be usable with the repository
+!if (%not(%variable_exists("$DETAILED")))
+    !global $DETAILED=%false()
+!endif
+!if (%not(%variable_exists("$SIMPLE")))
+    !global $SIMPLE=%false()
+!endif
+!if (%not(%variable_exists("$UML_STRICT")))
+    !global $UML_STRICT = %false()
+!endif
+
+' color schemes component
+!include ../../skin/ci_company_colors.iuml
+!include ../../skin/default.skin
+' Override default with other color values
+!ifdef DARCULA
+    !include ../../skin/darcula.skin
+!endif
+
+skinparam ActorBorderColor #$DEFAULT_ACTOR_BORDER_COLOR
+skinparam DefaultFontColor          #$DEFAULT_FONT_COLOR
+skinparam DefaultTextAlignment      center
+skinparam ComponentStyle            uml2
+skinparam shadowing                 false
+skinparam ArrowThickness            2
+
+skinparam component {
+    ArrowColor                      #$DEFAULT_CONNECTION_COLOR
+    ArrowThickness                  3
+    BackgroundColor                 #$DEFAULT_COMPONENT_COLOR
+    'BiPRO
+    BackgroundColor<<authentifizierung>>  #$AUTHENTIFIZIERUNG_DOMAIN_COLOR
+    BackgroundColor<<suche>>              #$SUCHE_DOMAIN_COLOR
+    BackgroundColor<<uebermittlung>>      #$UEBERMITTLUNG_DOMAIN_COLOR
+    BackgroundColor<<bestand>>            #$BESTAND_DOMAIN_COLOR
+    BackgroundColor<<taa>>                #$TAA_DOMAIN_COLOR
+    BackgroundColor<<risikodaten>>        #$RISIKODATEN_DOMAIN_COLOR
+    BackgroundColor<<spezifische>>        #$SPEZIFISCHE_DOMAIN_COLOR
+    'SID
+    BackgroundColor<<integration>>  #$INTEGRATION_DOMAIN_COLOR
+    BackgroundColor<<resource>>     #$RESOURCE_DOMAIN_COLOR
+    BackgroundColor<<financial>>    #$FINANCIAL_DOMAIN_COLOR
+    BackgroundColor<<customer>>     #$CUSTOMER_DOMAIN_COLOR
+    BackgroundColor<<user>>         #$CUSTOMER_DOMAIN_COLOR
+    BackgroundColor<<external>>     #$EXTERNAL_DOMAIN_COLOR
+    BackgroundColor<<warning>>      #$WARNING_BOX_COLOR
+    BorderColor<<dashedborder>>     #Grey
+    BackgroundColor<<dashedborder>> #$GENERAL_BACKGROUND_COLOR
+    FontColor<<dashedborder>>       #DarkSlateGrey
+    BorderThickness<<dashedborder>> 1
+    BorderStyle<<dashedborder>>     dashed
+
+    BorderColor<<dottedborder>>     #Grey
+    BackgroundColor<<dottedborder>> #$GENERAL_BACKGROUND_COLOR
+    FontColor<<dottedborder>>       #DarkSlateGrey
+    BorderThickness<<dottedborder>> 1
+    BorderStyle<<dottedborder>>     dotted
+
+    !if ($UML_STRICT == %false())
+    BorderColor                     #$DEFAULT_BORDER_COLOR
+    'BiPRO
+    BorderColor<<authentifizierung>>   #$AUTHENTIFIZIERUNG_DOMAIN_COLOR
+    BorderColor<<suche>>           #$SUCHE_DOMAIN_COLOR
+    BorderColor<<uebermittlung>>         #$UEBERMITTLUNG_DOMAIN_COLOR
+    BorderColor<<bestand>>             #$BESTAND_DOMAIN_COLOR
+    BorderColor<<taa>>              #$TAA_DOMAIN_COLOR
+    BorderColor<<risikodaten>>             #$RISIKODATEN_DOMAIN_COLOR
+    BorderColor<<spezifische>>        #$SPEZIFISCHE_DOMAIN_COLOR
+    'SID
+    BorderColor<<integration>>      #$INTEGRATION_DOMAIN_COLOR
+    BorderColor<<resource>>         #$RESOURCE_DOMAIN_COLOR
+    BorderColor<<financial>>        #$FINANCIAL_DOMAIN_COLOR
+    BorderColor<<customer>>         #$CUSTOMER_DOMAIN_COLOR
+    BorderColor<<user>>             #$CUSTOMER_DOMAIN_COLOR
+    BorderColor<<external>>         #$EXTERNAL_DOMAIN_COLOR
+    BorderColor<<warning>>          #$WARNING_BOX_COLOR
+    !else
+    BorderColor                     #$DEFAULT_BORDER_COLOR
+    BorderColor<<authentifizierung>>   #$DEFAULT_BORDER_COLOR
+    BorderColor<<suche>>            #$DEFAULT_BORDER_COLOR
+    BorderColor<<uebermittlung>>    #$DEFAULT_BORDER_COLOR
+    BorderColor<<bestand>>          #$DEFAULT_BORDER_COLOR
+    BorderColor<<taa>>              #$DEFAULT_BORDER_COLOR
+    BorderColor<<risikodaten>>      #$DEFAULT_BORDER_COLOR
+    BorderColor<<spezifische>>      #$DEFAULT_BORDER_COLOR
+    BorderColor<<integration>>      #$DEFAULT_BORDER_COLOR
+    BorderColor<<resource>>         #$DEFAULT_BORDER_COLOR
+    BorderColor<<financial>>        #$DEFAULT_BORDER_COLOR
+    BorderColor<<customer>>         #$DEFAULT_BORDER_COLOR
+    BorderColor<<user>>             #$DEFAULT_BORDER_COLOR
+    BorderColor<<external>>         #$DEFAULT_BORDER_COLOR
+    BorderColor<<warning>>          #$WARNING_BOX_COLOR
+    !endif
+}
+
+skinparam database {
+    ArrowColor                      #$DEFAULT_CONNECTION_COLOR
+    ArrowThickness                  2
+    BackgroundColor                 #$DEFAULT_COMPONENT_COLOR
+    BorderColor                     #$DEFAULT_BORDER_COLOR
+    'BiPRO
+    BackgroundColor<<authentifizierung>>  #$AUTHENTIFIZIERUNG_DOMAIN_COLOR
+    BackgroundColor<<suche>>          #$SUCHE_DOMAIN_COLOR
+    BackgroundColor<<uebermittlung>>  #$UEBERMITTLUNG_DOMAIN_COLOR
+    BackgroundColor<<bestand>>        #$BESTAND_DOMAIN_COLOR
+    BackgroundColor<<taa>>            #$TAA_DOMAIN_COLOR
+    BackgroundColor<<risikodaten>>    #$RISIKODATEN_DOMAIN_COLOR
+    BackgroundColor<<spezifische>>    #$SPEZIFISCHE_DOMAIN_COLOR
+    'SID
+    BackgroundColor<<integration>>  #$INTEGRATION_DOMAIN_COLOR
+    BackgroundColor<<resource>>     #$RESOURCE_DOMAIN_COLOR
+    BackgroundColor<<financial>>    #$FINANCIAL_DOMAIN_COLOR
+    BackgroundColor<<customer>>     #$CUSTOMER_DOMAIN_COLOR
+    BackgroundColor<<user>>         #$CUSTOMER_DOMAIN_COLOR
+    BackgroundColor<<external>>     #$EXTERNAL_DOMAIN_COLOR
+    BackgroundColor<<warning>>      #$WARNING_BOX_COLOR
+    !if ($UML_STRICT == %false())
+    BorderColor                     #$DEFAULT_BORDER_COLOR
+    'BiPRO
+    BorderColor<<authentifizierung>>   #$AUTHENTIFIZIERUNG_DOMAIN_COLOR
+    BorderColor<<suche>>            #$SUCHE_DOMAIN_COLOR
+    BorderColor<<uebermittlung>>    #$UEBERMITTLUNG_DOMAIN_COLOR
+    BorderColor<<bestand>>          #$BESTAND_DOMAIN_COLOR
+    BorderColor<<taa>>              #$TAA_DOMAIN_COLOR
+    BorderColor<<risikodaten>>      #$RISIKODATEN_DOMAIN_COLOR
+    BorderColor<<spezifische>>      #$SPEZIFISCHE_DOMAIN_COLOR
+    'SID
+    BorderColor<<integration>>      #$INTEGRATION_DOMAIN_COLOR
+    BorderColor<<resource>>         #$RESOURCE_DOMAIN_COLOR
+    BorderColor<<financial>>        #$FINANCIAL_DOMAIN_COLOR
+    BorderColor<<customer>>         #$CUSTOMER_DOMAIN_COLOR_CONNECTION
+    BorderColor<<user>>             #$CUSTOMER_DOMAIN_COLOR
+    BorderColor<<external>>         #$EXTERNAL_DOMAIN_COLOR
+    BorderColor<<warning>>          #$WARNING_BOX_COLOR
+    !else
+    BorderColor                     #$DEFAULT_BORDER_COLOR
+    BorderColor<<authentifizierung>>   #$DEFAULT_BORDER_COLOR
+    BorderColor<<suche>>            #$DEFAULT_BORDER_COLOR
+    BorderColor<<uebermittlung>>    #$DEFAULT_BORDER_COLOR
+    BorderColor<<bestand>>          #$DEFAULT_BORDER_COLOR
+    BorderColor<<taa>>              #$DEFAULT_BORDER_COLOR
+    BorderColor<<risikodaten>>      #$DEFAULT_BORDER_COLOR
+    BorderColor<<spezifische>>      #$DEFAULT_BORDER_COLOR
+    BorderColor<<integration>>      #$DEFAULT_BORDER_COLOR
+    BorderColor<<resource>>         #$DEFAULT_BORDER_COLOR
+    BorderColor<<financial>>        #$DEFAULT_BORDER_COLOR
+    BorderColor<<customer>>         #$DEFAULT_BORDER_COLOR
+    BorderColor<<user>>             #$DEFAULT_BORDER_COLOR
+    BorderColor<<external>>         #$DEFAULT_BORDER_COLOR
+    BorderColor<<warning>>          #$WARNING_BOX_COLOR
+    !endif
+}
+
+skinparam interface {
+    ArrowColor                      #$DEFAULT_CONNECTION_COLOR
+    ArrowThickness                  3
+    BorderColor                     #$DEFAULT_INTERFACE_BORDER_COLOR
+    BorderWidth                     5
+    BackgroundColor                 #$DEFAULT_COMPONENT_COLOR
+    'BiPRO
+    BackgroundColor<<authentifizierung>>  #$AUTHENTIFIZIERUNG_DOMAIN_COLOR
+    BackgroundColor<<suche>>       #$SUCHE_DOMAIN_COLOR
+    BackgroundColor<<uebermittlung>>     #$UEBERMITTLUNG_DOMAIN_COLOR
+    BackgroundColor<<bestand>>         #$BESTAND_DOMAIN_COLOR
+    BackgroundColor<<taa>>          #$TAA_DOMAIN_COLOR
+    BackgroundColor<<risikodaten>>         #$RISIKODATEN_DOMAIN_COLOR
+    BackgroundColor<<spezifische>>    #$SPEZIFISCHE_DOMAIN_COLOR
+    'SID
+    BackgroundColor<<integration>>  #$INTEGRATION_DOMAIN_COLOR
+    BackgroundColor<<resource>>     #$RESOURCE_DOMAIN_COLOR
+    BackgroundColor<<financial>>    #$FINANCIAL_DOMAIN_COLOR
+    BackgroundColor<<customer>>     #$CUSTOMER_DOMAIN_COLOR
+    BackgroundColor<<user>>         #$CUSTOMER_DOMAIN_COLOR
+    BackgroundColor<<external>>     #$EXTERNAL_DOMAIN_COLOR
+    BackgroundColor<<warning>>      #$WARNING_BOX_COLOR
+    !if ($UML_STRICT == %false())
+    'BiPRO
+    BorderColor<<authentifizierung>>   #White
+    BorderColor<<suche>>                #White
+    BorderColor<<uebermittlung>>         #White
+    BorderColor<<bestand>>             #White
+    BorderColor<<taa>>              #White
+    BorderColor<<risikodaten>>             #White
+    BorderColor<<spezifische>>        #White
+    'SID
+    BorderColor<<integration>>      #$INTEGRATION_DOMAIN_COLOR
+    BorderColor<<resource>>         #$RESOURCE_DOMAIN_COLOR
+    BorderColor<<financial>>        #$FINANCIAL_DOMAIN_COLOR
+    BorderColor<<customer>>         #$CUSTOMER_DOMAIN_COLOR
+    BorderColor<<user>>             #$CUSTOMER_DOMAIN_COLOR
+    BorderColor<<external>>         #$EXTERNAL_DOMAIN_COLOR
+    BorderColor<<warning>>          #$WARNING_BOX_COLOR
+    !else
+    BorderColor<<authentifizierung>>   #$AUTHENTIFIZIERUNG_DOMAIN_COLOR
+    BorderColor<<suche>>           #$SUCHE_DOMAIN_COLOR
+    BorderColor<<uebermittlung>>         #$UEBERMITTLUNG_DOMAIN_COLOR
+    BorderColor<<bestand>>             #$BESTAND_DOMAIN_COLOR
+    BorderColor<<taa>>              #$TAA_DOMAIN_COLOR
+    BorderColor<<risikodaten>>             #$RISIKODATEN_DOMAIN_COLOR
+    BorderColor<<spezifische>>        #$SPEZIFISCHE_DOMAIN_COLOR
+    BorderColor<<integration>>      #$INTEGRATION_DOMAIN_COLOR
+    BorderColor<<resource>>         #$RESOURCE_DOMAIN_COLOR
+    BorderColor<<financial>>        #$FINANCIAL_DOMAIN_COLOR
+    BorderColor<<customer>>         #$CUSTOMER_DOMAIN_COLOR
+    BorderColor<<user>>             #$CUSTOMER_DOMAIN_COLOR
+    BorderColor<<external>>         #$EXTERNAL_DOMAIN_COLOR
+    BorderColor<<warning>>          #$WARNING_BOX_COLOR
+    !endif
+}
+
+skinparam folder {
+    ArrowColor                      #$DEFAULT_CONNECTION_COLOR
+    ArrowThickness                  3
+    BackgroundColor                 #$DEFAULT_COMPONENT_COLOR
+    BorderColor                     #$DEFAULT_BORDER_COLOR
+    'BiPRO
+    BackgroundColor<<authentifizierung>>  #$AUTHENTIFIZIERUNG_DOMAIN_COLOR
+    BackgroundColor<<suche>>       #$SUCHE_DOMAIN_COLOR
+    BackgroundColor<<uebermittlung>>     #$UEBERMITTLUNG_DOMAIN_COLOR
+    BackgroundColor<<bestand>>         #$BESTAND_DOMAIN_COLOR
+    BackgroundColor<<taa>>          #$TAA_DOMAIN_COLOR
+    BackgroundColor<<risikodaten>>         #$RISIKODATEN_DOMAIN_COLOR
+    BackgroundColor<<spezifische>>    #$SPEZIFISCHE_DOMAIN_COLOR
+    'SID
+    BackgroundColor<<integration>>  #$INTEGRATION_DOMAIN_COLOR
+    BackgroundColor<<resource>>     #$RESOURCE_DOMAIN_COLOR
+    BackgroundColor<<financial>>    #$FINANCIAL_DOMAIN_COLOR
+    BackgroundColor<<customer>>     #$CUSTOMER_DOMAIN_COLOR
+    BackgroundColor<<user>>         #$CUSTOMER_DOMAIN_COLOR
+    BackgroundColor<<external>>     #$EXTERNAL_DOMAIN_COLOR
+    BackgroundColor<<warning>>      #$WARNING_BOX_COLOR
+    !if ($UML_STRICT == %false())
+    BorderColor                     #$DEFAULT_BORDER_COLOR
+    'BiPRO
+    BorderColor<<authentifizierung>>   #$AUTHENTIFIZIERUNG_DOMAIN_COLOR
+    BorderColor<<suche>>           #$SUCHE_DOMAIN_COLOR
+    BorderColor<<uebermittlung>>         #$UEBERMITTLUNG_DOMAIN_COLOR
+    BorderColor<<bestand>>             #$BESTAND_DOMAIN_COLOR
+    BorderColor<<taa>>              #$TAA_DOMAIN_COLOR
+    BorderColor<<risikodaten>>             #$RISIKODATEN_DOMAIN_COLOR
+    BorderColor<<spezifische>>        #$SPEZIFISCHE_DOMAIN_COLOR
+    'SID
+    BorderColor<<integration>>      #$INTEGRATION_DOMAIN_COLOR
+    BorderColor<<resource>>         #$RESOURCE_DOMAIN_COLOR
+    BorderColor<<financial>>        #$FINANCIAL_DOMAIN_COLOR
+    BorderColor<<customer>>         #$CUSTOMER_DOMAIN_COLOR
+    BorderColor<<user>>             #$CUSTOMER_DOMAIN_COLOR
+    BorderColor<<external>>         #$EXTERNAL_DOMAIN_COLOR
+    BorderColor<<warning>>          #$WARNING_BOX_COLOR
+    !else
+    BorderColor                     #$DEFAULT_BORDER_COLOR
+    BorderColor<<integration>>      #$DEFAULT_BORDER_COLOR
+    BorderColor<<resource>>         #$DEFAULT_BORDER_COLOR
+    BorderColor<<financial>>        #$DEFAULT_BORDER_COLOR
+    BorderColor<<customer>>         #$DEFAULT_BORDER_COLOR
+    BorderColor<<user>>             #$DEFAULT_BORDER_COLOR
+    BorderColor<<external>>         #$DEFAULT_BORDER_COLOR
+    BorderColor<<warning>>          #$WARNING_BOX_COLOR
+    !endif
+}
+
+
+skinparam rectangle {
+    DiagonalCorner                  2
+    BackgroundColor                 #$DEFAULT_COMPONENT_COLOR
+    BorderColor                     #$DEFAULT_BORDER_COLOR
+    'BiPRO
+    BackgroundColor<<authentifizierung>>  #$AUTHENTIFIZIERUNG_DOMAIN_COLOR
+    BackgroundColor<<suche>>       #$SUCHE_DOMAIN_COLOR
+    BackgroundColor<<uebermittlung>>     #$UEBERMITTLUNG_DOMAIN_COLOR
+    BackgroundColor<<bestand>>         #$BESTAND_DOMAIN_COLOR
+    BackgroundColor<<taa>>          #$TAA_DOMAIN_COLOR
+    BackgroundColor<<risikodaten>>         #$RISIKODATEN_DOMAIN_COLOR
+    BackgroundColor<<spezifische>>    #$SPEZIFISCHE_DOMAIN_COLOR
+    'SID
+    BackgroundColor<<integration>>  #$INTEGRATION_DOMAIN_COLOR
+    BackgroundColor<<resource>>     #$RESOURCE_DOMAIN_COLOR
+    BackgroundColor<<financial>>    #$FINANCIAL_DOMAIN_COLOR
+    BackgroundColor<<customer>>     #$CUSTOMER_DOMAIN_COLOR
+    BackgroundColor<<user>>         #$CUSTOMER_DOMAIN_COLOR
+    BackgroundColor<<external>>     #$EXTERNAL_DOMAIN_COLOR
+    BackgroundColor<<warning>>      #$WARNING_BOX_COLOR
+
+    BorderColor<<dashedborder>>     #Grey
+    BackgroundColor<<dashedborder>> #$GENERAL_BACKGROUND_COLOR
+    FontColor<<dashedborder>>       #DarkSlateGrey
+    BorderThickness<<dashedborder>> 1
+    BorderStyle<<dashedborder>>     dashed
+    RoundCorner<<dashedborder>>     15
+
+    BorderColor<<dottedborder>>     #Grey
+    BackgroundColor<<dottedborder>> #$GENERAL_BACKGROUND_COLOR
+    FontColor<<dottedborder>>       #DarkSlateGrey
+    BorderThickness<<dottedborder>> 1
+    BorderStyle<<dottedborder>>     dotted
+    RoundCorner<<dottedborder>>     15
+
+    !if ($UML_STRICT == %false())
+    BorderColor                     #$DEFAULT_BORDER_COLOR
+    'BiPRO
+    BorderColor<<authentifizierung>>   #$AUTHENTIFIZIERUNG_DOMAIN_COLOR
+    BorderColor<<suche>>           #$SUCHE_DOMAIN_COLOR
+    BorderColor<<uebermittlung>>         #$UEBERMITTLUNG_DOMAIN_COLOR
+    BorderColor<<bestand>>             #$BESTAND_DOMAIN_COLOR
+    BorderColor<<taa>>              #$TAA_DOMAIN_COLOR
+    BorderColor<<risikodaten>>             #$RISIKODATEN_DOMAIN_COLOR
+    BorderColor<<spezifische>>        #$SPEZIFISCHE_DOMAIN_COLOR
+    'SID
+    BorderColor<<integration>>      #$INTEGRATION_DOMAIN_COLOR
+    BorderColor<<resource>>         #$RESOURCE_DOMAIN_COLOR
+    BorderColor<<financial>>        #$FINANCIAL_DOMAIN_COLOR
+    BorderColor<<customer>>         #$CUSTOMER_DOMAIN_COLOR
+    BorderColor<<user>>             #$CUSTOMER_DOMAIN_COLOR
+    BorderColor<<external>>         #$EXTERNAL_DOMAIN_COLOR
+    BorderColor<<warning>>          #$WARNING_BOX_COLOR
+    !else
+    BorderColor                     #$DEFAULT_BORDER_COLOR
+    BorderColor<<integration>>      #$DEFAULT_BORDER_COLOR
+    BorderColor<<resource>>         #$DEFAULT_BORDER_COLOR
+    BorderColor<<financial>>        #$DEFAULT_BORDER_COLOR
+    BorderColor<<customer>>         #$DEFAULT_BORDER_COLOR
+    BorderColor<<user>>             #$DEFAULT_BORDER_COLOR
+    BorderColor<<external>>         #$DEFAULT_BORDER_COLOR
+    BorderColor<<warning>>          #$WARNING_BOX_COLOR
+    !endif
+}
+
+skinparam note {
+    TextAlignment                   left
+    BorderColor                     #$DEFAULT_BORDER_COLOR
+    BackgroundColor                 #$GENERAL_NOTE_COLOR
+}
+
+''''''''''''''''''''''''''''''''''''''''''''
+' Include the component definitions
+!include component_definition.iuml
+''''''''''''''''''''''''''''''''''''''''''''
+
+' ''''''''''''''''''''''
+'
+' Macro definition
+'
+' ''''''''''''''''''''''
+
+' Adds a note to a link, this needs to be added right after a line that contains a link
+!procedure $LINK_NOT_DEFINED()
+    note right on link #$WARNING_BOX_COLOR
+        This <b>service</b> is a placeholder.
+        It is used to specify a
+        not existing service.
+    end note
+!endprocedure
+
+!procedure $LINK_NOT_DEFINED_NAMED($_SERVICE_NAME)
+    note right on link #$WARNING_BOX_COLOR
+        The service
+        <color:#$WARNING_BOX_TEXT_COLOR><b>$_SERVICE_NAME</b></color>
+        is a placeholder. It is used to specify a
+        not existing service.
+        You can attach a note by defining
+        "note left of <InterfaceName>: Text"
+    end note
+!endprocedure
+
+!procedure $NOTE_ON_LINK($_DESC,$_DIR='right',$_COLOR='$GENERAL_NOTE_COLOR')
+    note $_DIR on link #$_COLOR : $_DESC
+!endprocedure
+
+' Details of an interface'
+!unquoted function $INTEGRATION_TYPE($_INT_NAME,$_COLOR_NAME)
+  !return "<color:"+$_COLOR_NAME+"><font size=8>[<U+21C4> "+$_INT_NAME+"]</font></color>"
+!endfunction
+!unquoted function $INTEGRATION_TYPE($_INT_NAME)
+  !return $INTEGRATION_TYPE($_INT_NAME,"SlateGray")
+!endfunction
+
+!unquoted function $INDIVIDUAL_METHODS($METHODS='[]',$_COLOR_NAME='SlateGray')
+    !if ($METHODS == "") || ($METHODS == "[]")
+        !return '\n'
+    !else
+        !return "<color:"+$_COLOR_NAME+"><font size=8>"+$METHODS+"</font></color>\n"
+    !endif
+!endfunction
+
+!unquoted function $SERVICE_INTERFACE($_SERVICE_DOMAIN,$_INTERFACE_NAME,$_COLOR_NAME="SlateGray")
+   !return "\n<color:$_COLOR_NAME><font size=10><b>$_SERVICE_DOMAIN</b></font></color>\n $_INTERFACE_NAME"
+!endfunction
+
+' creates a component
+!unquoted procedure $CREATE_COMPONENT($NAME,$ALIAS,$_COLOR_NAME="LightGrey")
+    !if ($UML_STRICT == %true())
+        component "$NAME" as $ALIAS #$_COLOR_NAME
+    !else
+        !include <tupadr3/common>
+        !include <tupadr3/font-awesome/server>
+        FA_SERVER($ALIAS,$NAME) #$_COLOR_NAME
+    !endif
+!endprocedure
+
+' creates a ghost component (greyish)
+!unquoted procedure $CREATE_COMPONENT_GHOST($NAME,$ALIAS,$_COLOR_NAME="LightGrey")
+    !if ($UML_STRICT == %true())
+        component "$NAME" as $ALIAS <<dottedborder>> #$_COLOR_NAME
+    !else
+        rectangle "<color:$_COLOR_NAME><$server></color>\r<color:$_COLOR_NAME>$NAME</color>" as $ALIAS <<dottedborder>>
+    !endif
+!endprocedure
+
+!unquoted procedure $CREATE_INTERFACE($_NAME,$_ALIAS,$_COLOR_NAME='DarkSlateGrey',$_INTEGRATION_TYPE='SOAP:XML')
+    interface "$INTEGRATION_TYPE($_INTEGRATION_TYPE)\n<font size=10>$_NAME</font>" as $_ALIAS #$_COLOR_NAME
+!endprocedure
+
+' creates a database
+!unquoted procedure $CREATE_DATABASE($_NAME,$_ALIAS,$_COLOR_NAME="LightGrey")
+    !if ($UML_STRICT == %true())
+        database "$_NAME" as $_ALIAS #$_COLOR_NAME
+    !else
+        FA_DATABASE($_ALIAS,$_NAME,database) #$_COLOR_NAME
+    !endif
+!endprocedure
+
+!unquoted procedure $ACTOR($_NAME,$_ALIAS,$_COLOR_NAME='LightGrey')
+    !if ($UML_STRICT == %true())
+        actor "$_NAME" as $_ALIAS #$_COLOR_NAME
+    !else
+        !include <office/Users/user>
+        rectangle "<$user>\n $_NAME" <<hidden>> as $_ALIAS #$_COLOR_NAME
+    !endif
+!endprocedure
+
+!procedure $DEPLOYMENT_NOTE($COMPONENT="",$SERVER_DEV="DEVServer",$SERVER_TB01="TB01Server",$SERVER_TB02="TB02Server",$SERVER_TB12="TB12Server",$SERVER_PROD="PRODServer")
+    !if (%strlen($COMPONENT) > 0)
+        note as $COMPONENT##_note #$GENERAL_NOTE_COLOR
+    !else
+        'default for floating notes without component
+        note as %date("a_YYYY_MM_DD_HH_MM_ssss")##$SERVER_DEV##$SERVER_TB01##$SERVER_TB02##$SERVER_TB12##$SERVER_PROD #GENERAL_NOTE_COLOR
+    !endif
+        | Umgebung                    | URL |
+        | <color:Orange>DEV: </color> | <color:orange>$SERVER_DEV</color> |
+        | <color:Green>TB01: </color> | <color:green>$SERVER_TB01</color> |
+        | <color:Blue>TB02: </color> | <color:blue>$SERVER_TB02</color> |
+        | <color:Black>TB12: </color> | <color:black>$SERVER_TB12</color> |
+        | <color:Red>PROD: </color>  | <color:red>$SERVER_PROD</color> |
+    end note
+    !if (%strlen($COMPONENT) > 0)
+        $COMPONENT ~~ $COMPONENT##_note
+    !endif
+!endprocedure
+
+!procedure $DEPLOYMENT_NOTE_CLOUD($COMPONENT="",$SERVER_DEV="DEVServer",$SERVER_LAB="LABServer",$SERVER_TB01="TB01Server",$SERVER_TB02="TB02Server",$SERVER_TB12="TB12Server",$SERVER_PROD="PRODServer")
+    !if (%strlen($COMPONENT) > 0)
+        note as $COMPONENT##_note #$GENERAL_NOTE_COLOR
+    !else
+        'default for floating notes without component
+        note as %date("a_YYYY_MM_DD_HH_MM_ssss")##$SERVER_DEV##$SERVER_TB01##$SERVER_TB02##$SERVER_TB12##$SERVER_PROD #GENERAL_NOTE_COLOR
+    !endif
+        | Umgebung                    | URL |
+        | <color:Orange>DEV: </color> | <color:orange>$SERVER_DEV</color> |
+        | <color:Orange>LAB: </color> | <color:orange>$SERVER_LAB</color> |
+        | <color:Green>TB01: </color> | <color:green>$SERVER_TB01</color> |
+        | <color:Blue>TB02: </color> | <color:blue>$SERVER_TB02</color> |
+        | <color:Black>TB12: </color> | <color:black>$SERVER_TB12</color> |
+        | <color:Red>PROD: </color>  | <color:red>$SERVER_PROD</color> |
+    end note
+    !if (%strlen($COMPONENT) > 0)
+        $COMPONENT ~~ $COMPONENT##_note
+    !endif
+!endprocedure
+
+!procedure $DEPLOYMENT_NOTE_ON_LINK($SERVER_DEV="DEVServer",$SERVER_TB01="TB01Server",$SERVER_TB02="TB02Server",$SERVER_TB12="TB12Server",$SERVER_PROD="PRODServer")
+        note on link #$GENERAL_NOTE_COLOR
+        | Umgebung                    | URL |
+        | <color:Orange>DEV: </color> | <color:orange>$SERVER_DEV</color> |
+        | <color:Green>TB01: </color> | <color:green>$SERVER_TB01 </color> |
+        | <color:Blue>TB02: </color> | <color:blue>$SERVER_TB02 </color> |
+        | <color:Black>TB12: </color> | <color:black>$SERVER_TB12 </color> |
+        | <color:Red>PROD: </color>  | <color:red>$SERVER_PROD </color> |
+    end note
+!endprocedure
+
+!function $IS_FALSE($variable)
+    !if (%not(%variable_exists($variable)))
+        !return %false()
+    !else ($variable == %false())
+        !return %false()
+    !endif
+!endfunction
+
+' load legend
+ !include domain_legend.iuml
+@enduml
