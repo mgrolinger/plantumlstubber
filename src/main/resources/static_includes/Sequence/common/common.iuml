@@ -542,5 +542,5 @@ skinparam note {
 ' HTTP Status Codes
 !include http_statuscodes.iuml
 ' BiPRO Status Codes
-!include bipro_messageids.iuml
+'!include bipro_messageids.iuml
 @enduml
