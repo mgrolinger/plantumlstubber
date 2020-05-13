@@ -13,21 +13,20 @@ The plantumlstubber will consider all yaml files in the target/ folder.
 
 #### Auto-Linking two applications
 Sometimes it can be usefull to draw a link between two applications or an application and its database. This can be done on the configuration yaml by fill in these two configuration keys:
+```
 linkToComponent: ApplicationName
 linkToCustomAlias: applicationalias
+```
 
 #### Call Stacks
 The configuration yaml enables call stacks, meaning the generated stubs contain already the !includes and $function calls to the other application given in the call stack. 
 Example:
-
+```
 ...
-
    REST::JSON:
-   
-        api: 
-        
+        /api/: 
             - convert->ApplicationName_ServiceName_InterfaceName
-
+```
 
 The Rest::JSON Interface /api/convert will call subsequently application with the Name ApplicationName. This application itself needs to provide this interface. There should be a configuration yaml for the application ApplicationName as well.
 
