@@ -1,0 +1,49 @@
+@startuml Readme
+'!define DARCULA
+skinparam linetype polyline
+
+'!define UML_STRICT
+!include common/common.iuml
+!$DETAILED=%true()
+component "Consumer" as consumer
+
+'' CustomerService
+!include Filesystem/readFile.iuml
+$Filesystem_readFile("consumer",$CUSTOMER_DOMAIN_COLOR_CONNECTION)
+
+
+consumer2 -[dashed,#CONNECTION_COLOR]-> filesystem : <<uses>>
+note as implementationNote
+<b>Implementation:</b>
+# Either call a service by method <b>$SampleService_method_interface(caller)</b>,
+    which may lead to multiple connections between the consumer and the esb.
+# Or, you skip using the method and make a direct connection
+    by using e.g. <b>-[dashed,#CONNECTION_COLOR]-></b> or <b>-[dashed,#color]-> </b>  and then there will
+    be only one connection, the one you defined.
+# From my idea access operations are dashed lines, whereas provided interfaces
+    are full lines with the color of the providing component.
+# For many services there is a service called <b>System_toBeDefined()</b> that
+    symbolizes a service, which acts as placeholder for a new service or interface
+    that is not defined yet.
+end note
+consumer .[dotted]. implementationNote
+filesystem .[dotted]. implementationNote
+
+
+note as interfaceNote
+<b>Soap vs REST vs other</b>
+This repository has two kind of interfaces,
+which are visible in DETAILED view only:
+# <b>SOAP</b> - Every Endpoint (WSDL/XSD) has its own interface.
+    Methods from this endpoints use the same Interface. e.g. CustomerService
+# <b>Rest</b> - Every Interface has its own endpoint
+    that may have one or more CRUD operations.
+end note
+!if ($DETAILED == %true())
+    FilesystemReadFileInt .. interfaceNote
+!else
+    implementationNote .[dotted]. interfaceNote
+!endif
+
+
+@enduml

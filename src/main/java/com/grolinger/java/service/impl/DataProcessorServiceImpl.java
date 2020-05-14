@@ -70,6 +70,9 @@ public class DataProcessorServiceImpl implements Loggable, com.grolinger.java.se
             }
             fileService.writeExampleFile(diagramType.getBasePath(), currentApplication.getName(), exampleFile.getFullFileContent());
         }
+        // Write the skin files
+        fileService.writeDefaultSkinFiles();
+        // Write everything connected to common.iuml and common/
         fileService.writeDefaultCommonFile(diagramType.getBasePath(), diagramType);
         fileService.writeComponentFile(diagramType, componentFile);
         //Todo: Add static import files here

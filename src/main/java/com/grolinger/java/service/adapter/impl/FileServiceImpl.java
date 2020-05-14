@@ -76,7 +76,8 @@ public class FileServiceImpl implements FileService {
                     COMMON_PATH + "devicons/salesforce.puml",
                     COMMON_PATH + "devicons/sap.puml",
                     COMMON_PATH + "devicons/solr.puml",
-                    COMMON_PATH + "devicons/tibco.puml");
+                    COMMON_PATH + "devicons/tibco.puml",
+                    "Readme.puml");
             // FIXME: better solution than hardcoding here
             Files.createDirectories(Paths.get(GLOBAL_FILE_EXPORT_PATH + basePath + COMMON_PATH));
             Files.createDirectories(Paths.get(GLOBAL_FILE_EXPORT_PATH + basePath + COMMON_PATH + "devicons/"));
@@ -108,6 +109,7 @@ public class FileServiceImpl implements FileService {
                 "skin/ci_company_colors.iuml",
                 "skin/default.skin",
                 "skin/darcula.skin");
+        logger().info("Write some skin files: {}", filesToExport);
         Files.createDirectories(Paths.get(GLOBAL_FILE_EXPORT_PATH + "skin/"));
         //skin
         for (String currentFileName : filesToExport) {

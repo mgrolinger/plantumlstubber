@@ -294,6 +294,29 @@ skinparam note {
 	!return "\n[Payload <&data-transfer-upload>:**"+$PAYLOAD_TYPE+"**: "+$PAYLOAD_VALUE+", **"+$PAYLOAD_TYPE2+"**: "+$PAYLOAD_VALUE2+"]"
 !endfunction
 
+' RFC-7807
+!unquoted function $returnIfJSONValueNotEmpty($KEY="",$VALUE="")
+ !if (%strlen($VALUE) > 0)
+ !return '\n\t<i> "'+$KEY+'" : '+$VALUE+'</i>'
+ !else
+ !return ''
+ !endif
+!endfunction
+!unquoted function $problemDetail($PROBLEM_TYPE="",$PROBLEM_ERROR_CODE="",$PROBLEM_TITLE="",$PROBLEM_STATUS_CODE="",$PROBLEM_DETAIL="")
+ !if ($DETAILED)
+ ' Detailed response body
+ !return '<i>{</i>' + $returnIfJSONValueNotEmpty("type",$PROBLEM_TYPE) +","+ $returnIfJSONValueNotEmpty("errorCode",$PROBLEM_ERROR_CODE) +","+ $returnIfJSONValueNotEmpty("title",$PROBLEM_TITLE) +","+ $returnIfJSONValueNotEmpty("status",$PROBLEM_STATUS_CODE) +","+ $returnIfJSONValueNotEmpty("detail",$PROBLEM_DETAIL)+'}'
+ !else
+ ' Non detailed
+ !return ''
+ !endif
+!endfunction
+' Alternative for RFC-7807: 1st define the JSON variable
+' !$payloadProblemDetailBody = { "type": "test", "errorCode" : "ERROR_CODE", "title" : "The title of the error", "statusCode" : 400, "detail" : "A ver long detailed explanation of the error." }
+' 2nd use to display the payload or $payload("application/json+problem", $payloadProblemDetailBody)
+' use parts of the JSON like that $payloadProblemDetailBody.title
+
+
 !final function $contentType($CONTENT_TYPE)
 	!return "\n[Content-Type:**"+$CONTENT_TYPE+"**]"
 !endfunction
