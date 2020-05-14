@@ -1,24 +1,7 @@
 '
-' Error handling
-!final function $statusResponse($PROTOCOL,$STATUS_CODE,$STATUS_DESCR)
-    !if ($DETAILED || $SHOW_EXCEPTION)
-        !return "\n["+$PROTOCOL+"::<b>"+$STATUS_CODE+"</b>:"+$STATUS_DESCR+"]"
-    !else
-        !return "("+$STATUS_DESCR+")"
-    !end
-!endfunction
 
-!final function $errorResponse($PROTOCOL,$ERROR_CODE,$ERROR_DESCR)
-	!return "\n["+$PROTOCOL+"::<b>"+$ERROR_CODE+"</b>:"+$ERROR_DESCR+"]"
-!endfunction
 !final function $httpError($ERROR_CODE,$ERROR_DESCR)
 	!return $errorResponse("HTTP",$ERROR_CODE,$ERROR_DESCR)
-!endfunction
-!final function $soapFault($ERROR_CODE,$ERROR_DESCR)
-    !return $errorResponse("SOAP",$ERROR_CODE,$ERROR_DESCR)
-!endfunction
-!final function $soapError($ERROR_CODE,$ERROR_DESCR)
-	!return $errorResponse("SOAP",$ERROR_CODE,$ERROR_DESCR)
 !endfunction
 
 ' HTTP Status Codes

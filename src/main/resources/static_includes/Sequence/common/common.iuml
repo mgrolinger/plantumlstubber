@@ -562,6 +562,35 @@ skinparam note {
     !return $databaseCall($DESCRIPTIVE_LINE,$DB,$TABLE,$REFERENCE)
 !endfunction
 
+
+' Error handling
+!final function $statusResponse($PROTOCOL,$STATUS_CODE,$STATUS_DESCR)
+    !if ($DETAILED || $SHOW_EXCEPTION)
+        !return "\n["+$PROTOCOL+"::<b>"+$STATUS_CODE+"</b>:"+$STATUS_DESCR+"]"
+    !else
+        !return "("+$STATUS_DESCR+")"
+    !end
+!endfunction
+!final function $errorResponse($PROTOCOL,$ERROR_CODE,$ERROR_DESCR)
+	!return "\n["+$PROTOCOL+"::<b>"+$ERROR_CODE+"</b>:"+$ERROR_DESCR+"]"
+!endfunction
+!final function $customErrorLine($ERROR_CODE,$ERROR_MESSAGE)
+    !if ($DETAILED || $SHOW_EXCEPTION)
+        !return "\n[Error code:<b>"+$ERROR_CODE+"</b>, Message:"+$ERROR_MESSAGE+"]"
+    !else
+        !return ""
+    !end
+!endfunction
+
+!final function $soapFault($ERROR_CODE,$ERROR_DESCR)
+    !return $errorResponse("SOAP",$ERROR_CODE,$ERROR_DESCR)
+!endfunction
+!final function $soapError($ERROR_CODE,$ERROR_DESCR)
+	!return $errorResponse("SOAP",$ERROR_CODE,$ERROR_DESCR)
+!endfunction
+
+
+
 ' HTTP Status Codes
 !include http_statuscodes.iuml
 ' BiPRO Status Codes
