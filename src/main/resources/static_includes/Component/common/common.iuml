@@ -387,7 +387,7 @@ skinparam note {
     !if ($METHODS == "") || ($METHODS == "[]")
         !return '\n'
     !else
-        !return "<color:"+$_COLOR_NAME+"><font size=8>"+$METHODS+"</font></color>\n"
+        !return '<color:'+$_COLOR_NAME+'><font size=8>'+$METHODS+'</font></color>\n'
     !endif
 !endfunction
 
