@@ -104,13 +104,13 @@ skinparam database {
     BackgroundColor<<warning>>      #$WARNING_BOX_COLOR
 }
 skinparam note {
-	BackgroundColor<<doc>> #DOCUMENT_BOX_COLOR|White
+	BackgroundColor<<doc>> #$DOCUMENT_BOX_COLOR|White
 	BorderColor<<doc>> #Black
 	FontColor<<doc>> #Black
 	NoteBorderThickness<<doc>> 1
 	shadowing<<doc>> false
 
-    BackgroundColor<<general>> #GENERAL_NOTE_COLOR
+    BackgroundColor<<general>> #$GENERAL_NOTE_COLOR
     shadowing<<general>> false
     BorderColor<<general>> #Silver
     FontColor<<general>> #DarkSlateGray
