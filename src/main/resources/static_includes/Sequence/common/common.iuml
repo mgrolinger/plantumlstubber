@@ -295,6 +295,10 @@ skinparam note {
 !endfunction
 
 ' RFC-7807
+!final function $payloadProblem($PAYLOAD_VALUE)
+    !return $payload("application/json+problem",$PAYLOAD_VALUE)
+!endfunction
+
 !unquoted function $returnIfJSONValueNotEmpty($KEY="",$VALUE="")
  !if (%strlen($VALUE) > 0)
  !return '\n\t<i> "'+$KEY+'" : '+$VALUE+'</i>'
