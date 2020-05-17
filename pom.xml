@@ -5,11 +5,11 @@
 
     <groupId>com.grolinger.java</groupId>
     <artifactId>plantumlstubber</artifactId>
-    <version>0.5.1-SNAPSHOT</version>
+    <version>0.5.2-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>PlantumlStubber</name>
-    <description>Generator for Plantuml (i)uml service stubs</description>
+    <description>Generator for Plantuml (i/p)uml service stubs</description>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -27,7 +27,7 @@
         <lombok.version>1.18.12</lombok.version>
         <commons.version>3.10</commons.version>
         <testng.version>7.1.0</testng.version>
-        <springboot.version>2.2.6.RELEASE</springboot.version>
+        <springboot.version>2.3.0.RELEASE</springboot.version>
         <picoli.version>4.2.0</picoli.version>
     </properties>
 

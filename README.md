@@ -61,4 +61,4 @@ You need to configure the working directory  (Java `user.dir`) in Run/Debug of t
 configuration yaml can be found, 
 e.g. `$MODULE_WORKING_DIR$` in Intellij: ![](Intellij_Config.png)
 
-_last update 13.05.2020_
+_last update 17.05.2020_

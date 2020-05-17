@@ -1,5 +1,16 @@
 # Release Notes
 
+## 0.5.2 (2020-05-17)
+
+### New + Improved
+- RFC-7807 problem detail function for sequence diagrams
+
+### Fixes
+- solved distorted display of individual rest methods
+
+### Updates
+- Update spring-boot 2.3.0.RELEASE
+
 ## 0.5.1 (2020-05-08)
 
 ### New + Improved
