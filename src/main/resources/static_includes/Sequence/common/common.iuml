@@ -296,7 +296,7 @@ skinparam note {
 
 ' RFC-7807
 !final function $payloadProblem($PAYLOAD_VALUE)
-    !return $payload("application/json+problem",$PAYLOAD_VALUE)
+    !return $payload("application/problem+json",$PAYLOAD_VALUE)
 !endfunction
 
 !unquoted function $returnIfJSONValueNotEmpty($KEY="",$VALUE="")
@@ -317,7 +317,7 @@ skinparam note {
 !endfunction
 ' Alternative for RFC-7807: 1st define the JSON variable
 ' !$payloadProblemDetailBody = { "type": "test", "errorCode" : "ERROR_CODE", "title" : "The title of the error", "statusCode" : 400, "detail" : "A ver long detailed explanation of the error." }
-' 2nd use to display the payload or $payload("application/json+problem", $payloadProblemDetailBody)
+' 2nd use to display the payload or $payload("application/problem+json", $payloadProblemDetailBody)
 ' use parts of the JSON like that $payloadProblemDetailBody.title
 
 
