@@ -439,7 +439,7 @@ skinparam note {
 
 ' default: draws a lightgrey dashed link with "↻t" as link text to state a time controlled action
 !function $CREATE_SELFLINK($LINK_COMPONENT="consumer",$LINK_TEXT="<U+21BB><i>t</i>",$LINK_COLOR="LightGrey")
-    !return $LINK_COMPONENT +'-[dashed,'+$LINK_COLOR+']-> '+$LINK_COMPONENT+ ': <color:#'+$LINK_COLOR+'><b>'+$LINK_TEXT+'</b></color>'
+    !return $LINK_COMPONENT +'-[dashed,#'+$LINK_COLOR+']-> '+$LINK_COMPONENT+ ': <color:#'+$LINK_COLOR+'><b>'+$LINK_TEXT+'</b></color>'
 !endfunction
 
 
