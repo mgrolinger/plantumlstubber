@@ -437,55 +437,11 @@ skinparam note {
     !endif
 !endprocedure
 
-!procedure $DEPLOYMENT_NOTE($COMPONENT="",$SERVER_DEV="DEVServer",$SERVER_TB01="TB01Server",$SERVER_TB02="TB02Server",$SERVER_TB12="TB12Server",$SERVER_PROD="PRODServer")
-    !if (%strlen($COMPONENT) > 0)
-        note as $COMPONENT##_note #$GENERAL_NOTE_COLOR
-    !else
-        'default for floating notes without component
-        note as %date("a_YYYY_MM_DD_HH_MM_ssss")##$SERVER_DEV##$SERVER_TB01##$SERVER_TB02##$SERVER_TB12##$SERVER_PROD #GENERAL_NOTE_COLOR
-    !endif
-        | Umgebung                    | URL |
-        | <color:Orange>DEV: </color> | <color:orange>$SERVER_DEV</color> |
-        | <color:Green>TB01: </color> | <color:green>$SERVER_TB01</color> |
-        | <color:Blue>TB02: </color> | <color:blue>$SERVER_TB02</color> |
-        | <color:Black>TB12: </color> | <color:black>$SERVER_TB12</color> |
-        | <color:Red>PROD: </color>  | <color:red>$SERVER_PROD</color> |
-    end note
-    !if (%strlen($COMPONENT) > 0)
-        $COMPONENT ~~ $COMPONENT##_note
-    !endif
-!endprocedure
+' default: draws a lightgrey dashed link with "↻t" as link text to state a time controlled action
+!function $CREATE_SELFLINK($LINK_COMPONENT="consumer",$LINK_TEXT="<U+21BB><i>t</i>",$LINK_COLOR="LightGrey")
+    !return $LINK_COMPONENT +'-[dashed,'+$LINK_COLOR+']-> '+$LINK_COMPONENT+ ': <color:#'+$LINK_COLOR+'><b>'+$LINK_TEXT+'</b></color>'
+!endfunction
 
-!procedure $DEPLOYMENT_NOTE_CLOUD($COMPONENT="",$SERVER_DEV="DEVServer",$SERVER_LAB="LABServer",$SERVER_TB01="TB01Server",$SERVER_TB02="TB02Server",$SERVER_TB12="TB12Server",$SERVER_PROD="PRODServer")
-    !if (%strlen($COMPONENT) > 0)
-        note as $COMPONENT##_note #$GENERAL_NOTE_COLOR
-    !else
-        'default for floating notes without component
-        note as %date("a_YYYY_MM_DD_HH_MM_ssss")##$SERVER_DEV##$SERVER_TB01##$SERVER_TB02##$SERVER_TB12##$SERVER_PROD #GENERAL_NOTE_COLOR
-    !endif
-        | Umgebung                    | URL |
-        | <color:Orange>DEV: </color> | <color:orange>$SERVER_DEV</color> |
-        | <color:Orange>LAB: </color> | <color:orange>$SERVER_LAB</color> |
-        | <color:Green>TB01: </color> | <color:green>$SERVER_TB01</color> |
-        | <color:Blue>TB02: </color> | <color:blue>$SERVER_TB02</color> |
-        | <color:Black>TB12: </color> | <color:black>$SERVER_TB12</color> |
-        | <color:Red>PROD: </color>  | <color:red>$SERVER_PROD</color> |
-    end note
-    !if (%strlen($COMPONENT) > 0)
-        $COMPONENT ~~ $COMPONENT##_note
-    !endif
-!endprocedure
-
-!procedure $DEPLOYMENT_NOTE_ON_LINK($SERVER_DEV="DEVServer",$SERVER_TB01="TB01Server",$SERVER_TB02="TB02Server",$SERVER_TB12="TB12Server",$SERVER_PROD="PRODServer")
-        note on link #$GENERAL_NOTE_COLOR
-        | Umgebung                    | URL |
-        | <color:Orange>DEV: </color> | <color:orange>$SERVER_DEV</color> |
-        | <color:Green>TB01: </color> | <color:green>$SERVER_TB01 </color> |
-        | <color:Blue>TB02: </color> | <color:blue>$SERVER_TB02 </color> |
-        | <color:Black>TB12: </color> | <color:black>$SERVER_TB12 </color> |
-        | <color:Red>PROD: </color>  | <color:red>$SERVER_PROD </color> |
-    end note
-!endprocedure
 
 !function $IS_FALSE($variable)
     !if (%not(%variable_exists($variable)))
