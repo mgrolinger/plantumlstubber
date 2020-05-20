@@ -1,15 +1,22 @@
 # Release Notes
 
-## 0.5.2 (2020-05-17)
+## 0.5.2 (2020-05-20)
 
 ### New + Improved
 - RFC-7807 problem detail function for sequence diagrams
+- New function for component diagrams to create self links, e.g. to show timed actions
+- removed own Logger interface in favor for lombok
+- use plugin maven-release-plugin
+- use plugin versions-maven-plugin 
 
 ### Fixes
 - solved distorted display of individual rest methods
+- removed obsolete procedures
+- removed picoli that was never used
 
 ### Updates
 - Update spring-boot 2.3.0.RELEASE
+- Update spring-boot-parent 2.3.0.RELEASE
 
 ## 0.5.1 (2020-05-08)
 

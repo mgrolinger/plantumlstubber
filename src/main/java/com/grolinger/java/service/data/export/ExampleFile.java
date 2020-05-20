@@ -1,12 +1,12 @@
 package com.grolinger.java.service.data.export;
 
-import com.grolinger.java.config.Loggable;
 import com.grolinger.java.controller.templatemodel.Constants;
 import com.grolinger.java.controller.templatemodel.Template;
 import com.grolinger.java.controller.templatemodel.TemplateContent;
 import com.grolinger.java.service.data.ApplicationDefinition;
 import com.grolinger.java.service.data.InterfaceDefinition;
 import com.grolinger.java.service.data.ServiceDefinition;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.validation.constraints.NotNull;
@@ -20,7 +20,8 @@ import static com.grolinger.java.service.adapter.impl.FileServiceImpl.FILE_TYPE_
  * the visual check of new services. It can be found in the root folder of each
  * application with <name_of_application>_example.puml
  */
-public class ExampleFile implements Loggable {
+@Slf4j
+public class ExampleFile {
     private Template template;
     private StringBuilder content;
 
@@ -56,7 +57,7 @@ public class ExampleFile implements Loggable {
                 .append("consumer").append(currentApplication.getAlias().toLowerCase())
                 .append("\")")
                 .append(CARRIAGE_RETURN.getContent()).append(CARRIAGE_RETURN.getContent());
-        logger().info("Write {}_{}_{} to {}{}", currentApplication.getName(), currentService.getServiceCallName(), currentInterface.getFormattedName(), currentInterface.getMethodName(), FILE_TYPE_IUML);
+        log.info("Write {}_{}_{} to {}{}", currentApplication.getName(), currentService.getServiceCallName(), currentInterface.getFormattedName(), currentInterface.getMethodName(), FILE_TYPE_IUML);
     }
 
     /**

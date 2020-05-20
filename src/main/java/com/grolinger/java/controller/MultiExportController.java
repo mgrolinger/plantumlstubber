@@ -1,11 +1,11 @@
 package com.grolinger.java.controller;
 
-import com.grolinger.java.config.Loggable;
 import com.grolinger.java.service.DataProcessorService;
 import com.grolinger.java.service.adapter.ImportService;
 import com.grolinger.java.service.data.ApplicationDefinition;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,8 +18,9 @@ import java.util.List;
 
 import static com.grolinger.java.controller.templatemodel.DiagramType.*;
 
+@Slf4j
 @RestController
-public class MultiExportController implements Loggable {
+public class MultiExportController {
     private DataProcessorService dataProcessorService;
     private ImportService importService;
 
@@ -40,7 +41,7 @@ public class MultiExportController implements Loggable {
         } else {
             dataProcessorService.processApplication(pumlComponents, COMPONENT_V1_2019_6_DIAGRAM_BASE);
         }
-        logger().info("Processing components completed. Using preprocessor version {} for export.", preprocessorVersion);
+        log.info("Processing components completed. Using preprocessor version {} for export.", preprocessorVersion);
     }
 
     @ApiOperation(
@@ -55,7 +56,7 @@ public class MultiExportController implements Loggable {
         } else {
             dataProcessorService.processApplication(pumlComponents, SEQUENCE_V1_2019_6_DIAGRAM_BASE);
         }
-        logger().info("Processing sequences completed. Using preprocessor version {} for export.", preprocessorVersion);
+        log.info("Processing sequences completed. Using preprocessor version {} for export.", preprocessorVersion);
     }
 
 }

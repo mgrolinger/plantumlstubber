@@ -8,6 +8,7 @@ import com.grolinger.java.service.data.InterfaceDefinition;
 import com.grolinger.java.service.data.ServiceDefinition;
 import com.grolinger.java.service.data.export.ComponentFile;
 import com.grolinger.java.service.data.export.ExampleFile;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,6 +29,7 @@ import java.util.Map;
 
 import static com.grolinger.java.controller.templatemodel.Constants.*;
 
+@Slf4j
 @Service
 public class FileServiceImpl implements FileService {
     public static final String FILE_TYPE_IUML = ".iuml";
@@ -43,7 +45,7 @@ public class FileServiceImpl implements FileService {
 
     @Autowired
     private FileServiceImpl(SpringTemplateEngine templateEngine) {
-        logger().info("Configure base folder to read yaml files: {}", GLOBAL_FILE_EXPORT_PATH);
+        log.info("Configure base folder to read yaml files: {}", GLOBAL_FILE_EXPORT_PATH);
         this.templateEngine = templateEngine;
     }
 
@@ -98,7 +100,7 @@ public class FileServiceImpl implements FileService {
                 writer.write(content);
             } catch (IOException e) {
                 // do nothing
-                logger().error("Exception occurred: {}", e.getMessage());
+                log.error("Exception occurred: {}", e.getMessage());
             }
         }
     }
@@ -109,7 +111,7 @@ public class FileServiceImpl implements FileService {
                 "skin/ci_company_colors.iuml",
                 "skin/default.skin",
                 "skin/darcula.skin");
-        logger().info("Write some skin files: {}", filesToExport);
+        log.info("Write some skin files: {}", filesToExport);
         Files.createDirectories(Paths.get(GLOBAL_FILE_EXPORT_PATH + "skin/"));
         //skin
         for (String currentFileName : filesToExport) {
@@ -121,7 +123,7 @@ public class FileServiceImpl implements FileService {
                 writer.write(content);
             } catch (IOException e) {
                 // do nothing
-                logger().error("Exception occurred: {}", e.getMessage());
+                log.error("Exception occurred: {}", e.getMessage());
             }
         }
     }
@@ -132,7 +134,7 @@ public class FileServiceImpl implements FileService {
             writer.write(exampleFileContent);
         } catch (IOException e) {
             // do nothing
-            logger().error("Exception occurred: {}", e.getMessage());
+            log.error("Exception occurred: {}", e.getMessage());
         }
     }
 
@@ -148,7 +150,7 @@ public class FileServiceImpl implements FileService {
             writer.write(templateEngine.process(exampleFile.getTemplate().getTemplateURL(), context));
         } catch (IOException io) {
             // do nothing
-            logger().error("exception: {}", io.getMessage());
+            log.error("exception: {}", io.getMessage());
         }
         return exampleFile;
     }
@@ -159,7 +161,7 @@ public class FileServiceImpl implements FileService {
             Path pathToFile = Paths.get(fullPathToInterfaceFile + FILE_TYPE_IUML);
             Files.createDirectories(pathToFile.getParent());
         } catch (IOException ioe) {
-            logger().error("exception:", ioe);
+            log.error("exception:", ioe);
         }
     }
 
@@ -171,7 +173,7 @@ public class FileServiceImpl implements FileService {
                 Files.createDirectories(Paths.get(path));
                 dirsCreate.put(applicationName, path);
             } catch (IOException ioe) {
-                logger().error("Could not create directory {}{} for {}", basePath, path, applicationName);
+                log.error("Could not create directory {}{} for {}", basePath, path, applicationName);
             }
         }
         return path;
@@ -186,7 +188,7 @@ public class FileServiceImpl implements FileService {
         StringBuilder cp = new StringBuilder();
         if (serviceName.contains(Constants.SLASH.getValue())) {
             for (int i = 0; i <= serviceName.split(Constants.SLASH.getValue()).length; i++) {
-                logger().warn(">> Servicename: {}, {}", i, serviceName);
+                log.warn(">> Servicename: {}, {}", i, serviceName);
                 cp.append(DIR_UP.getValue());
             }
         } else {
@@ -209,7 +211,7 @@ public class FileServiceImpl implements FileService {
             writer.write(componentFile.getFullFileContent());
         } catch (IOException e) {
             // do nothing
-            logger().error("Exception occurred: {}", e.getMessage());
+            log.error("Exception occurred: {}", e.getMessage());
         }
     }
 

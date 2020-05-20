@@ -1,12 +1,12 @@
 package com.grolinger.java.service.impl;
 
-import com.grolinger.java.config.Loggable;
 import com.grolinger.java.controller.templatemodel.Constants;
 import com.grolinger.java.service.NameConverter;
 import com.grolinger.java.service.data.ApplicationDefinition;
 import com.grolinger.java.service.data.InterfaceDefinition;
 import com.grolinger.java.service.data.ServiceDefinition;
 import com.grolinger.java.service.data.mapper.ColorMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 import org.thymeleaf.context.Context;
 
@@ -16,6 +16,7 @@ import static com.grolinger.java.controller.templatemodel.Constants.EMPTY;
 import static com.grolinger.java.controller.templatemodel.ContextVariables.*;
 import static com.grolinger.java.service.NameConverter.replaceUnwantedPlantUMLCharacters;
 
+@Slf4j
 public final class ContextSpec {
 
 
@@ -46,7 +47,7 @@ public final class ContextSpec {
         Context getContext();
     }
 
-    public class ContextBuilderImpl implements ContextBuilder, ColorBuilder, ApplicationNameBuilder, Loggable {
+    public class ContextBuilderImpl implements ContextBuilder, ColorBuilder, ApplicationNameBuilder {
         private Context context;
 
         ContextBuilderImpl(Context context) {
@@ -138,7 +139,7 @@ public final class ContextSpec {
                 context.setVariable(HTTP_METHODS, "");
             }
 
-            logger().info("Methods: {}", interfaceDefinition.getMethodDefinition().getMethods());
+            log.info("Methods: {}", interfaceDefinition.getMethodDefinition().getMethods());
             return this;
         }
 
@@ -150,7 +151,7 @@ public final class ContextSpec {
                 context.setVariable(IS_ROOT_SERVICE, true);
             } else {
                 //ServiceName containing dot (.) seems to cause syntax error in generated iuml file
-                logger().info("Service Name:{}, Label:{}", serviceName, serviceDefinition.getServiceLabel());
+                log.info("Service Name:{}, Label:{}", serviceName, serviceDefinition.getServiceLabel());
                 context.setVariable(SERVICE_NAME, serviceName);
                 context.setVariable(SERVICE_LABEL, serviceDefinition.getServiceLabel());
                 context.setVariable(IS_ROOT_SERVICE, false);
@@ -159,7 +160,7 @@ public final class ContextSpec {
 
         private ContextBuilder withInterfaceName(final String interfaceName) {
             final String cleanedInterfaceName = replaceUnwantedPlantUMLCharacters(interfaceName, false);
-            logger().info("Interface Name b4:{},after:{}", interfaceName, cleanedInterfaceName);
+            log.info("Interface Name b4:{},after:{}", interfaceName, cleanedInterfaceName);
             context.setVariable(INTERFACE_NAME, cleanedInterfaceName);
             String applicationName = (String) context.getVariable(APPLICATION_NAME);
             String serviceName = (String) context.getVariable(SERVICE_NAME);

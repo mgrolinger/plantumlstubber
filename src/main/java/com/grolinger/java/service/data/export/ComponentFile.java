@@ -1,6 +1,5 @@
 package com.grolinger.java.service.data.export;
 
-import com.grolinger.java.config.Loggable;
 import com.grolinger.java.controller.templatemodel.Constants;
 import com.grolinger.java.controller.templatemodel.DiagramType;
 import com.grolinger.java.service.data.ApplicationDefinition;
@@ -22,7 +21,7 @@ import static com.grolinger.java.controller.templatemodel.TemplateContent.*;
  * either component_definition.iuml or participant_definition.iuml
  */
 @Slf4j
-public class ComponentFile implements Loggable {
+public class ComponentFile {
     private DiagramType diagramType;
     private StringBuilder content;
     private StringBuilder bucket1;
@@ -117,7 +116,7 @@ public class ComponentFile implements Loggable {
                 doneApplication.add(currentApplication.getName());
             }
         } else {
-            logger().debug("{} is already defined.", currentApplication.getName());
+            log.debug("{} is already defined.", currentApplication.getName());
         }
 
     }

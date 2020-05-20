@@ -7,6 +7,7 @@ import com.grolinger.java.service.adapter.importdata.ImportedServices;
 import com.grolinger.java.service.data.ApplicationDefinition;
 import com.grolinger.java.service.data.InterfaceDefinition;
 import com.grolinger.java.service.data.ServiceDefinition;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -26,6 +27,7 @@ import static com.grolinger.java.service.NameConverter.replaceUnwantedPlantUMLCh
 /**
  * This service maps information from the yaml files to internal *definitions.
  */
+@Slf4j
 @Service
 public class ImportServiceImpl implements ImportService {
     private static final String GLOBAL_FILE_EXPORT_PATH = System.getProperty("user.dir") + File.separator + "target" + File.separator;
@@ -41,11 +43,11 @@ public class ImportServiceImpl implements ImportService {
                     .filter(YamlPredicate::isYamlFile)
                     .collect(Collectors.toList());
         } catch (IOException ioe) {
-            logger().error("Failed to find yaml files", ioe);
+            log.error("Failed to find yaml files", ioe);
         }
 
         if (collect.isEmpty()) {
-            logger().warn("No Yaml file found. Please check working directory in run configuration.");
+            log.warn("No Yaml file found. Please check working directory in run configuration.");
         }
 
         List<ImportedServices> services = new LinkedList<>();
@@ -59,7 +61,7 @@ public class ImportServiceImpl implements ImportService {
                 continue;
             }
             int orderPrio = Integer.parseInt(importedServices.getOrderPrio());
-            logger().debug("{}, {}, {}", importedServices.getApplication(), importedServices.getSystemType(), importedServices.getOrderPrio());
+            log.debug("{}, {}, {}", importedServices.getApplication(), importedServices.getSystemType(), importedServices.getOrderPrio());
             final String applicationName = replaceUnwantedPlantUMLCharacters(importedServices.getApplication(), false);
             ApplicationDefinition pumlComponent;
             // Do we know this application already from before, reuse it.
@@ -104,6 +106,7 @@ public class ImportServiceImpl implements ImportService {
 
     /**
      * Extracts the services from yaml file
+     *
      * @param importedServices
      * @param interfacesIntegrationType
      * @param serviceList
@@ -113,7 +116,7 @@ public class ImportServiceImpl implements ImportService {
         List<ServiceDefinition> serviceDefinitions = new LinkedList<>();
         for (Map.Entry<String, String[]> serviceName : serviceList.entrySet()) {
             String[] interfaceNames = serviceName.getValue();
-            String clearServiceName= serviceName.getKey();
+            String clearServiceName = serviceName.getKey();
             if (clearServiceName.startsWith("_") || clearServiceName.startsWith("/")) {
                 clearServiceName = clearServiceName.substring(1);
             }
@@ -132,6 +135,7 @@ public class ImportServiceImpl implements ImportService {
 
     /**
      * Extracts the interfaces from the yaml file
+     *
      * @param importedServices
      * @param interfacesIntegrationType
      * @param interfaceNames
@@ -148,7 +152,7 @@ public class ImportServiceImpl implements ImportService {
                     .linkToCustomAlias(importedServices.getLinkToCustomAlias())
                     .build();
             // ignore call stack information
-            logger().debug("Extracted interface: {}", interfaceDefinition.getName());
+            log.debug("Extracted interface: {}", interfaceDefinition.getName());
             interfaceDefinitions.add(interfaceDefinition);
         }
         return interfaceDefinitions;
@@ -159,13 +163,13 @@ public class ImportServiceImpl implements ImportService {
         ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
         try {
             ImportedServices importedServices = mapper.readValue(path.toFile(), ImportedServices.class);
-            if (logger().isInfoEnabled()) {
-                logger().info(ReflectionToStringBuilder.toString(importedServices, ToStringStyle.MULTI_LINE_STYLE));
+            if (log.isInfoEnabled()) {
+                log.info(ReflectionToStringBuilder.toString(importedServices, ToStringStyle.MULTI_LINE_STYLE));
             }
             importedServicesList.add(importedServices);
         } catch (Exception e) {
             //Do nothing
-            logger().error("mapYamls exception: {}", e.getMessage());
+            log.error("mapYamls exception: {}", e.getMessage());
         }
         return importedServicesList;
     }

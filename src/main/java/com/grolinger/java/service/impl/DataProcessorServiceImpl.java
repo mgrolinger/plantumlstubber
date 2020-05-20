@@ -1,7 +1,7 @@
 package com.grolinger.java.service.impl;
 
-import com.grolinger.java.config.Loggable;
 import com.grolinger.java.controller.templatemodel.DiagramType;
+import com.grolinger.java.service.DataProcessorService;
 import com.grolinger.java.service.adapter.FileService;
 import com.grolinger.java.service.data.ApplicationDefinition;
 import com.grolinger.java.service.data.InterfaceDefinition;
@@ -9,6 +9,7 @@ import com.grolinger.java.service.data.ServiceDefinition;
 import com.grolinger.java.service.data.export.ComponentFile;
 import com.grolinger.java.service.data.export.ExampleFile;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
@@ -18,9 +19,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-public class DataProcessorServiceImpl implements Loggable, com.grolinger.java.service.DataProcessorService {
+public class DataProcessorServiceImpl implements DataProcessorService {
     private final FileService fileService;
 
     @Override
@@ -80,7 +82,7 @@ public class DataProcessorServiceImpl implements Loggable, com.grolinger.java.se
     }
 
     private String createDirectoryForService(String basePath, Map<String, String> dirsCreate, ApplicationDefinition applicationDefinition, ServiceDefinition serviceDefinition) throws IOException {
-        logger().info("Processing service:{} {}", applicationDefinition.getName(), serviceDefinition.getServiceCallName());
+        log.info("Processing service:{} {}", applicationDefinition.getName(), serviceDefinition.getServiceCallName());
         String pathForReturnValue;
 
         if (!dirsCreate.containsKey(applicationDefinition.getName() + serviceDefinition.getServiceCallName())) {
@@ -94,13 +96,13 @@ public class DataProcessorServiceImpl implements Loggable, com.grolinger.java.se
     }
 
     private void processInterfaces(String path, ContextSpec.ContextBuilder contextBuilder, final ApplicationDefinition currentApplication, final ServiceDefinition serviceDefinition, ExampleFile exampleFile) {
-        logger().info("Current path: {}", path);
+        log.info("Current path: {}", path);
         for (InterfaceDefinition currentInterface : serviceDefinition.getInterfaceDefinitions()) {
             if (currentInterface.hasRelativeCommonPath()) {
                 contextBuilder.addToCommonPath(currentInterface.getRelativeCommonPath());
             }
             // ignore call stack information
-            logger().info("Extracted interface: {}", currentInterface.getName());
+            log.info("Extracted interface: {}", currentInterface.getName());
             if (currentInterface.containsPath()) {
                 //first create the parent dir and next replace chars
                 fileService.createParentDir(path + currentInterface.getName());

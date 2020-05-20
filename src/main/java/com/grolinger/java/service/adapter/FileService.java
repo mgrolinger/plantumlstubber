@@ -1,6 +1,5 @@
 package com.grolinger.java.service.adapter;
 
-import com.grolinger.java.config.Loggable;
 import com.grolinger.java.controller.templatemodel.DiagramType;
 import com.grolinger.java.service.data.ApplicationDefinition;
 import com.grolinger.java.service.data.InterfaceDefinition;
@@ -15,7 +14,8 @@ import java.util.Map;
 /**
  * Interface for all file based processes, e.g. to export each iuml file
  */
-public interface FileService extends Loggable {
+
+public interface FileService {
     /**
      * Creates a directory for a service
      *
