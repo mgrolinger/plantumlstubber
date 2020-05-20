@@ -5,7 +5,7 @@
 
     <groupId>com.grolinger.java</groupId>
     <artifactId>plantumlstubber</artifactId>
-    <version>0.5.2-SNAPSHOT</version>
+    <version>0.5.3-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>PlantumlStubber</name>
@@ -169,6 +169,13 @@
             </plugin>
         </plugins>
     </build>
-
+    <!-- Todo fill in the distributionMgmt or the release plugin will fail-->
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>GitHub Packages</name>
+            <url>https://maven.pkg.github.com/mgrolinger/plantumlstubber</url>
+        </repository>
+    </distributionManagement>
 
 </project>
