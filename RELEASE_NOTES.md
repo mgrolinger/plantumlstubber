@@ -6,10 +6,11 @@
 - moved package importdata
 - renamed package export to exportdata
 - added tests for DiagramType and SystemType
-- minor refactoring for readability 
+- minor refactoring for readability
 
 ### Fixes
 - tests
+- console runner works again and has the preprocessor version as new argument
 
 ### Updates
 
