@@ -34,7 +34,7 @@ public final class ContextSpec {
     }
 
     public interface ContextBuilder {
-        ContextBuilder withOrderPrio(final Integer orderNumber);
+        ContextBuilder withOrderPrio(final int orderNumber);
 
         ContextBuilder withServiceDefinition(final ServiceDefinition serviceDefinition);
 
@@ -48,7 +48,7 @@ public final class ContextSpec {
     }
 
     public class ContextBuilderImpl implements ContextBuilder, ColorBuilder, ApplicationNameBuilder {
-        private Context context;
+        private final Context context;
 
         ContextBuilderImpl(Context context) {
             this.context = context;
@@ -134,7 +134,7 @@ public final class ContextSpec {
             context.setVariable(LINKED_TO_COMPONENT, interfaceDefinition.getLinkToComponent());
             context.setVariable(LINK_TO_CUSTOM_ALIAS, interfaceDefinition.getLinkToCustomAlias());
             if (!interfaceDefinition.getMethodDefinition().getMethods().isEmpty()) {
-                context.setVariable(HTTP_METHODS, "$INDIVIDUAL_METHODS(" + interfaceDefinition.getMethodDefinition().getMethods() + ")");
+                context.setVariable(HTTP_METHODS, "$INDIVIDUAL_METHODS('" + interfaceDefinition.getMethodDefinition().getMethods() + "')");
             } else {
                 context.setVariable(HTTP_METHODS, "");
             }
@@ -177,10 +177,8 @@ public final class ContextSpec {
         }
 
         @Override
-        public ContextBuilder withOrderPrio(final Integer orderWithinSequence) {
-            if (orderWithinSequence != null) {
-                context.setVariable(SEQUENCE_PARTICIPANT_ORDER, orderWithinSequence);
-            }
+        public ContextBuilder withOrderPrio(final int orderWithinSequence) {
+            context.setVariable(SEQUENCE_PARTICIPANT_ORDER, new Integer(orderWithinSequence));
             return this;
         }
 

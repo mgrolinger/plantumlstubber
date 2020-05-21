@@ -2,7 +2,6 @@ package com.grolinger.java.controller;
 
 import com.grolinger.java.controller.templatemodel.ContextVariables;
 import com.grolinger.java.service.DataProcessorService;
-import com.grolinger.java.service.adapter.FileService;
 import com.grolinger.java.service.data.mapper.ColorMapper;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -22,8 +21,6 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
 public class SingleExportControllerTest {
-    @Mock
-    private FileService fileService;
     @Mock
     private DataProcessorService dataProcessorService;
     @InjectMocks

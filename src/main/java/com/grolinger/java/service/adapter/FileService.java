@@ -4,8 +4,8 @@ import com.grolinger.java.controller.templatemodel.DiagramType;
 import com.grolinger.java.service.data.ApplicationDefinition;
 import com.grolinger.java.service.data.InterfaceDefinition;
 import com.grolinger.java.service.data.ServiceDefinition;
-import com.grolinger.java.service.data.export.ComponentFile;
-import com.grolinger.java.service.data.export.ExampleFile;
+import com.grolinger.java.service.data.exportdata.ComponentFile;
+import com.grolinger.java.service.data.exportdata.ExampleFile;
 import org.thymeleaf.context.Context;
 
 import java.io.IOException;

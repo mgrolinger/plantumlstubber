@@ -19,19 +19,21 @@ public class ContextSpecTest {
                 .alias("customAlias")
                 .systemType("application")
                 .build();
+        final int sequenceOrderPrio = 99;
         Context result = new ContextSpec().builder()
                 .withColorName("test")
                 .withApplication(applicationDefinition)
                 .withCommonPath("commonPath")
-                .withOrderPrio(99)
+                .withOrderPrio(sequenceOrderPrio)
                 .getContext();
+
         assertThat(result.getVariable(APPLICATION_NAME)).isEqualTo("MinApp");
         assertThat(result.getVariable(APPLICATION_LABEL)).isEqualTo("MinLabel");
         assertThat(result.getVariable(ALIAS)).isEqualTo("customAlias");
         assertThat(result.getVariable(COLOR_TYPE)).isEqualTo("<<test>>");
         assertThat(result.getVariable(COLOR_NAME)).isEqualTo("TEST_DOMAIN_COLOR");
         assertThat(result.getVariable(CONNECTION_COLOR)).isEqualTo("TEST_DOMAIN_COLOR_CONNECTION");
-        assertThat(result.getVariable(SEQUENCE_PARTICIPANT_ORDER)).isEqualTo(99);
+        assertThat(result.getVariable(SEQUENCE_PARTICIPANT_ORDER)).isEqualTo(sequenceOrderPrio);
         assertThat(result.getVariable(PATH_TO_COMMON_FILE)).isEqualTo("commonPath");
     }
 
@@ -59,7 +61,13 @@ public class ContextSpecTest {
     @Test
     public void testInterfaceDefinition() {
         ApplicationDefinition applicationDefinition = ApplicationDefinition.builder().name("MinApp").label("MinLabel").build();
-        InterfaceDefinition interfaceDefinition = new InterfaceDefinition("/api/rest/interface->Call_sub", "customAlias", "foo::bar", "linkedComponent", "linkedAlias");
+        InterfaceDefinition interfaceDefinition = InterfaceDefinition.builder()
+                .originalInterfaceName("/api/rest/interface::POST:PUT->Call_sub")
+                .customAlias("customAlias")
+                .integrationType("foo::bar")
+                .linkToComponent("linkedComponent")
+                .linkToCustomAlias("linkedAlias")
+                .build();
         Context result = new ContextSpec().builder()
                 .withColorName("test")
                 .withApplication(applicationDefinition)
@@ -74,7 +82,8 @@ public class ContextSpecTest {
         // neither soap nor rest because of FOO::BAR
         assertThat(result.getVariable(IS_REST_SERVICE)).isEqualTo(false);
         assertThat(result.getVariable(IS_SOAP_SERVICE)).isEqualTo(false);
-        assertThat(result.getVariable(COMPONENT_INTEGRATION_TYPE)).isEqualTo("INTEGRATION_TYPE(foo::bar)");
+        assertThat(result.getVariable(COMPONENT_INTEGRATION_TYPE)).isEqualTo("$INTEGRATION_TYPE(foo::bar)");
+        assertThat(result.getVariable(HTTP_METHODS)).isEqualTo("$INDIVIDUAL_METHODS('[POST, PUT]')");
         assertThat(result.getVariable(CALL_STACK)).isEqualTo(new String[]{"Call_sub"});
         assertThat(result.getVariable(CALL_STACK_INCLUDES)).isEqualTo(new String[]{"Call/sub"});
         assertThat(result.getVariable(IS_LINKED)).isEqualTo(true);

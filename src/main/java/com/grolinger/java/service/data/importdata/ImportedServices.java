@@ -1,9 +1,8 @@
-package com.grolinger.java.service.adapter.importdata;
+package com.grolinger.java.service.data.importdata;
 
 import lombok.*;
 
 import java.util.LinkedHashMap;
-import java.util.Map;
 
 /**
  * Class that is used in the context of {@link com.grolinger.java.controller.MultiExportController}

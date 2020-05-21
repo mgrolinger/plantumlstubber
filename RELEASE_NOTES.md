@@ -1,5 +1,19 @@
 # Release Notes
 
+## 0.5.3 (unreleased)
+
+### New + Improved
+- moved package importdata
+- renamed package export to exportdata
+- added tests for DiagramType and SystemType
+- minor refactoring for readability 
+
+### Fixes
+- tests
+
+### Updates
+
+
 ## 0.5.2 (2020-05-20)
 
 ### New + Improved

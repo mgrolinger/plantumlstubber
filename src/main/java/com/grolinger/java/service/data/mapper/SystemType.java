@@ -11,6 +11,9 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum SystemType {
+    //TYPE      what's used in case                         what def. is used in sequence diagrams
+    //          UML_STRICT=true     what def. is used in default
+    //                              case for component diagrams
     COMPONENT("component", "FA_SERVER", "participant"),
     SPRINGBOOT("component", "FA_SPRINGBOOT", "participant"),
     SOLR("component", "FA_SOLR", "participant"),
@@ -36,11 +39,6 @@ public enum SystemType {
             }
         }
         // last resort
-        switch (systemType) {
-            case "application":
-                return COMPONENT;
-            default:
-                return COMPONENT;
-        }
+        return COMPONENT;
     }
 }

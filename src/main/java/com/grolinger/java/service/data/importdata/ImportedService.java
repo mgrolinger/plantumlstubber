@@ -1,4 +1,4 @@
-package com.grolinger.java.service.adapter.importdata;
+package com.grolinger.java.service.data.importdata;
 
 import lombok.Builder;
 import lombok.Getter;

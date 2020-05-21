@@ -2,7 +2,7 @@ package com.grolinger.java.controller;
 
 import com.grolinger.java.controller.templatemodel.Template;
 import com.grolinger.java.service.DataProcessorService;
-import com.grolinger.java.service.adapter.importdata.ImportedService;
+import com.grolinger.java.service.data.importdata.ImportedService;
 import com.grolinger.java.service.data.mapper.ColorMapper;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;

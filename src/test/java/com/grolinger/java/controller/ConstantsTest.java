@@ -1,7 +1,7 @@
 package com.grolinger.java.controller;
 
 import com.grolinger.java.controller.templatemodel.Constants;
-import org.junit.Test;
+import org.testng.annotations.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

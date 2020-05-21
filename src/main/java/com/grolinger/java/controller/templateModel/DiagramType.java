@@ -8,7 +8,10 @@ import static com.grolinger.java.controller.templatemodel.TemplateContent.COMPON
 import static com.grolinger.java.controller.templatemodel.TemplateContent.SEQUENCE_HEADER_VARIABLES;
 
 /**
- * Which plantUML diagram is processed
+ * Which plantUML diagram is processed,
+ * which root directory is used for export
+ * which template ist used to export
+ * which header information are exported
  */
 @Getter
 @AllArgsConstructor

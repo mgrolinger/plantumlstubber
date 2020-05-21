@@ -1,4 +1,4 @@
-package com.grolinger.java.service.data.export;
+package com.grolinger.java.service.data.exportdata;
 
 import com.grolinger.java.controller.templatemodel.Constants;
 import com.grolinger.java.controller.templatemodel.DiagramType;
