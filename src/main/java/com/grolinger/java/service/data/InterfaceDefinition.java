@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import org.springframework.util.StringUtils;
 
+import javax.validation.constraints.NotNull;
 import java.util.*;
 
 import static com.grolinger.java.controller.templatemodel.Constants.SLASH;
@@ -19,8 +20,8 @@ import static com.grolinger.java.service.NameConverter.replaceUnwantedPlantUMLCh
  * or the service method of a SOAP service.
  */
 public class InterfaceDefinition {
-    private static Map<String, String> DEFAULT_MAPPER_INTEGRATION = new HashMap<>();
-    private static Map<String, String> DEFAULT_MAPPER_RESPONSE = new HashMap<>();
+    private static final Map<String, String> DEFAULT_MAPPER_INTEGRATION = new HashMap<>();
+    private static final Map<String, String> DEFAULT_MAPPER_RESPONSE = new HashMap<>();
 
     static {
         // e.g. SOAP -> SOAP::XML
@@ -34,17 +35,29 @@ public class InterfaceDefinition {
         DEFAULT_MAPPER_RESPONSE.put("HTTP", "HTML");
     }
 
-    private String originalInterface;
+    private final String originalInterface;
+    @Getter
+    private final String name;
+    @Getter
+    private final String customAlias;
+    @Getter
+    private final String interfacePath = "";
+    @Getter
+    private final String formattedName;
+    @Getter
+    private final String linkToComponent;
+    @Getter
+    private final boolean isLinked;
+    @Getter
+    private final String integrationType;
+    @Getter
+    private final String pumlFunctionType;
+    @Getter
+    private final String responseType;
+    @Getter
+    private final MethodDefinition methodDefinition;
     @Getter
     private String methodName;
-    @Getter
-    private String name;
-    @Getter
-    private String customAlias;
-    @Getter
-    private String interfacePath = "";
-    @Getter
-    private String formattedName;
     @Getter
     private String[] callStack;
     @Getter
@@ -52,34 +65,23 @@ public class InterfaceDefinition {
     @Getter
     private String relativeCommonPath = "";
     @Getter
-    private String linkToComponent;
-    @Getter
     private String linkToCustomAlias;
-    @Getter
-    private boolean isLinked;
-    @Getter
-    private String integrationType;
-    @Getter
-    private String pumlFunctionType;
-    @Getter
-    private String responseType;
-    @Getter
-    private MethodDefinition methodDefinition;
 
     /**
      * Hidden constructor is used by the Builder below.
+     *
      * @param originalInterfaceName The original interface name, such as doSomething() or a resource such as /person/id
-     * @param customAlias the a
-     * @param integrationType which kind of integration provides the interface, such as SOAP::XML or Rest::JSON
-     * @param linkToComponent generates a link to this component, a visible line in the resulting diagram
-     * @param linkToCustomAlias specifies the custom alias name of the linked component
+     * @param customAlias           the a
+     * @param integrationType       which kind of integration provides the interface, such as SOAP::XML or Rest::JSON
+     * @param linkToComponent       generates a link to this component, a visible line in the resulting diagram
+     * @param linkToCustomAlias     specifies the custom alias name of the linked component
      */
     @Builder()
     public InterfaceDefinition(final String originalInterfaceName,
-                                final String customAlias,
-                                final String integrationType,
-                                final String linkToComponent,
-                                final String linkToCustomAlias) {
+                               final String customAlias,
+                               final String integrationType,
+                               final String linkToComponent,
+                               final String linkToCustomAlias) {
         this.originalInterface = originalInterfaceName;
         this.name = extractInterfaceName(originalInterfaceName);
         this.methodName = getMethodName(name);
@@ -188,7 +190,13 @@ public class InterfaceDefinition {
         return calledInterfaceName;
     }
 
-    private String getMethodName(final String currentInterfaceName) {
+    /**
+     * TODO
+     *
+     * @param currentInterfaceName
+     * @return
+     */
+    private String getMethodName(@NotNull final String currentInterfaceName) {
         if (currentInterfaceName.contains(SLASH.getValue())) {
             char[] currentInterfacePath = new char[currentInterfaceName.length()];
             currentInterfaceName.getChars(0, currentInterfaceName.lastIndexOf(SLASH.getValue()), currentInterfacePath, 0);
@@ -208,7 +216,7 @@ public class InterfaceDefinition {
      * @param type something like SOAP or REST:JSON or DB::JDBC
      * @return returns the polished integration type, such as SOAP becomes SOAP::XML, REST::JSON remains REST::JSON
      */
-    private String getIntegrationType(final String type) {
+    private String getIntegrationType(@NotNull final String type) {
         String result;
 
         if (type.contains(Constants.INTERFACE_INTEGRATION_SEPARATOR.getValue())) {
@@ -231,7 +239,7 @@ public class InterfaceDefinition {
      * This method tries to guess from the integration type the correct type of response
      * that is later used in sequence diagrams for the response part
      *
-     * @param integrationType if the respinse type
+     * @param integrationType if the response type
      * @return the hopefully correct response
      */
     private String getResponseType(final String integrationType) {

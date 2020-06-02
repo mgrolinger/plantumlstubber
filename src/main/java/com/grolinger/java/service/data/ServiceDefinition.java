@@ -20,13 +20,13 @@ import static com.grolinger.java.service.NameConverter.replaceUnwantedPlantUMLCh
 @Builder
 @Getter
 public class ServiceDefinition {
-    private String servicePath;
-    private String domainColor;
-    private String commonPath;
-    private String serviceLabel;
-    private String serviceCallName;
+    private final String servicePath;
+    private final String domainColor;
+    private final String commonPath;
+    private final String serviceLabel;
+    private final String serviceCallName;
     @Builder.Default
-    private List<InterfaceDefinition> interfaceDefinitions = new LinkedList<>();
+    private final List<InterfaceDefinition> interfaceDefinitions = new LinkedList<>();
 
     /**
      * Override Builder method to set servicePath, serviceLabel and serviceCallName

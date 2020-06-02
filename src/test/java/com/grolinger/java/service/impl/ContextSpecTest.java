@@ -83,7 +83,7 @@ public class ContextSpecTest {
         assertThat(result.getVariable(IS_REST_SERVICE)).isEqualTo(false);
         assertThat(result.getVariable(IS_SOAP_SERVICE)).isEqualTo(false);
         assertThat(result.getVariable(COMPONENT_INTEGRATION_TYPE)).isEqualTo("$INTEGRATION_TYPE(foo::bar)");
-        assertThat(result.getVariable(HTTP_METHODS)).isEqualTo("$INDIVIDUAL_METHODS('[POST, PUT]')");
+        assertThat(result.getVariable(HTTP_METHODS)).isEqualTo("$INDIVIDUAL_METHODS([POST, PUT])");
         assertThat(result.getVariable(CALL_STACK)).isEqualTo(new String[]{"Call_sub"});
         assertThat(result.getVariable(CALL_STACK_INCLUDES)).isEqualTo(new String[]{"Call/sub"});
         assertThat(result.getVariable(IS_LINKED)).isEqualTo(true);

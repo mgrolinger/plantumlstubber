@@ -4,7 +4,7 @@ import javax.validation.constraints.NotNull;
 
 /**
  * Color mapper that will generate the three different types used in a template
- * - Domain color is mainly be used for the skinparam section
+ * - Domain color is mainly be used for the <i>skinparam</i> section
  * - Connection color is used for connections between components
  * - Stereotypes are used for component definitions
  */

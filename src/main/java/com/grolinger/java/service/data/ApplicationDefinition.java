@@ -13,13 +13,13 @@ import java.util.List;
 @Getter
 @Builder
 public class ApplicationDefinition {
-    private String name;
-    private String label;
-    private SystemType systemType;
-    private String alias;
+    private final String name;
+    private final String label;
+    private final SystemType systemType;
+    private final String alias;
     @Builder.Default
-    private int orderPrio=1;
-    private List<ServiceDefinition> serviceDefinitions;
+    private final int orderPrio = 1;
+    private final List<ServiceDefinition> serviceDefinitions;
 
     /**
      * Override systemType builder method.

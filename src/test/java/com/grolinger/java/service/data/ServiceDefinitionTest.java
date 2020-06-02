@@ -1,7 +1,6 @@
 package com.grolinger.java.service.data;
 
 import com.grolinger.java.controller.templatemodel.Constants;
-import org.springframework.util.StringUtils;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
@@ -16,6 +15,7 @@ public class ServiceDefinitionTest {
                 //@formatter:off
                 {"serviceName", "serviceName"},
                 {"serviceName/service", "serviceName_service"},
+                {"serviceName/{service}", "serviceName_service"},
                 {Constants.EMPTY.getValue(), DEFAULT_ROOT_SERVICE_NAME.getValue()}
                 //@formatter:on
         };
@@ -26,16 +26,14 @@ public class ServiceDefinitionTest {
                                                    final String expectedValue) {
         ServiceDefinition cut = ServiceDefinition.builder()
                 .serviceName(serviceName).domainColor("integration").build();
-        String result = cut.getServiceCallName();
-        assertThat(result).isEqualTo(expectedValue);
+        assertThat(cut.getServiceCallName()).isEqualTo(expectedValue);
     }
 
     @DataProvider
     public Object[][] testGetFormattedServiceNameDataProvider() {
-        final String application = "applicationName";
         final String serviceName = "serviceName";
-        final String serviceNameWithUnwantedChars = "restServiceName/subservice/interface";
-        final String soapServiceNameWithUnwantedChars = "soapServiceName/subservice/interface";
+        final String serviceNameWithUnwantedChars = "restServiceName/{subservice}/interface";
+        final String soapServiceNameWithUnwantedChars = "soapServiceName.subservice.interface";
         return new Object[][]{
                 //@formatter:off
                 {null, DEFAULT_ROOT_SERVICE_NAME.getValue()},
@@ -43,8 +41,8 @@ public class ServiceDefinitionTest {
                 {"", DEFAULT_ROOT_SERVICE_NAME.getValue()},
                 {"", DEFAULT_ROOT_SERVICE_NAME.getValue()},
                 {serviceName, serviceName},
-                {serviceNameWithUnwantedChars, "restServiceName_subservice_interface"},
-                {soapServiceNameWithUnwantedChars, "soapServiceName_subservice_interface"}
+                {serviceNameWithUnwantedChars, "restServiceName/{subservice}/interface"},
+                {soapServiceNameWithUnwantedChars, "soapServiceName.subservice.interface"}
                 //@formatter:on
         };
     }
@@ -54,8 +52,7 @@ public class ServiceDefinitionTest {
         // FixmE
         ServiceDefinition cut = ServiceDefinition.builder()
                 .serviceName(serviceName).domainColor("integration").build();
-        String result = cut.getServiceCallName();
+        String result = cut.getServiceLabel();
         assertThat(result).isNotNull().isEqualTo(expectedResult);
-
     }
 }
