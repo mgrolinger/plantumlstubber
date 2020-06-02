@@ -116,6 +116,7 @@ public final class ContextSpec {
 
         @Override
         public ContextBuilder withInterfaceDefinition(InterfaceDefinition interfaceDefinition) {
+            context.setVariable(INTERFACE_LABEL, interfaceDefinition.getName());
             this.withInterfaceName(interfaceDefinition.getName());
 
             if (interfaceDefinition.containsCallStack()) {
@@ -125,7 +126,6 @@ public final class ContextSpec {
                 context.removeVariable(CALL_STACK);
                 context.removeVariable(CALL_STACK_INCLUDES);
             }
-
             setIntegrationType(interfaceDefinition.getIntegrationType());
             // the functions are usually defined in common.iuml and look like this $restCall()
             context.setVariable(CALL_INTERFACE_BY, "$" + interfaceDefinition.getPumlFunctionType().toLowerCase() + "Call");
@@ -134,7 +134,7 @@ public final class ContextSpec {
             context.setVariable(LINKED_TO_COMPONENT, interfaceDefinition.getLinkToComponent());
             context.setVariable(LINK_TO_CUSTOM_ALIAS, interfaceDefinition.getLinkToCustomAlias());
             if (!interfaceDefinition.getMethodDefinition().getMethods().isEmpty()) {
-                context.setVariable(HTTP_METHODS, "$INDIVIDUAL_METHODS('" + interfaceDefinition.getMethodDefinition().getMethods() + "')");
+                context.setVariable(HTTP_METHODS, "$INDIVIDUAL_METHODS(" + interfaceDefinition.getMethodDefinition().getMethods() + ")");
             } else {
                 context.setVariable(HTTP_METHODS, "");
             }
@@ -163,12 +163,13 @@ public final class ContextSpec {
             log.info("Interface Name b4:{},after:{}", interfaceName, cleanedInterfaceName);
             context.setVariable(INTERFACE_NAME, cleanedInterfaceName);
             String applicationName = (String) context.getVariable(APPLICATION_NAME);
+
             String serviceName = (String) context.getVariable(SERVICE_NAME);
             boolean isRoot = (boolean) context.getVariable(IS_ROOT_SERVICE);
-            context.setVariable(COMPLETE_INTERFACE_NAME,
-                    StringUtils.capitalize(applicationName) + (isRoot ? "" : capitalizePathParts(serviceName)) +
-                            StringUtils.capitalize(cleanedInterfaceName.replaceAll(Constants.NAME_SEPARATOR.getValue(), "")) +
-                            "Int");
+
+            String completeInterfaceNAME = StringUtils.capitalize(applicationName) +
+                    (isRoot ? "" : capitalizePathParts(serviceName)) + StringUtils.capitalize(cleanedInterfaceName) + "Int";
+            context.setVariable(COMPLETE_INTERFACE_NAME, completeInterfaceNAME.replaceAll(Constants.NAME_SEPARATOR.getValue(), ""));
             context.setVariable(API_CREATED, applicationName.toUpperCase() +
                     "_API" + (isRoot ? "" : "_" + serviceName.toUpperCase().replaceAll(Constants.SLASH.getValue(), Constants.NAME_SEPARATOR.getValue())) +
                     "_" + cleanedInterfaceName.toUpperCase() +
@@ -178,7 +179,7 @@ public final class ContextSpec {
 
         @Override
         public ContextBuilder withOrderPrio(final int orderWithinSequence) {
-            context.setVariable(SEQUENCE_PARTICIPANT_ORDER, new Integer(orderWithinSequence));
+            context.setVariable(SEQUENCE_PARTICIPANT_ORDER, orderWithinSequence);
             return this;
         }
 

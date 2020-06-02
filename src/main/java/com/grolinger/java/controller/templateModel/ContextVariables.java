@@ -19,6 +19,7 @@ public final class ContextVariables {
     public static final String CONNECTION_COLOR = "connectionColor";
     public static final String DATE_CREATED = "dateCreated";
     public static final String INTERFACE_NAME = "interfaceName";
+    public static final String INTERFACE_LABEL = "INTERFACE_LABEL";
     public static final String INTERFACE_RESPONSE_TYPE = "interfaceResponseType";
     public static final String IS_LINKED = "isLinked";
     public static final String IS_REST_SERVICE = "isRestService";
