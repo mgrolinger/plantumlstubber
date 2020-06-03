@@ -47,6 +47,15 @@ public class DataProcessorServiceImpl implements DataProcessorService {
                 .getContext();
     }
 
+    /**
+     * Processes all applications that are defined by a list of {@link ApplicationDefinition},
+     * {@link ServiceDefinition} and {@link InterfaceDefinition}. The result is exported as diagrams
+     * specified by {@link DiagramType}.
+     *
+     * @param pumlComponents The applications, services and interfaces defined in a tree structure
+     * @param diagramType    either {@code Component} or {@code Sequence}
+     * @throws IOException Exception if the files cannot be written to the local file system
+     */
     @Override
     public void processApplication(List<ApplicationDefinition> pumlComponents, DiagramType diagramType) throws IOException {
         Map<String, String> dirsCreate = new HashMap<>();
@@ -77,10 +86,17 @@ public class DataProcessorServiceImpl implements DataProcessorService {
         // Write everything connected to common.iuml and common/
         fileService.writeDefaultCommonFile(diagramType.getBasePath(), diagramType);
         fileService.writeComponentFile(diagramType, componentFile);
-        //Todo: Add static import files here
-
     }
 
+    /**
+     * Creates directories for the services
+     * @param basePath
+     * @param dirsCreate
+     * @param applicationDefinition
+     * @param serviceDefinition
+     * @return
+     * @throws IOException
+     */
     private String createDirectoryForService(String basePath, Map<String, String> dirsCreate, ApplicationDefinition applicationDefinition, ServiceDefinition serviceDefinition) throws IOException {
         log.info("Processing service:{} {}", applicationDefinition.getName(), serviceDefinition.getServiceCallName());
         String pathForReturnValue;
