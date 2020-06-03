@@ -12,5 +12,5 @@ import java.util.List;
 public class MethodDefinition {
     @Builder.Default
     @Getter
-    private List<String> methods = new LinkedList<>();
+    private List<HttpMethod> methods = new LinkedList<>();
 }

@@ -14,7 +14,7 @@ public enum HttpMethod {
     CONNECT,
     PATCH;
 
-    public HttpMethod match(final String method) {
+    public static HttpMethod match(final String method) {
         HttpMethod result = null;
         try {
             result = valueOf(method);

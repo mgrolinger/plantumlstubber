@@ -1,12 +1,14 @@
 package com.grolinger.java.service.data;
 
 import com.grolinger.java.controller.templatemodel.Constants;
+import com.grolinger.java.service.NameConverter;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.util.StringUtils;
 
 import javax.validation.constraints.NotNull;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.grolinger.java.controller.templatemodel.Constants.SLASH;
 import static com.grolinger.java.service.NameConverter.replaceUnwantedPlantUMLCharacters;
@@ -111,7 +113,7 @@ public class InterfaceDefinition {
     }
 
     private MethodDefinition extractMethods(final String originalInterfaceName) {
-        List<String> currentMethods = new LinkedList<>();
+        List<HttpMethod> currentMethods = new LinkedList<>();
         if (containsIndividualMethods(originalInterfaceName)) {
             // interface::POST:GET
             String[] singleMethod = originalInterfaceName
@@ -119,8 +121,8 @@ public class InterfaceDefinition {
                     .split("->")[0]
                     .split(Constants.INTERFACE_METHOD_SEPARATOR.getValue());
 
-            // ignore call stack information
-            currentMethods.addAll(Arrays.asList(singleMethod));
+            // ignore call stack information, just save the methods
+            currentMethods = Arrays.stream(singleMethod).map(HttpMethod::match).collect(Collectors.toList());
         }
         return MethodDefinition.builder().methods(currentMethods).build();
     }
@@ -206,7 +208,7 @@ public class InterfaceDefinition {
         } else {
             methodName = currentInterfaceName;
         }
-        return methodName;
+        return NameConverter.replaceUnwantedPlantUMLCharacters(methodName, false);
     }
 
     /**
