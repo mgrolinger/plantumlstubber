@@ -13,24 +13,25 @@
 !endif
 'Definition of the components
 !if (%not(%variable_exists("$[[${#strings.toUpperCase(applicationName)}]]_COMPONENT_CREATED")))
-    !if (%not(%variable_exists("$[[${#strings.toUpperCase(applicationName)}]]_COMPONENT")))
-        !$[[${#strings.toUpperCase(applicationName)}]]_COMPONENT = 'component "**[[${applicationLabel}]]**\nPlease define\nthe component \nin **component_definition.iuml**" as [[${ALIAS}]] [(${colorType})] #Red'
-    !endif
-     $[[${#strings.toUpperCase(applicationName)}]]_COMPONENT
-    !global $[[${#strings.toUpperCase(applicationName)}]]_COMPONENT_CREATED=%true()
+!if (%not(%variable_exists("$[[${#strings.toUpperCase(applicationName)}]]_COMPONENT")))
+!$[[${#strings.toUpperCase(applicationName)}]]_COMPONENT = 'component "**[[${applicationLabel}]]**\nPlease define\nthe component \nin **component_definition.iuml**" as [[${ALIAS}]] [(${colorType})] #Red'
+!endif
+$[[${#strings.toUpperCase(applicationName)}]]_COMPONENT
+!global $[[${#strings.toUpperCase(applicationName)}]]_COMPONENT_CREATED=%true()
 !endif
 !if ($DETAILED == %true())
-    interface "[(${componentIntegrationType})] [[${HTTP_METHODS}]] <font size=8><i>[[${SERVICE_LABEL}]] </i></font>\n[[${interfaceName}]]" as [[${COMPLETE_INTERFACE_PATH}]] [(${colorType})]
-    [[${ALIAS}]] -[single,#$[[${#strings.toUpperCase(connectionColor)}]]]- [[${COMPLETE_INTERFACE_PATH}]]
+interface "[(${componentIntegrationType})] $INDIVIDUAL_METHODS('[[${HTTP_METHODS}]]') <font size=8><i>[[${SERVICE_LABEL}]] </i></font>\n[[${INTERFACE_LABEL}]]" as [[${COMPLETE_INTERFACE_PATH}]] [(${colorType})]
+[[${ALIAS}]] -[single,#$[[${#strings.toUpperCase(connectionColor)}]]]- [[${COMPLETE_INTERFACE_PATH}]]
 !else
-    ' define PUMLComponent as interface endpoint for mixed detailed/non-detailed views.
-    ' Variable does not contain a $ sign to catch the alias above
-    ![[${COMPLETE_INTERFACE_PATH}]]='[[${ALIAS}]]'
+' define PUMLComponent as interface endpoint for mixed detailed/non-detailed views.
+' Variable does not contain a $ sign to catch the alias above
+![[${COMPLETE_INTERFACE_PATH}]]='[[${ALIAS}]]'
 !endif
 ' Include call stack information only if not disabled by !$APPLICATIONNAME_SIMPLE=%false()
 !if ( $[[${#strings.toUpperCase(applicationName)}]]_SIMPLE == %false() )
-    ' Includes to subsequent importedServices go HERE
-    <th:block th:each="callIncludes : ${callStackIncludes}" xmlns:th="http://www.w3.org/1999/xhtml">!include [[${commonPath}]][[${callIncludes}]].iuml
+' Includes to subsequent importedServices go HERE
+<th:block th:each="callIncludes : ${callStackIncludes}" xmlns:th="http://www.w3.org/1999/xhtml">!include
+    [[${commonPath}]][[${callIncludes}]].iuml
     </th:block>
 !endif
 

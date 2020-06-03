@@ -134,7 +134,7 @@ public final class ContextSpec {
             context.setVariable(LINKED_TO_COMPONENT, interfaceDefinition.getLinkToComponent());
             context.setVariable(LINK_TO_CUSTOM_ALIAS, interfaceDefinition.getLinkToCustomAlias());
             if (!interfaceDefinition.getMethodDefinition().getMethods().isEmpty()) {
-                context.setVariable(HTTP_METHODS, "$INDIVIDUAL_METHODS(" + interfaceDefinition.getMethodDefinition().getMethods() + ")");
+                context.setVariable(HTTP_METHODS, interfaceDefinition.getMethodDefinition().getMethods());
             } else {
                 context.setVariable(HTTP_METHODS, "");
             }

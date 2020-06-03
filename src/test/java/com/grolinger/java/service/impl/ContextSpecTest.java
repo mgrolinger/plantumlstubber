@@ -6,6 +6,8 @@ import com.grolinger.java.service.data.ServiceDefinition;
 import org.testng.annotations.Test;
 import org.thymeleaf.context.Context;
 
+import java.util.Arrays;
+
 import static com.grolinger.java.controller.templatemodel.ContextVariables.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -76,20 +78,54 @@ public class ContextSpecTest {
 
         assertThat(result.getVariable(CALL_INTERFACE_BY)).isEqualTo("$fooCall");
         assertThat(result.getVariable(INTERFACE_NAME)).isEqualTo("_api_rest_interface");
-        assertThat(result.getVariable(COMPLETE_INTERFACE_NAME)).isEqualTo("MinAppApirestinterfaceInt");
+        assertThat(result.getVariable(COMPLETE_INTERFACE_NAME)).isEqualTo("MinAppapirestinterfaceInt");
         assertThat(result.getVariable(INTERFACE_RESPONSE_TYPE)).isEqualTo("bar");
         assertThat(result.getVariable(SERVICE_NAME)).isNull();
         // neither soap nor rest because of FOO::BAR
         assertThat(result.getVariable(IS_REST_SERVICE)).isEqualTo(false);
         assertThat(result.getVariable(IS_SOAP_SERVICE)).isEqualTo(false);
         assertThat(result.getVariable(COMPONENT_INTEGRATION_TYPE)).isEqualTo("$INTEGRATION_TYPE(foo::bar)");
-        assertThat(result.getVariable(HTTP_METHODS)).isEqualTo("$INDIVIDUAL_METHODS([POST, PUT])");
+        assertThat(result.getVariable(HTTP_METHODS)).isEqualTo(Arrays.asList("POST", "PUT"));
         assertThat(result.getVariable(CALL_STACK)).isEqualTo(new String[]{"Call_sub"});
         assertThat(result.getVariable(CALL_STACK_INCLUDES)).isEqualTo(new String[]{"Call/sub"});
         assertThat(result.getVariable(IS_LINKED)).isEqualTo(true);
         assertThat(result.getVariable(LINKED_TO_COMPONENT)).isEqualTo("linkedComponent");
         assertThat(result.getVariable(LINK_TO_CUSTOM_ALIAS)).isEqualTo("linkedAlias");
         assertThat(result.getVariable(API_CREATED)).isEqualTo("MINAPP_API__API_REST_INTERFACE_CREATED");
+    }
+
+    @Test
+    public void testInterfaceDefinitionSoap() {
+        ApplicationDefinition applicationDefinition = ApplicationDefinition.builder().name("MinApp").label("MinLabel").build();
+        InterfaceDefinition interfaceDefinition = InterfaceDefinition.builder()
+                .originalInterfaceName("soapMethod->Call_sub")
+                .customAlias("customAlias")
+                .integrationType("SOAP")
+                .linkToComponent("linkedComponent")
+                .linkToCustomAlias("linkedAlias")
+                .build();
+        Context result = new ContextSpec().builder()
+                .withColorName("test")
+                .withApplication(applicationDefinition)
+                .withInterfaceDefinition(interfaceDefinition)
+                .getContext();
+
+        assertThat(result.getVariable(CALL_INTERFACE_BY)).isEqualTo("$soapCall");
+        assertThat(result.getVariable(INTERFACE_NAME)).isEqualTo("soapMethod");
+        assertThat(result.getVariable(COMPLETE_INTERFACE_NAME)).isEqualTo("MinAppSoapMethodInt");
+        assertThat(result.getVariable(SERVICE_NAME)).isNull();
+        assertThat(result.getVariable(IS_REST_SERVICE)).isEqualTo(false);
+        assertThat(result.getVariable(IS_SOAP_SERVICE)).isEqualTo(true);
+        // This should be extended from SOAP to SOAP::XML
+        assertThat(result.getVariable(COMPONENT_INTEGRATION_TYPE)).isEqualTo("$INTEGRATION_TYPE(SOAP::XML)");
+        assertThat(result.getVariable(INTERFACE_RESPONSE_TYPE)).isEqualTo("XML");
+        assertThat(result.getVariable(HTTP_METHODS)).isEqualTo("");
+        assertThat(result.getVariable(CALL_STACK)).isEqualTo(new String[]{"Call_sub"});
+        assertThat(result.getVariable(CALL_STACK_INCLUDES)).isEqualTo(new String[]{"Call/sub"});
+        assertThat(result.getVariable(IS_LINKED)).isEqualTo(true);
+        assertThat(result.getVariable(LINKED_TO_COMPONENT)).isEqualTo("linkedComponent");
+        assertThat(result.getVariable(LINK_TO_CUSTOM_ALIAS)).isEqualTo("linkedAlias");
+        assertThat(result.getVariable(API_CREATED)).isEqualTo("MINAPP_API_SOAPMETHOD_CREATED");
     }
 
     @Test
@@ -116,6 +152,6 @@ public class ContextSpecTest {
         assertThat(result.getVariable(SERVICE_LABEL)).isEqualTo(sname);
         assertThat(result.getVariable(COLOR_NAME)).isEqualTo("TEST_DOMAIN_COLOR");
         assertThat(result.getVariable(IS_ROOT_SERVICE)).isEqualTo(false);
-        assertThat(result.getVariable(PATH_TO_COMMON_FILE)).isEqualTo("../../");
+        assertThat(result.getVariable(PATH_TO_COMMON_FILE)).isEqualTo("../../../");
     }
 }
