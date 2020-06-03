@@ -5,54 +5,71 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import static com.grolinger.java.controller.templatemodel.Constants.DEFAULT_ROOT_SERVICE_NAME;
+import static com.grolinger.java.controller.templatemodel.Constants.SLASH;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ServiceDefinitionTest {
 
     @DataProvider
-    public Object[][] getServiceCallNameDataProvider() {
+    public Object[][] serviceNameDataProvider() {
+        final String simpleServiceName = "serviceName";
+        final String restServiceName = "restServiceName/{subservice}/subs";
+        final String soapServiceNameWithUnwantedChars = "soapServiceName.subservice.subs";
+        final String defaultServiceName = DEFAULT_ROOT_SERVICE_NAME.getValue();
         return new Object[][]{
                 //@formatter:off
-                {"serviceName", "serviceName"},
-                {"serviceName/service", "serviceName_service"},
-                {"serviceName/{service}", "serviceName_service"},
-                {Constants.EMPTY.getValue(), DEFAULT_ROOT_SERVICE_NAME.getValue()}
+                {null,                          defaultServiceName ,                defaultServiceName},
+                {"",                            defaultServiceName,                 defaultServiceName},
+                {Constants.EMPTY.getValue(),    defaultServiceName,                 defaultServiceName},
+                {simpleServiceName,             simpleServiceName,                  simpleServiceName},
+                {restServiceName,               "restServiceName_subservice_subs" , restServiceName},
+                {soapServiceNameWithUnwantedChars,"soapServiceName_subservice_subs",soapServiceNameWithUnwantedChars}
                 //@formatter:on
         };
     }
 
-    @Test(dataProvider = "getServiceCallNameDataProvider")
-    public void testGetServiceCallNameDataProvider(final String serviceName,
-                                                   final String expectedValue) {
+    @Test(dataProvider = "serviceNameDataProvider")
+    public void testServiceName(final String serviceName, final String expectedServiceCall, final String expectedName) {
+        // given
+        final String domainColorDefault = "domainColorDefault";
         ServiceDefinition cut = ServiceDefinition.builder()
-                .serviceName(serviceName).domainColor("integration").build();
-        assertThat(cut.getServiceCallName()).isEqualTo(expectedValue);
+                .serviceName(serviceName)
+                .domainColor(domainColorDefault)
+                .build();
+
+        // when - then
+        assertThat(cut.getServiceCallName()).isEqualTo(expectedServiceCall);
+        assertThat(cut.getServiceLabel()).isEqualTo(expectedName);
+        assertThat(cut.getDomainColor()).isEqualTo(domainColorDefault);
     }
 
     @DataProvider
-    public Object[][] testGetFormattedServiceNameDataProvider() {
-        final String serviceName = "serviceName";
-        final String serviceNameWithUnwantedChars = "restServiceName/{subservice}/interface";
-        final String soapServiceNameWithUnwantedChars = "soapServiceName.subservice.interface";
+    public Object[][] servicePathDataProvider() {
+        final String simpleServiceName = "serviceName";
+        final String restServiceName = "restServiceName/{subservice}/subs";
+        final String soapServiceNameWithUnwantedChars = "soapServiceName.subservice.subs";
+        final String defaultServiceName = DEFAULT_ROOT_SERVICE_NAME.getValue();
         return new Object[][]{
                 //@formatter:off
-                {null, DEFAULT_ROOT_SERVICE_NAME.getValue()},
-                {null, DEFAULT_ROOT_SERVICE_NAME.getValue()},
-                {"", DEFAULT_ROOT_SERVICE_NAME.getValue()},
-                {"", DEFAULT_ROOT_SERVICE_NAME.getValue()},
-                {serviceName, serviceName},
-                {serviceNameWithUnwantedChars, "restServiceName/{subservice}/interface"},
-                {soapServiceNameWithUnwantedChars, "soapServiceName.subservice.interface"}
+                {null,                              defaultServiceName, "../"},
+                {"",                                defaultServiceName, "../"},
+                {Constants.EMPTY.getValue(),        defaultServiceName, "../"},
+                {simpleServiceName,                 simpleServiceName+SLASH.getValue(),"../../"},
+                {restServiceName,                   "restServiceName/subservice/subs/","../../../../" },
+                {soapServiceNameWithUnwantedChars,  "soapServiceName/subservice/subs/","../../../../" }
                 //@formatter:on
         };
     }
 
-    @Test(dataProvider = "testGetFormattedServiceNameDataProvider")
-    public void testGetFormattedServiceName(final String serviceName, final String expectedResult) {
-        // FixmE
+    @Test(dataProvider = "servicePathDataProvider")
+    public void testservicePath(final String serviceName, final String expServicePath, final String expCommonPath) {
+        // given
         ServiceDefinition cut = ServiceDefinition.builder()
-                .serviceName(serviceName).domainColor("integration").build();
-        String result = cut.getServiceLabel();
-        assertThat(result).isNotNull().isEqualTo(expectedResult);
+                .serviceName(serviceName)
+                .build();
+
+        // when - then
+        assertThat(cut.getServicePath()).isEqualTo(expServicePath);
+        assertThat(cut.getCommonPath()).isEqualTo(expCommonPath);
     }
 }

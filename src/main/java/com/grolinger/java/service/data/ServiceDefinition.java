@@ -10,7 +10,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static com.grolinger.java.controller.templatemodel.Constants.*;
-import static com.grolinger.java.service.NameConverter.replaceUnwantedPlantUMLCharacters;
 
 /**
  * Container for a service definition.
@@ -37,9 +36,10 @@ public class ServiceDefinition {
                 this.servicePath = "";
                 this.serviceLabel = DEFAULT_ROOT_SERVICE_NAME.getValue();
                 this.serviceCallName = DEFAULT_ROOT_SERVICE_NAME.getValue();
+                // Default: one up just for the Application
                 commonPath = DIR_UP.getValue();
             } else {
-                this.servicePath = replaceUnwantedPlantUMLCharacters(serviceName, true);
+                this.servicePath = NameConverter.replaceUnwantedPlantUMLCharactersForPath(serviceName);
                 if (!servicePath.endsWith(SLASH.getValue())) {
                     this.servicePath = this.servicePath + SLASH.getValue();
                 }
@@ -48,7 +48,7 @@ public class ServiceDefinition {
                     this.serviceLabel = serviceName;
                 }
                 this.serviceCallName = NameConverter.replaceUnwantedPlantUMLCharacters(serviceName, false);
-                commonPath = getRelativeCommonPath(serviceName);
+                commonPath = getRelativeCommonPath(servicePath);
             }
             return this;
         }
@@ -56,9 +56,8 @@ public class ServiceDefinition {
         private String getRelativeCommonPath(final String serviceName) {
             StringBuilder cp = new StringBuilder();
             if (serviceName.contains(Constants.SLASH.getValue())) {
-                for (int i = 0; i <= serviceName.split(Constants.SLASH.getValue()).length; i++) {
-                    cp.append(DIR_UP.getValue());
-                }
+                cp.append(String.valueOf(DIR_UP.getValue())
+                        .repeat(Math.max(0, serviceName.split(Constants.SLASH.getValue()).length + 1)));
             } else {
                 cp.append(DIR_UP.getValue())
                         .append(DIR_UP.getValue());
