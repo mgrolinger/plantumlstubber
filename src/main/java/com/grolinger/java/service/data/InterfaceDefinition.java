@@ -86,6 +86,7 @@ public class InterfaceDefinition {
                                final String linkToCustomAlias) {
         this.originalInterface = originalInterfaceName;
         this.name = extractInterfaceName(originalInterfaceName);
+        //TODO set interfacePath
         this.methodName = getMethodName(name);
         this.formattedName = replaceUnwantedPlantUMLCharacters(name, false);
         this.methodDefinition = extractMethods(originalInterfaceName);
