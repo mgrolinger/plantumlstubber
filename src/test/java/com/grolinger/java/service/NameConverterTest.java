@@ -17,20 +17,23 @@ public class NameConverterTest {
 
     @DataProvider
     public Object[][] testGetReplaceUnwantedCharactersDataProvider() {
-        String pathWitDots = "test.test";
+        String pathWithDots = "test.test";
+        String restPath = "/api/resource/{id}/subresource";
         final boolean REPLACEDOTSONLY = true;
         final boolean REPLACEALL = false;
         return new Object[][]{
                 //@formatter:off
-                {pathWitDots,       REPLACEDOTSONLY, "test_test"},
-                {pathWitDots,       REPLACEALL,      "test_test"},
-                {pathWitDots+"/",   REPLACEDOTSONLY, "test_test/"},
-                {pathWitDots+"/",   REPLACEALL,      "test_test_"},
-                {pathWitDots+"_",   REPLACEALL,      "test_test_"},
-                {"test \n test",   REPLACEALL,      "test___test"},
-                {"test \\ test",   REPLACEALL,      "test___test"},
-                {"",                REPLACEALL,      ""},
-                {null,              REPLACEALL,      ""}
+                {pathWithDots,     REPLACEDOTSONLY, "test_test"},
+                {pathWithDots,     REPLACEALL,      "test_test"},
+                {pathWithDots+"/", REPLACEDOTSONLY, "test_test/"},
+                {pathWithDots+"/", REPLACEALL,      "test_test_"},
+                {pathWithDots+"_", REPLACEALL,      "test_test_"},
+                {"test \n test",   REPLACEALL,      "test_test"},
+                {"test \\ test",   REPLACEALL,      "test_test"},
+                {restPath,         REPLACEALL,      "_api_resource_id_subresource"},
+                {restPath,         REPLACEDOTSONLY, "/api/resource/id/subresource"},
+                {"",               REPLACEALL,      ""},
+                {null,             REPLACEALL,      ""}
                 //@formatter:on
         };
     }
@@ -39,6 +42,30 @@ public class NameConverterTest {
     public void testGetReplaceUnwantedCharacters(final String startValue, final boolean dots,
                                                  final String expectedValue) {
         String result = NameConverter.replaceUnwantedPlantUMLCharacters(startValue, dots);
+        assertThat(result).isEqualTo(expectedValue);
+    }
+
+    @DataProvider
+    public Object[][] testReplaceUnwantedPlantUMLCharactersForPathDataProvider() {
+        String pathWithDots = "test.test";
+        String restPath = "/api/resource/{id}/subresource";
+        return new Object[][]{
+                //@formatter:off
+                {pathWithDots,      "test/test"},
+                {pathWithDots+"/", "test/test/"},
+                {"test \n test",   "test/test"},
+                {"test \\ test",   "test/test"},
+                {"test//test",     "test/test"},
+                {restPath,         "/api/resource/id/subresource"},
+                {"",               ""},
+                {null,             ""}
+                //@formatter:on
+        };
+    }
+
+    @Test(dataProvider = "testReplaceUnwantedPlantUMLCharactersForPathDataProvider")
+    public void testReplaceUnwantedPlantUMLCharactersForPath(final String startValue, final String expectedValue) {
+        String result = NameConverter.replaceUnwantedPlantUMLCharactersForPath(startValue);
         assertThat(result).isEqualTo(expectedValue);
     }
 

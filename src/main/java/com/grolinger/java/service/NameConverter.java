@@ -8,30 +8,45 @@ import static com.grolinger.java.controller.templatemodel.Constants.SLASH;
 
 public class NameConverter {
 
-    private static final String PARENTHESIS = "([{}])";
-    private static final String REGEX_DOT_MINUS = "(\\.|\\n|\\s|-)";
-    private static final String SLASH_BACKSLASH = "([\\\\/])";
+    private static final String PARENTHESIS = "[{}]";
+    private static final String REGEX_DOT_MINUS = "[.|\\n|\\s|-|\\\\]";
+    private static final String SLASH_BACKSLASH = "([\\\\|/])";
+    private static final String DUPLICATES = "\\{2,}|_{2,}|/{2,}";
 
+    /**
+     * Removes characters from the given name that may cause problems in plantuml if used in !function definitions
+     *
+     * @param name            Name that should be cleaned
+     * @param replaceDotsOnly
+     * @return the new name where all kind of special characters are replaced by _
+     */
     public static String replaceUnwantedPlantUMLCharacters(final String name, final boolean replaceDotsOnly) {
         String newName = "";
         if (!StringUtils.isEmpty(name)) {
-            newName = replaceStringsByNameSeparator(name, NAME_SEPARATOR);
-            newName = removeParenthesisFromName(newName);
+            newName = removeParenthesisFromName(name);
+            newName = replaceStringsByNameSeparator(newName, NAME_SEPARATOR);
             if (!replaceDotsOnly) {
                 newName = newName.replaceAll(SLASH_BACKSLASH, NAME_SEPARATOR.getValue());
             }
         }
-        return newName;
+        // replace all duplicate name separators by single
+        return newName.replaceAll(DUPLICATES, NAME_SEPARATOR.getValue());
     }
 
+    /**
+     * Removes characters from the given name that may cause problems in plantuml
+     * if used in the directory or file name
+     *
+     * @param name name to be processed
+     * @return the new name where all kind of special characters are replaced by /
+     */
     public static String replaceUnwantedPlantUMLCharactersForPath(final String name) {
-        String newName = name;
-        if (!StringUtils.isEmpty(newName)) {
-            newName = removeParenthesisFromName(newName);
+        String newName = "";
+        if (!StringUtils.isEmpty(name)) {
+            newName = removeParenthesisFromName(name);
             newName = replaceStringsByNameSeparator(newName, SLASH);
-
         }
-        return newName;
+        return newName.replaceAll(DUPLICATES, SLASH.getValue());
     }
 
     /**
