@@ -98,15 +98,15 @@ public class DataProcessorServiceImpl implements DataProcessorService {
      * @throws IOException
      */
     private String createDirectoryForService(String basePath, Map<String, String> dirsCreate, ApplicationDefinition applicationDefinition, ServiceDefinition serviceDefinition) throws IOException {
-        log.info("Processing service:{} {}", applicationDefinition.getName(), serviceDefinition.getServiceCallName());
+        log.info("Create directory for application {} and service {}", applicationDefinition.getName(), serviceDefinition.getServicePath());
         String pathForReturnValue;
 
-        if (!dirsCreate.containsKey(applicationDefinition.getName() + serviceDefinition.getServiceCallName())) {
+        if (!dirsCreate.containsKey(applicationDefinition.getName() + serviceDefinition.getServicePath())) {
             // create directory if not done yet
             String path = fileService.createServiceDirectory(basePath, applicationDefinition, serviceDefinition);
-            dirsCreate.put(applicationDefinition.getName() + serviceDefinition.getServiceCallName(), path);
+            dirsCreate.put(applicationDefinition.getName() + serviceDefinition.getServicePath(), path);
         }
-        pathForReturnValue = dirsCreate.get(applicationDefinition.getName() + serviceDefinition.getServiceCallName());
+        pathForReturnValue = dirsCreate.get(applicationDefinition.getName() + serviceDefinition.getServicePath());
 
         return pathForReturnValue;
     }
