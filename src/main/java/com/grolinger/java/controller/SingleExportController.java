@@ -17,7 +17,15 @@ import java.time.LocalDate;
 
 import static com.grolinger.java.controller.templatemodel.ContextVariables.*;
 
-@Deprecated(since = "31.12.2019")
+/**
+ * Controller that processes a single application-service-interface at once
+ * and returns the resulting iuml file to the rest-interface. This breaks the new concept
+ * of generating a complete and working environment.
+ *
+ * So, this should not be used anymore unless updated.
+ *
+ * @deprecated since 31.12.2019
+ */
 @Controller
 public class SingleExportController {
     private final DataProcessorService dataProcessorService;

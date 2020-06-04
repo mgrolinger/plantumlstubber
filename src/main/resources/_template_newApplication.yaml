@@ -46,7 +46,7 @@ services:
         ## or/and a call stack that is identified by "->", like this: interface->Application2_service_interface2
         ## this will result in subsequent !includes ../Application2/service/interface2.iuml and Plantuml-Function calls
         ## in the generated plantuml, such as $Application2_service_interface2()
-        restLess/restMore:
+        restLess/restMore/:
             - withCallStack/{id}::POST:GET->Filesystem_readFile
     SOAP:
         serviceMore.andMore.v2: [interface]
