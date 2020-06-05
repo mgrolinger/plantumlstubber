@@ -35,7 +35,7 @@ services:
         ## Service calls are generated as $<application>_<service>_<interface>()
         #  Keyword EMPTY
         ## except for keyword EMPTY which results in $<application>_<interface>()
-        EMPTY: [newService->NewApplication_access,newService2]
+        EMPTY: [/newService->NewApplication_access,/newService2/]
         # Interfaces
         ## interfaces are either listed as coma-separated array [interface,interface2]
         ## or as list items - interface
@@ -46,8 +46,11 @@ services:
         ## or/and a call stack that is identified by "->", like this: interface->Application2_service_interface2
         ## this will result in subsequent !includes ../Application2/service/interface2.iuml and Plantuml-Function calls
         ## in the generated plantuml, such as $Application2_service_interface2()
-        restLess/restMore/:
+        /restLess/restMore/:
             - withCallStack/{id}::POST:GET->Filesystem_readFile
+            - withCallStack/{id}/foo
+        /restLess/{id}/:
+            - someInterface::GET->NewApplication_restLess_restMore_withCallStack_id
     SOAP:
         serviceMore.andMore.v2: [interface]
         serviceLess.intMore.intMore2: [noCallStack]
