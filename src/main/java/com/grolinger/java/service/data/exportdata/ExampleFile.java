@@ -39,8 +39,8 @@ public class ExampleFile {
 
     public void addInclude(final ServiceDefinition currentService, final InterfaceDefinition currentInterface) {
         content.append(INCLUDE.getContent())
-                .append(currentService.getServicePath())
-                .append(currentInterface.getName())
+                .append(currentService.getPath())
+                .append(currentInterface.getPath())
                 .append(FILE_TYPE_IUML)
                 .append(CARRIAGE_RETURN.getContent());
     }
@@ -52,12 +52,12 @@ public class ExampleFile {
                 .append(currentService.getServiceCallName())
                 //append separator only when service is not EMPTY otherwise we end up in double underscore App__interface() instead of App_interface()
                 .append(StringUtils.isEmpty(currentService.getServiceCallName()) ? "" : Constants.NAME_SEPARATOR.getValue())
-                .append(currentInterface.getFormattedName())
+                .append(currentInterface.getCallName())
                 .append("(\"")
                 .append("consumer").append(currentApplication.getAlias().toLowerCase())
                 .append("\")")
                 .append(CARRIAGE_RETURN.getContent()).append(CARRIAGE_RETURN.getContent());
-        log.info("Write {}_{}_{} to {}{}", currentApplication.getName(), currentService.getServiceCallName(), currentInterface.getFormattedName(), currentInterface.getMethodName(), FILE_TYPE_IUML);
+        log.info("Write {}_{}_{} to {}{}", currentApplication.getName(), currentService.getServiceCallName(), currentInterface.getCallName(), currentInterface.getMethodName(), FILE_TYPE_IUML);
     }
 
     /**

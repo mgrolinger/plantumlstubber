@@ -71,17 +71,6 @@ public interface FileService {
     String createDirectory(final String basePath, String path, Map<String, String> dirsCreate, final String applicationName);
 
     /**
-     * Calculate the relative common path which is later used in the templates and the
-     * resulting plantuml files to relatively include other files
-     *
-     * @param applicationName the name of the application
-     * @param serviceName     the name of the service
-     * @param interfaceName   the name of the interface
-     * @return the complete path
-     */
-    String getRelativeCommonPath(final String applicationName, final String serviceName, final String interfaceName);
-
-    /**
      * Writes a single file for an application_service_interface
      *
      * @param diagramType   either component|sequence

@@ -42,8 +42,6 @@ public final class ContextSpec {
 
         ContextBuilder withCommonPath(final String commonPath);
 
-        ContextBuilder addToCommonPath(final String commonPath);
-
         Context getContext();
     }
 
@@ -111,13 +109,22 @@ public final class ContextSpec {
             // Set a label to default if not defined
             if (StringUtils.isEmpty(label)) label = name;
             context.setVariable(APPLICATION_LABEL, label);
+            // We can set the root path here as new default, it needs to be manually overridden later
+            context.setVariable(PATH_TO_COMMON_FILE,application.getPathToRoot());
+
+            return this;
+        }
+
+        @Override
+        public ContextBuilder withCommonPath(String commonPath) {
+            context.setVariable(PATH_TO_COMMON_FILE, commonPath);
             return this;
         }
 
         @Override
         public ContextBuilder withInterfaceDefinition(InterfaceDefinition interfaceDefinition) {
             context.setVariable(INTERFACE_LABEL, interfaceDefinition.getName());
-            this.withInterfaceName(interfaceDefinition.getName());
+            this.withInterfaceName(interfaceDefinition.getCallName());
 
             if (interfaceDefinition.containsCallStack()) {
                 context.setVariable(CALL_STACK, interfaceDefinition.getCallStack());
@@ -138,8 +145,6 @@ public final class ContextSpec {
             } else {
                 context.setVariable(HTTP_METHODS, "");
             }
-
-            log.info("Methods: {}", interfaceDefinition.getMethodDefinition().getMethods());
             return this;
         }
 
@@ -186,26 +191,6 @@ public final class ContextSpec {
         @Override
         public ContextBuilder withServiceDefinition(ServiceDefinition serviceDefinition) {
             setServiceName(serviceDefinition);
-            withCommonPath(serviceDefinition.getCommonPath());
-            return this;
-        }
-
-
-        @Override
-        public ContextBuilder withCommonPath(final String commonPath) {
-            context.setVariable(PATH_TO_COMMON_FILE, commonPath);
-            return this;
-        }
-
-        @Override
-        public ContextBuilder addToCommonPath(final String commonPath) {
-            String existingPath = (String) context.getVariable(PATH_TO_COMMON_FILE);
-            if (!StringUtils.isEmpty(existingPath)) {
-                existingPath = existingPath + commonPath;
-            } else {
-                existingPath = commonPath;
-            }
-            context.setVariable(PATH_TO_COMMON_FILE, existingPath);
             return this;
         }
 

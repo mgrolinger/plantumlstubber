@@ -1,6 +1,5 @@
 package com.grolinger.java.service.adapter.impl;
 
-import com.grolinger.java.controller.templatemodel.Constants;
 import com.grolinger.java.controller.templatemodel.DiagramType;
 import com.grolinger.java.service.adapter.FileService;
 import com.grolinger.java.service.data.ApplicationDefinition;
@@ -27,7 +26,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import static com.grolinger.java.controller.templatemodel.Constants.*;
+import static com.grolinger.java.controller.templatemodel.Constants.PATH_SEPARATOR;
+import static com.grolinger.java.controller.templatemodel.Constants.SLASH;
 
 @Slf4j
 @Service
@@ -54,12 +54,12 @@ public class FileServiceImpl implements FileService {
     public String createServiceDirectory(final String basePath, final ApplicationDefinition applicationDefinition, final ServiceDefinition serviceDefinition) throws IOException {
         String path;
         String applicationPart = "";
-        if (null != applicationDefinition.getName()) {
-            applicationPart = applicationDefinition.getName() + PATH_SEPARATOR.getValue();
+        if (null != applicationDefinition.getPath()) {
+            applicationPart = applicationDefinition.getPath() + PATH_SEPARATOR.getValue();
         }
         String servicePart = "";
-        if (null != serviceDefinition.getServicePath()) {
-            servicePart = serviceDefinition.getServicePath();
+        if (null != serviceDefinition.getPath()) {
+            servicePart = serviceDefinition.getPath();
         }
         path = GLOBAL_FILE_EXPORT_PATH + basePath + applicationPart + servicePart;
         Files.createDirectories(Paths.get(path));
@@ -140,8 +140,7 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public ExampleFile writeInterfaceFile(final String currentPath, final ApplicationDefinition currentApplication, final ServiceDefinition currentService, final InterfaceDefinition currentInterface, final Context context, ExampleFile exampleFile) {
-
-        try (Writer writer = new FileWriter(currentPath + currentInterface.getName() + FILE_TYPE_IUML)) {
+        try (Writer writer = new FileWriter(currentPath + currentInterface.getPath() + FILE_TYPE_IUML)) {
             // !include file.iuml
             exampleFile.addInclude(currentService, currentInterface);
             // "call" the service
@@ -150,7 +149,7 @@ public class FileServiceImpl implements FileService {
             writer.write(templateEngine.process(exampleFile.getTemplate().getTemplateURL(), context));
         } catch (IOException io) {
             // do nothing
-            log.error("exception: {}", io.getMessage());
+            log.error("Exception occurred: {}", io.getMessage());
         }
         return exampleFile;
     }
@@ -161,7 +160,7 @@ public class FileServiceImpl implements FileService {
             Path pathToFile = Paths.get(fullPathToInterfaceFile + FILE_TYPE_IUML);
             Files.createDirectories(pathToFile.getParent());
         } catch (IOException ioe) {
-            log.error("exception:", ioe);
+            log.error("Exception occurred:", ioe);
         }
     }
 
@@ -173,29 +172,10 @@ public class FileServiceImpl implements FileService {
                 Files.createDirectories(Paths.get(path));
                 dirsCreate.put(applicationName, path);
             } catch (IOException ioe) {
-                log.error("Could not create directory {}{} for {}", basePath, path, applicationName);
+                log.error("Could not create directory {}{} for application {}", basePath, path, applicationName);
             }
         }
         return path;
-    }
-
-    @Override
-    public String getRelativeCommonPath(final String applicationName, final String serviceName, final String interfaceName) {
-        return getRelativeCommonPath(applicationName + Constants.SLASH + serviceName + Constants.SLASH + interfaceName);
-    }
-
-    private String getRelativeCommonPath(final String serviceName) {
-        StringBuilder cp = new StringBuilder();
-        if (serviceName.contains(Constants.SLASH.getValue())) {
-            for (int i = 0; i <= serviceName.split(Constants.SLASH.getValue()).length; i++) {
-                log.warn(">> Servicename: {}, {}", i, serviceName);
-                cp.append(DIR_UP.getValue());
-            }
-        } else {
-            cp.append(DIR_UP.getValue())
-                    .append(DIR_UP.getValue());
-        }
-        return cp.toString();
     }
 
     @Override

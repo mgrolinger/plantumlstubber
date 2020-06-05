@@ -4,6 +4,7 @@ import com.grolinger.java.controller.templatemodel.Constants;
 import com.grolinger.java.service.NameConverter;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 
 import javax.validation.constraints.NotNull;
@@ -21,7 +22,8 @@ import static com.grolinger.java.service.NameConverter.replaceUnwantedPlantUMLCh
  * /api/rest/interface -> interface or
  * or the service method of a SOAP service.
  */
-public class InterfaceDefinition {
+@Slf4j
+public class InterfaceDefinition implements CommonRootPathHandler, PathHandler {
     private static final Map<String, String> DEFAULT_MAPPER_INTEGRATION = new HashMap<>();
     private static final Map<String, String> DEFAULT_MAPPER_RESPONSE = new HashMap<>();
 
@@ -39,13 +41,17 @@ public class InterfaceDefinition {
 
     private final String originalInterface;
     @Getter
+    private final boolean endsWithSlash;
+    @Getter
+    private final boolean isInterface = true;
+    @Getter
+    private final List<String> nameParts;
+    @Getter
     private final String name;
     @Getter
     private final String customAlias;
     @Getter
-    private final String interfacePath = "";
-    @Getter
-    private final String formattedName;
+    private final String callName;
     @Getter
     private final String linkToComponent;
     @Getter
@@ -65,15 +71,14 @@ public class InterfaceDefinition {
     @Getter
     private String[] callStackForIncludes;
     @Getter
-    private String relativeCommonPath = "";
-    @Getter
     private String linkToCustomAlias;
+
 
     /**
      * Hidden constructor is used by the Builder below.
      *
      * @param originalInterfaceName The original interface name, such as doSomething() or a resource such as /person/id
-     * @param customAlias           the a
+     * @param customAlias           a custom alias that is later used in plantuml to address e.g. a component
      * @param integrationType       which kind of integration provides the interface, such as SOAP::XML or Rest::JSON
      * @param linkToComponent       generates a link to this component, a visible line in the resulting diagram
      * @param linkToCustomAlias     specifies the custom alias name of the linked component
@@ -85,24 +90,28 @@ public class InterfaceDefinition {
                                final String linkToComponent,
                                final String linkToCustomAlias) {
         this.originalInterface = originalInterfaceName;
+        this.endsWithSlash = originalInterfaceName.endsWith(SLASH.getValue());
+
         this.name = extractInterfaceName(originalInterfaceName);
-        //TODO set interfacePath
-        this.methodName = getMethodName(name);
-        this.formattedName = replaceUnwantedPlantUMLCharacters(name, false);
         this.methodDefinition = extractMethods(originalInterfaceName);
-        StringBuilder relativeCommonPathBuilder = new StringBuilder();
-        for (int i = 0; i < name.chars().filter(ch -> ch == SLASH.getFirstChar()).count(); i++) {
-            // counts the parts of the interface so that we can generate the correct
-            // number of ../ to traverse out of the current directory to reach the common.iuml
-            relativeCommonPathBuilder.append(Constants.DIR_UP.getValue());
-        }
-        relativeCommonPath = relativeCommonPathBuilder.toString();
+
+        this.methodName = getMethodName(name);
+        final String[] splitName = NameConverter.replaceUnwantedPlantUMLCharactersForPath(name).split(SLASH.getValue());
+        this.nameParts = Arrays.stream(splitName)
+                .filter(s -> !StringUtils.isEmpty(s))
+                .collect(Collectors.toList());
+
+        this.callName = extractFormattedName(name);
 
         this.customAlias = customAlias;
+
         this.integrationType = getIntegrationType(integrationType);
+
         this.pumlFunctionType = getFunctionType(integrationType);
+
         this.responseType = getResponseType(integrationType);
         // this might be empty
+
         this.isLinked = !StringUtils.isEmpty(linkToComponent);
         this.linkToComponent = linkToComponent;
         if (isLinked) {
@@ -113,6 +122,32 @@ public class InterfaceDefinition {
 
     }
 
+    /**
+     * Makes the name usable for PlantUML !functions and !procedures,
+     * which only supports a number of special chars.
+     *
+     * @param name the resulting name
+     * @return the new name
+     */
+    private String extractFormattedName(final String name) {
+        String fName = replaceUnwantedPlantUMLCharacters(name, false);
+
+        if (fName.startsWith(Constants.NAME_SEPARATOR.getValue())) {
+            fName = fName.substring(1);
+        }
+        if (fName.endsWith(Constants.NAME_SEPARATOR.getValue())) {
+            fName = fName.substring(0, fName.length() - 1);
+        }
+        return fName;
+    }
+
+    /**
+     * Extracts the HttpMethods from the orignalInterfaceName that may look like this:
+     * /api/v2/resource::GET->Call_stack
+     *
+     * @param originalInterfaceName the name of the interface defined in the yaml
+     * @return the MethodDefinition if exists
+     */
     private MethodDefinition extractMethods(final String originalInterfaceName) {
         List<HttpMethod> currentMethods = new LinkedList<>();
         if (containsIndividualMethods(originalInterfaceName)) {
@@ -123,17 +158,16 @@ public class InterfaceDefinition {
                     .split(Constants.INTERFACE_METHOD_SEPARATOR.getValue());
 
             // ignore call stack information, just save the methods
-            currentMethods = Arrays.stream(singleMethod).map(HttpMethod::match).collect(Collectors.toList());
+            currentMethods = Arrays.stream(singleMethod)
+                    .map(HttpMethod::match)
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.toList());
         }
         return MethodDefinition.builder().methods(currentMethods).build();
     }
 
     public boolean containsPath() {
-        return name.contains(SLASH.getValue());
-    }
-
-    public boolean hasRelativeCommonPath() {
-        return relativeCommonPath.length() > 0;
+        return !nameParts.isEmpty();
     }
 
     public boolean containsCallStack() {
@@ -219,9 +253,9 @@ public class InterfaceDefinition {
      * @param type something like SOAP or REST:JSON or DB::JDBC
      * @return returns the polished integration type, such as SOAP becomes SOAP::XML, REST::JSON remains REST::JSON
      */
-    private String getIntegrationType(@NotNull final String type) {
+    private String getIntegrationType(@NotNull final String integrationType) {
         String result;
-
+        String type = integrationType.toUpperCase();
         if (type.contains(Constants.INTERFACE_INTEGRATION_SEPARATOR.getValue())) {
             // e.g. REST::JSON remains REST::JSON
             result = type;

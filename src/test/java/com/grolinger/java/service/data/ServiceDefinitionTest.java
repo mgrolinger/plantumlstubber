@@ -51,12 +51,13 @@ public class ServiceDefinitionTest {
         final String defaultServiceName = DEFAULT_ROOT_SERVICE_NAME.getValue();
         return new Object[][]{
                 //@formatter:off
-                {null,                              defaultServiceName, "../"},
-                {"",                                defaultServiceName, "../"},
-                {Constants.EMPTY.getValue(),        defaultServiceName, "../"},
-                {simpleServiceName,                 simpleServiceName+SLASH.getValue(),"../../"},
-                {restServiceName,                   "restServiceName/subservice/subs/","../../../../" },
-                {soapServiceNameWithUnwantedChars,  "soapServiceName/subservice/subs/","../../../../" }
+                {null,                              defaultServiceName, ""},
+                {"",                                defaultServiceName, ""},
+                {" ",                               defaultServiceName, ""},
+                {Constants.EMPTY.getValue(),        defaultServiceName, ""},
+                {simpleServiceName,                 simpleServiceName+SLASH.getValue(),"../"},
+                {restServiceName,                   "restServiceName/subservice/subs/","../../../" },
+                {soapServiceNameWithUnwantedChars,  "soapServiceName/subservice/subs/","../../../" }
                 //@formatter:on
         };
     }
@@ -69,7 +70,7 @@ public class ServiceDefinitionTest {
                 .build();
 
         // when - then
-        assertThat(cut.getServicePath()).isEqualTo(expServicePath);
-        assertThat(cut.getCommonPath()).isEqualTo(expCommonPath);
+        assertThat(cut.getPath()).isEqualTo(expServicePath);
+        assertThat(cut.getPathToRoot()).isEqualTo(expCommonPath);
     }
 }

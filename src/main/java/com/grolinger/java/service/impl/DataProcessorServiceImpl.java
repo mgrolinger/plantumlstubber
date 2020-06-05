@@ -43,7 +43,7 @@ public class DataProcessorServiceImpl implements DataProcessorService {
                 .withApplication(applicationDefinition)
                 .withServiceDefinition(serviceDefinition)
                 .withOrderPrio(orderPrio)
-                .withCommonPath(fileService.getRelativeCommonPath(applicationName, serviceName, interfaceName))
+                //.withCommonPath(fileService.getRelativeCommonPath(applicationName, serviceName, interfaceName))
                 .getContext();
     }
 
@@ -90,6 +90,7 @@ public class DataProcessorServiceImpl implements DataProcessorService {
 
     /**
      * Creates directories for the services
+     *
      * @param basePath
      * @param dirsCreate
      * @param applicationDefinition
@@ -98,35 +99,35 @@ public class DataProcessorServiceImpl implements DataProcessorService {
      * @throws IOException
      */
     private String createDirectoryForService(String basePath, Map<String, String> dirsCreate, ApplicationDefinition applicationDefinition, ServiceDefinition serviceDefinition) throws IOException {
-        log.info("Create directory for application {} and service {}", applicationDefinition.getName(), serviceDefinition.getServicePath());
+        log.info("Create directory for application {} and service {}", applicationDefinition.getName(), serviceDefinition.getPath());
         String pathForReturnValue;
 
-        if (!dirsCreate.containsKey(applicationDefinition.getName() + serviceDefinition.getServicePath())) {
+        if (!dirsCreate.containsKey(applicationDefinition.getName() + serviceDefinition.getPath())) {
             // create directory if not done yet
             String path = fileService.createServiceDirectory(basePath, applicationDefinition, serviceDefinition);
-            dirsCreate.put(applicationDefinition.getName() + serviceDefinition.getServicePath(), path);
+            dirsCreate.put(applicationDefinition.getName() + serviceDefinition.getPath(), path);
         }
-        pathForReturnValue = dirsCreate.get(applicationDefinition.getName() + serviceDefinition.getServicePath());
+        pathForReturnValue = dirsCreate.get(applicationDefinition.getName() + serviceDefinition.getPath());
 
         return pathForReturnValue;
     }
 
-    private void processInterfaces(String path, ContextSpec.ContextBuilder contextBuilder, final ApplicationDefinition currentApplication, final ServiceDefinition serviceDefinition, ExampleFile exampleFile) {
+    private void processInterfaces(String path, ContextSpec.ContextBuilder contextBuilder, final ApplicationDefinition currentApplication, final ServiceDefinition currentService, ExampleFile exampleFile) {
         log.info("Current path: {}", path);
-        for (InterfaceDefinition currentInterface : serviceDefinition.getInterfaceDefinitions()) {
-            if (currentInterface.hasRelativeCommonPath()) {
-                contextBuilder.addToCommonPath(currentInterface.getRelativeCommonPath());
-            }
+        for (InterfaceDefinition currentInterface : currentService.getInterfaceDefinitions()) {
+            //contextBuilder.addToCommonPath(currentInterface.getPathToRoot());
             // ignore call stack information
-            log.info("Extracted interface: {}", currentInterface.getName());
+            log.info("Extracted interface: {}", currentInterface.getPath());
             if (currentInterface.containsPath()) {
                 //first create the parent dir and next replace chars
-                fileService.createParentDir(path + currentInterface.getName());
+                fileService.createParentDir(path + currentInterface.getPath());
             }
             contextBuilder.withInterfaceDefinition(currentInterface);
+            //Todo find a better solution, but for now we need to set the complete path every time we process an interface
+            contextBuilder.withCommonPath(currentApplication.getPathToRoot() + currentService.getPathToRoot() + currentInterface.getPathToRoot());
 
             // Pull context to use it later for export
-            exampleFile = fileService.writeInterfaceFile(path, currentApplication, serviceDefinition, currentInterface, contextBuilder.getContext(), exampleFile);
+            exampleFile = fileService.writeInterfaceFile(path, currentApplication, currentService, currentInterface, contextBuilder.getContext(), exampleFile);
         }
 
     }
