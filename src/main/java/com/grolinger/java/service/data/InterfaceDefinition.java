@@ -41,8 +41,6 @@ public class InterfaceDefinition implements CommonRootPathHandler, PathHandler {
 
     private final String originalInterface;
     @Getter
-    private final boolean endsWithSlash;
-    @Getter
     private final boolean isInterface = true;
     @Getter
     private final List<String> nameParts;
@@ -90,7 +88,6 @@ public class InterfaceDefinition implements CommonRootPathHandler, PathHandler {
                                final String linkToComponent,
                                final String linkToCustomAlias) {
         this.originalInterface = originalInterfaceName;
-        this.endsWithSlash = originalInterfaceName.endsWith(SLASH.getValue());
 
         this.name = extractInterfaceName(originalInterfaceName);
         this.methodDefinition = extractMethods(originalInterfaceName);

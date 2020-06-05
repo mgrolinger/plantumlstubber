@@ -32,8 +32,6 @@ public class ServiceDefinition implements CommonRootPathHandler, PathHandler {
     // path to the root directory of the diagrams, from which we can descent into the common/ directory
     // the label is displayed in the diagrams
     private final String serviceLabel;
-    // is true if the definition ends by slash, e.g. in rest api /api/v2/
-    private final boolean endsWithSlash;
     private final boolean isInterface = false;
     @Builder.Default
     private final List<InterfaceDefinition> interfaceDefinitions = new LinkedList<>();
@@ -56,7 +54,6 @@ public class ServiceDefinition implements CommonRootPathHandler, PathHandler {
                 this.nameParts = new ArrayList<>();
                 this.serviceLabel = DEFAULT_ROOT_SERVICE_NAME.getValue();
             } else {
-                this.endsWithSlash = serviceName.endsWith(SLASH.getValue());
                 this.nameParts = Arrays.stream(NameConverter.replaceUnwantedPlantUMLCharactersForPath(serviceName).split("/")).collect(Collectors.toList());
                 // Set if not yet set by builder method
                 if (StringUtils.isEmpty(this.serviceLabel)) {

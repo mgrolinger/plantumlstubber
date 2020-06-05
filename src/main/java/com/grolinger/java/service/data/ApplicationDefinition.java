@@ -17,7 +17,6 @@ import java.util.List;
 @Builder
 public class ApplicationDefinition implements CommonRootPathHandler, PathHandler {
     private final List<String> nameParts;
-    private final boolean endsWithSlash = false;
     private final boolean isInterface = false;
     private final String name;
     private final String label;

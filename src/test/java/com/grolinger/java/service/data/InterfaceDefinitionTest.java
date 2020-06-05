@@ -97,7 +97,6 @@ public class InterfaceDefinitionTest {
     @Test(dataProvider = "testContainsPathDataProvider")
     public void testContainsPath(final InterfaceDefinition cut, final boolean expContainsPath, final boolean expSlash) {
         assertThat(cut.containsPath()).isEqualTo(expContainsPath);
-        assertThat(cut.isEndsWithSlash()).isEqualTo(expSlash);
     }
 
     @DataProvider
