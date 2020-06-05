@@ -121,7 +121,7 @@ public class ContextSpecTest {
         // neither soap nor rest because of FOO::BAR
         assertThat(result.getVariable(IS_REST_SERVICE)).isEqualTo(false);
         assertThat(result.getVariable(IS_SOAP_SERVICE)).isEqualTo(false);
-        assertThat(result.getVariable(COMPONENT_INTEGRATION_TYPE)).isEqualTo("$INTEGRATION_TYPE(foo::bar)");
+        assertThat(result.getVariable(COMPONENT_INTEGRATION_TYPE)).isEqualTo("$INTEGRATION_TYPE(FOO::BAR)");
         assertThat(result.getVariable(HTTP_METHODS)).isEqualTo(Arrays.asList(HttpMethod.POST, HttpMethod.PUT));
         assertThat(result.getVariable(CALL_STACK)).isEqualTo(new String[]{"Call_sub"});
         assertThat(result.getVariable(CALL_STACK_INCLUDES)).isEqualTo(new String[]{"Call/sub"});
