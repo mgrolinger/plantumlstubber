@@ -1,7 +1,6 @@
 package com.grolinger.java.controller;
 
 import org.springframework.beans.BeansException;
-import org.springframework.boot.ExitCodeGenerator;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;

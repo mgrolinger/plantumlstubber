@@ -39,6 +39,7 @@ public class ImportServiceImpl implements ImportService {
 
         try (Stream<Path> input = Files.walk(Paths.get(GLOBAL_FILE_EXPORT_PATH))) {
             collect = input
+                    .filter(Objects::nonNull)
                     .filter(Files::isRegularFile)
                     .filter(YamlPredicate::isYamlFile)
                     .collect(Collectors.toList());
@@ -97,7 +98,7 @@ public class ImportServiceImpl implements ImportService {
     private void mapIntegrationTypes(ImportedServices importedServices, ApplicationDefinition pumlComponent) {
         // Iterate over Services.<REST|SOAP|...>
         for (String interfacesIntegrationType : importedServices.getServices().keySet()) {
-            LinkedHashMap<String, String[]> serviceList = importedServices.getServices().get(interfacesIntegrationType);
+            Map<String, String[]> serviceList = importedServices.getServices().get(interfacesIntegrationType);
             // Iterate over the services itself
             List<ServiceDefinition> serviceDefinitions = mapServiceDefinitions(importedServices, interfacesIntegrationType, serviceList);
             pumlComponent.getServiceDefinitions().addAll(serviceDefinitions);
@@ -112,7 +113,7 @@ public class ImportServiceImpl implements ImportService {
      * @param serviceList
      * @return
      */
-    private List<ServiceDefinition> mapServiceDefinitions(ImportedServices importedServices, String interfacesIntegrationType, LinkedHashMap<String, String[]> serviceList) {
+    private List<ServiceDefinition> mapServiceDefinitions(ImportedServices importedServices, String interfacesIntegrationType, Map<String, String[]> serviceList) {
         List<ServiceDefinition> serviceDefinitions = new LinkedList<>();
         for (Map.Entry<String, String[]> serviceName : serviceList.entrySet()) {
             String[] interfaceNames = serviceName.getValue();

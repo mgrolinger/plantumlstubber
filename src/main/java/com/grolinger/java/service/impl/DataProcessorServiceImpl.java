@@ -105,6 +105,7 @@ public class DataProcessorServiceImpl implements DataProcessorService {
         if (!dirsCreate.containsKey(applicationDefinition.getName() + serviceDefinition.getPath())) {
             // create directory if not done yet
             String path = fileService.createServiceDirectory(basePath, applicationDefinition, serviceDefinition);
+            // remember it for later
             dirsCreate.put(applicationDefinition.getName() + serviceDefinition.getPath(), path);
         }
         pathForReturnValue = dirsCreate.get(applicationDefinition.getName() + serviceDefinition.getPath());
@@ -115,7 +116,6 @@ public class DataProcessorServiceImpl implements DataProcessorService {
     private void processInterfaces(String path, ContextSpec.ContextBuilder contextBuilder, final ApplicationDefinition currentApplication, final ServiceDefinition currentService, ExampleFile exampleFile) {
         log.info("Current path: {}", path);
         for (InterfaceDefinition currentInterface : currentService.getInterfaceDefinitions()) {
-            //contextBuilder.addToCommonPath(currentInterface.getPathToRoot());
             // ignore call stack information
             log.info("Extracted interface: {}", currentInterface.getPath());
             if (currentInterface.containsPath()) {

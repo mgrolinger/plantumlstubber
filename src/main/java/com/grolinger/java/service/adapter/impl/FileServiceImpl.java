@@ -39,6 +39,7 @@ public class FileServiceImpl implements FileService {
     private static final String COMPONENT_DEFINITION_FILE = "component_definition.iuml";
     private static final String PARTICIPANT_DEFINITION_FILE = "participant_definition.iuml";
     private static final String EXAMPLE_FILE_SUFFIX = "_example.puml";
+    private static final String EXCEPTION_OCCURRED = "An exception occurred: {}";
 
     private final SpringTemplateEngine templateEngine;
 
@@ -100,7 +101,7 @@ public class FileServiceImpl implements FileService {
                 writer.write(content);
             } catch (IOException e) {
                 // do nothing
-                log.error("Exception occurred: {}", e.getMessage());
+                log.error(EXCEPTION_OCCURRED, e.getMessage());
             }
         }
     }
@@ -123,7 +124,7 @@ public class FileServiceImpl implements FileService {
                 writer.write(content);
             } catch (IOException e) {
                 // do nothing
-                log.error("Exception occurred: {}", e.getMessage());
+                log.error(EXCEPTION_OCCURRED, e.getMessage());
             }
         }
     }
@@ -134,7 +135,7 @@ public class FileServiceImpl implements FileService {
             writer.write(exampleFileContent);
         } catch (IOException e) {
             // do nothing
-            log.error("Exception occurred: {}", e.getMessage());
+            log.error(EXCEPTION_OCCURRED, e.getMessage());
         }
     }
 
@@ -149,7 +150,7 @@ public class FileServiceImpl implements FileService {
             writer.write(templateEngine.process(exampleFile.getTemplate().getTemplateURL(), context));
         } catch (IOException io) {
             // do nothing
-            log.error("Exception occurred: {}", io.getMessage());
+            log.error(EXCEPTION_OCCURRED, io.getMessage());
         }
         return exampleFile;
     }
@@ -158,7 +159,9 @@ public class FileServiceImpl implements FileService {
     public void createParentDir(final String fullPathToInterfaceFile) {
         try {
             Path pathToFile = Paths.get(fullPathToInterfaceFile + FILE_TYPE_IUML);
-            Files.createDirectories(pathToFile.getParent());
+            if (pathToFile != null) {
+                Files.createDirectories(pathToFile.getParent());
+            }
         } catch (IOException ioe) {
             log.error("Exception occurred:", ioe);
         }
@@ -191,7 +194,7 @@ public class FileServiceImpl implements FileService {
             writer.write(componentFile.getFullFileContent());
         } catch (IOException e) {
             // do nothing
-            log.error("Exception occurred: {}", e.getMessage());
+            log.error(EXCEPTION_OCCURRED, e.getMessage());
         }
     }
 

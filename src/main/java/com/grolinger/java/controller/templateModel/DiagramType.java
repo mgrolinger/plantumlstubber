@@ -21,8 +21,8 @@ public enum DiagramType {
     COMPONENT_V1_2020_7_DIAGRAM_BASE("Component/", COMPONENT_V1_2020_7, COMPONENT_HEADER_VARIABLES),
     SEQUENCE_V1_2020_7_DIAGRAM_BASE("Sequence/", SEQUENCE_V1_2020_7,    SEQUENCE_HEADER_VARIABLES);
 
-    private String basePath;
-    private Template template;
-    private TemplateContent templateContent;
+    private final String basePath;
+    private final Template template;
+    private final TemplateContent templateContent;
 
 }

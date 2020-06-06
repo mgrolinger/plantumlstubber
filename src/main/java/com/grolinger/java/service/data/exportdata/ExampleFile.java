@@ -22,8 +22,8 @@ import static com.grolinger.java.service.adapter.impl.FileServiceImpl.FILE_TYPE_
  */
 @Slf4j
 public class ExampleFile {
-    private Template template;
-    private StringBuilder content;
+    private final Template template;
+    private final StringBuilder content;
 
     @NotNull
     public ExampleFile(final Template template, final TemplateContent headerContent) {

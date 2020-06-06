@@ -17,7 +17,6 @@ import java.util.List;
 @Builder
 public class ApplicationDefinition implements CommonRootPathHandler, PathHandler {
     private final List<String> nameParts;
-    private final boolean isInterface = false;
     private final String name;
     private final String label;
     private final SystemType systemType;
@@ -48,5 +47,9 @@ public class ApplicationDefinition implements CommonRootPathHandler, PathHandler
             }
             return this;
         }
+    }
+    @Override
+    public boolean isInterface(){
+        return false;
     }
 }

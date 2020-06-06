@@ -8,7 +8,7 @@ public enum Template {
     COMPONENT_V1_2020_7("componentExport_V1_2020_7.html"),
     SEQUENCE_V1_2020_7("sequenceExport_V1_2020_7.html");
 
-    private String type;
+    private final String type;
 
     Template(final String type) {
         this.type = type;

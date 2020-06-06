@@ -37,7 +37,7 @@ public enum TemplateContent {
             "'!$UML_STRICT=%false()\n" +
             "!$SHOW_TODO=%false()\n\n\n");
 
-    private String content;
+    private final String content;
 
     TemplateContent(final String content) {
         this.content = content;

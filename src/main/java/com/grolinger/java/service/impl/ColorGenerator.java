@@ -1,5 +1,6 @@
 package com.grolinger.java.service.impl;
 
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.nio.charset.StandardCharsets;
@@ -13,8 +14,9 @@ import java.util.Map;
  * The colors are used for default.skin
  */
 @Slf4j
+@NoArgsConstructor
 public class ColorGenerator {
-    private static Map<String, String> colorMap = new HashMap<String, String>() {{
+    private static final Map<String, String> colorMap = new HashMap<String, String>() {{
         // SID
         put("customer", "Orange");
         put("external", "D4D4CD");
@@ -31,7 +33,7 @@ public class ColorGenerator {
         put("uebermittlung", "96e8c3");
     }};
 
-    private static Map<String, String> connectionColorMap = new HashMap<String, String>() {{
+    private static final Map<String, String> connectionColorMap = new HashMap<String, String>() {{
         // SID
         put("customer", "Orange");
         put("external", "DimGrey");

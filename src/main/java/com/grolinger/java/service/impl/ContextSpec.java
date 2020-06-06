@@ -21,7 +21,7 @@ public final class ContextSpec {
 
 
     public ColorBuilder builder() {
-        return new ContextBuilderImpl(new Context());
+        return new ContextBuilderImpl();
     }
 
 
@@ -45,11 +45,9 @@ public final class ContextSpec {
         Context getContext();
     }
 
-    public class ContextBuilderImpl implements ContextBuilder, ColorBuilder, ApplicationNameBuilder {
-        private final Context context;
-
-        ContextBuilderImpl(Context context) {
-            this.context = context;
+    public static class ContextBuilderImpl implements ContextBuilder, ColorBuilder, ApplicationNameBuilder {
+        private final Context context = new Context();
+        {
             context.setVariable(DATE_CREATED, LocalDate.now());
             // set the default to true to prevent NullPointer, so called root services have only the applicationName and interfaceName set
             context.setVariable(IS_ROOT_SERVICE, true);

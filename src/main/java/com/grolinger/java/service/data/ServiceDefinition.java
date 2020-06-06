@@ -32,7 +32,6 @@ public class ServiceDefinition implements CommonRootPathHandler, PathHandler {
     // path to the root directory of the diagrams, from which we can descent into the common/ directory
     // the label is displayed in the diagrams
     private final String serviceLabel;
-    private final boolean isInterface = false;
     @Builder.Default
     private final List<InterfaceDefinition> interfaceDefinitions = new LinkedList<>();
 
@@ -43,6 +42,11 @@ public class ServiceDefinition implements CommonRootPathHandler, PathHandler {
      */
     public String getServiceCallName() {
         return String.join(NAME_SEPARATOR.getValue(), this.nameParts);
+    }
+
+    @Override
+    public boolean isInterface() {
+        return false;
     }
 
     /**

@@ -22,11 +22,11 @@ import static com.grolinger.java.controller.templatemodel.TemplateContent.*;
  */
 @Slf4j
 public class ComponentFile {
-    private DiagramType diagramType;
-    private StringBuilder content;
+    private final DiagramType diagramType;
+    private final StringBuilder content;
     private StringBuilder bucket1;
     private StringBuilder bucket2;
-    private Set<String> doneApplication;
+    private final Set<String> doneApplication;
 
     @NotNull
     public ComponentFile(final DiagramType diagramType) {

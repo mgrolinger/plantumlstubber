@@ -22,7 +22,7 @@ public enum Constants {
     DATABASE_SUFFIX("_DATABASE"),
     PARTICIPANT_SUFFIX("_PARTICIPANT");
 
-    private String value;
+    private final String value;
 
     Constants(final String value) {
         this.value = value;

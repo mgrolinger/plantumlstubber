@@ -1,11 +1,13 @@
 package com.grolinger.java.service;
 
 import com.grolinger.java.controller.templatemodel.Constants;
+import lombok.NoArgsConstructor;
 import org.springframework.util.StringUtils;
 
 import static com.grolinger.java.controller.templatemodel.Constants.NAME_SEPARATOR;
 import static com.grolinger.java.controller.templatemodel.Constants.SLASH;
 
+@NoArgsConstructor
 public class NameConverter {
 
     private static final String PARENTHESIS = "[{}]";

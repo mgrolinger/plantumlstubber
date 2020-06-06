@@ -21,8 +21,8 @@ import static com.grolinger.java.controller.templatemodel.DiagramType.*;
 @Slf4j
 @RestController
 public class MultiExportController {
-    private DataProcessorService dataProcessorService;
-    private ImportService importService;
+    private final DataProcessorService dataProcessorService;
+    private final ImportService importService;
 
     private MultiExportController(@Autowired DataProcessorService dataProcessorService, @Autowired ImportService importService) {
         this.dataProcessorService = dataProcessorService;

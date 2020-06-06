@@ -14,18 +14,18 @@ public enum SystemType {
     //TYPE      what's used in case                         what def. is used in sequence diagrams
     //          UML_STRICT=true     what def. is used in default
     //                              case for component diagrams
-    COMPONENT("component", "FA_SERVER", "participant"),
-    SPRINGBOOT("component", "FA_SPRINGBOOT", "participant"),
-    SOLR("component", "FA_SOLR", "participant"),
-    ARCHIVE("component", "FA_ARCHIVE", "participant"),
-    ZIP("component", "FA_FILE_ZIP_O", "entity"),
-    DATABASE("database", "FA_DATABASE", "database"),
-    USERS("actor", "FA_USERS", "actor"),
-    ADDRESS_BOOK("component", "FA_ADDRESS_BOOK", "participant"),
-    EMAIL("component", "FA_ENVELOPE", "entity"),
-    FOLDER("folder", "FA_FOLDER", "participant"),
-    DOCUMENTS("collections", "FA_FILE_O", "collections"),
-    JENKINS("component", "DEV_JENKINS", "participant");
+    COMPONENT(Constants.PUML_COMPONENT_NAME,    "FA_SERVER",        Constants.PUML_PARTICIPANT_NAME),
+    SPRINGBOOT(Constants.PUML_COMPONENT_NAME,   "FA_SPRINGBOOT",    Constants.PUML_PARTICIPANT_NAME),
+    SOLR(Constants.PUML_COMPONENT_NAME,         "FA_SOLR",          Constants.PUML_PARTICIPANT_NAME),
+    ARCHIVE(Constants.PUML_COMPONENT_NAME,      "FA_ARCHIVE",       Constants.PUML_PARTICIPANT_NAME),
+    ZIP(Constants.PUML_COMPONENT_NAME,          "FA_FILE_ZIP_O",    Constants.PUML_ENTITY_NAME),
+    DATABASE(Constants.PUML_DATABASE_NAME,      "FA_DATABASE",      Constants.PUML_DATABASE_NAME),
+    USERS(Constants.PUML_ACTOR_NAME,            "FA_USERS",         Constants.PUML_ACTOR_NAME),
+    ADDRESS_BOOK(Constants.PUML_COMPONENT_NAME, "FA_ADDRESS_BOOK",  Constants.PUML_PARTICIPANT_NAME),
+    EMAIL(Constants.PUML_COMPONENT_NAME,        "FA_ENVELOPE",      Constants.PUML_ENTITY_NAME),
+    FOLDER(Constants.PUML_FOLDER_NAME,          "FA_FOLDER",        Constants.PUML_PARTICIPANT_NAME),
+    DOCUMENTS(Constants.PUML_COLLECTIONS_NAME,  "FA_FILE_O",        Constants.PUML_COLLECTIONS_NAME),
+    JENKINS(Constants.PUML_COMPONENT_NAME,      "DEV_JENKINS",      Constants.PUML_PARTICIPANT_NAME);
 
     private final String umlStrict;
     private final String fontAwesome;
@@ -40,5 +40,15 @@ public enum SystemType {
         }
         // last resort
         return COMPONENT;
+    }
+
+    private static class Constants {
+        private static final String PUML_COMPONENT_NAME = "component";
+        private static final String PUML_PARTICIPANT_NAME = "participant";
+        private static final String PUML_ENTITY_NAME = "entity";
+        private static final String PUML_DATABASE_NAME = "database";
+        private static final String PUML_COLLECTIONS_NAME = "collections";
+        private static final String PUML_FOLDER_NAME = "folder";
+        private static final String PUML_ACTOR_NAME = "actor";
     }
 }

@@ -2,7 +2,7 @@ package com.grolinger.java.service.data.importdata;
 
 import lombok.*;
 
-import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * Class that is used in the context of {@link com.grolinger.java.controller.MultiExportController}
@@ -20,7 +20,7 @@ public class ImportedServices {
     private String systemType = "application";
     private String domainColor;
     private String orderPrio;
-    private LinkedHashMap<String, LinkedHashMap<String, String[]>> services;
+    private Map<String, Map<String, String[]>> services;
     private String linkToComponent;
     private String linkToCustomAlias;
 }

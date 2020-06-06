@@ -1,5 +1,7 @@
 package com.grolinger.java.service.data.mapper;
 
+import lombok.NoArgsConstructor;
+
 import javax.validation.constraints.NotNull;
 
 /**
@@ -8,6 +10,7 @@ import javax.validation.constraints.NotNull;
  * - Connection color is used for connections between components
  * - Stereotypes are used for component definitions
  */
+@NoArgsConstructor
 public final class ColorMapper {
 
     public static String getDomainColor(@NotNull final String colorName) {
