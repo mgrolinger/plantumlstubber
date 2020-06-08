@@ -249,6 +249,10 @@ skinparam note {
   !endif
 !endfunction
 
+' File
+!final function $fileMethod($ACCESS_METHOD="READ",$FILE_NAME,$USED_PROTOCOL='FileSystem')
+	!return "\n["+$USED_PROTOCOL+"::<b>"+$ACCESS_METHOD+"</b> "+$FILE_NAME+"]"
+!endfunction
 
 ' Rest
 !unquoted function $restCallMethod($HTTP_METHOD,$REST_ROUTE,$USED_PROTOCOL="HTTP<i>s</i>)")
@@ -285,6 +289,7 @@ skinparam note {
 !final function $httpsCallMethod($SERVICE_URL)
 	!return $httpsCallMethod("GET",$SERVICE_URL)
 !endfunction
+
 
 !final function $payload($PAYLOAD_TYPE, $PAYLOAD_VALUE)
 	!return "\n[Payload:**"+$PAYLOAD_TYPE+"** <&data-transfer-upload>: "+$PAYLOAD_VALUE+"]"
@@ -418,6 +423,15 @@ skinparam note {
     	!return participant $NAME as $ALIAS order $PRIO #$COLOR
     !else
     	!return participant $NAME as $ALIAS #$COLOR
+    !endif
+!endfunction
+
+''FileSystem
+!final function $fileCall($DESCRIPTIVE_LINE,$ACCESS_METHOD,$FILE_NAME,$USED_PROTOCOL="FS")
+    !if ($DETAILED)
+        !return $serviceCallDescription($DESCRIPTIVE_LINE) + $fileMethod($ACCESS_METHOD,$FILE_NAME,$USED_PROTOCOL)
+    !else
+        !return $serviceCallDescription($DESCRIPTIVE_LINE)
     !endif
 !endfunction
 

@@ -25,7 +25,7 @@ public class SingleExportControllerTest {
     private DataProcessorService dataProcessorService;
     @InjectMocks
     private SingleExportController cut;
-    private Model model = new ConcurrentModel();
+    private final Model model = new ConcurrentModel();
 
     @BeforeClass
     public void setUp() {

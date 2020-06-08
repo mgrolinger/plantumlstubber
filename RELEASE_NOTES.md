@@ -6,11 +6,14 @@
 - moved package importdata
 - renamed package export to exportdata
 - added tests for DiagramType and SystemType
-- minor refactoring for readability
+- multiple refactorings for readability
+- assertj for readability
 
 ### Fixes
+- major refactoring finally solves the common path problem or to little or to many ../ 
 - tests
 - console runner works again and has the preprocessor version as new argument
+- Export of skin and common files also works when started as jar
 
 ### Updates
 

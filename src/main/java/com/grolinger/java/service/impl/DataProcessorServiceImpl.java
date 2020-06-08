@@ -81,11 +81,11 @@ public class DataProcessorServiceImpl implements DataProcessorService {
             }
             fileService.writeExampleFile(diagramType.getBasePath(), currentApplication.getName(), exampleFile.getFullFileContent());
         }
-        // Write the skin files
-        fileService.writeDefaultSkinFiles();
+        fileService.writeComponentFile(diagramType, componentFile);
         // Write everything connected to common.iuml and common/
         fileService.writeDefaultCommonFile(diagramType.getBasePath(), diagramType);
-        fileService.writeComponentFile(diagramType, componentFile);
+        // Write the skin files
+        fileService.writeDefaultSkinFiles();
     }
 
     /**
