@@ -1,10 +1,11 @@
 @startuml [(${isRootService} ?  ${applicationName} : ${applicationName}+'_'+${serviceName})]_[[${interfaceName}]]
 ' generated on [[${dateCreated}]]
-!include [[${commonPath}]]common/common.iuml
 '!$DETAILED=%true()
 '!$[[${#strings.toUpperCase(applicationName)}]]_SIMPLE=%true()
 '!$SIMPLE=%true()
 '!$SHOW_EXCEPTION=%true()
+' include common !functions and !procedures
+!include [[${commonPath}]]common/common.iuml
 !assert %variable_exists("$SIMPLE") : "Please define !$SIMPLE=%false()/%true()"
 !assert %variable_exists("$DETAILED") : "Please define !$DETAILED=%false()/%true()"
 !assert %variable_exists("$SHOW_EXCEPTION") : "Please define !$SHOW_EXCEPTION=%false()/%true()"

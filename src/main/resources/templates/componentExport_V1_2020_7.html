@@ -1,11 +1,12 @@
 @startuml [(${isRootService} ?  ${applicationName} : ${applicationName}+'_'+${serviceName})]_[[${interfaceName}]]
 ' generated on [[${dateCreated}]]
-' Define UML_STRICT before including as this is needed in common.iuml
+' Define UML_STRICT and DETAILED etc. before including as this is needed in common.iuml
 '!$UML_STRICT=%true()
-!include [[${commonPath}]]common/common.iuml
 '!$DETAILED=%true()
 '!$[[${#strings.toUpperCase(applicationName)}]]_SIMPLE=%true()
 '!define SHOW_TODO
+' include common !functions and !procedures
+!include [[${commonPath}]]common/common.iuml
 !assert %variable_exists("$DETAILED") : "Please define !$DETAILED=%false()/%true()"
 ' This variable can be used to hide everything what would be called subsequently
 !if (%not(%variable_exists("$[[${#strings.toUpperCase(applicationName)}]]_SIMPLE")))
