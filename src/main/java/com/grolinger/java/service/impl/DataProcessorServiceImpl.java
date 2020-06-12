@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,18 +33,22 @@ public class DataProcessorServiceImpl implements DataProcessorService {
                 .name(applicationName).alias(applicationName.toLowerCase()).label(applicationName)
                 .orderPrio(orderPrio)
                 .build();
+        final InterfaceDefinition interfaceDefinition = InterfaceDefinition.builder()
+                .originalInterfaceName(interfaceName)
+                .integrationType(integrationType)
+                .build();
         ServiceDefinition serviceDefinition = ServiceDefinition.builder()
                 .serviceName(serviceName)
                 .domainColor(colorName)
-
+                .interfaceDefinitions(Collections.singletonList(interfaceDefinition))
                 .build();
 
         return new ContextSpec().builder()
                 .withColorName(colorName)
                 .withApplication(applicationDefinition)
                 .withServiceDefinition(serviceDefinition)
+                .withInterfaceDefinition(interfaceDefinition)
                 .withOrderPrio(orderPrio)
-                //.withCommonPath(fileService.getRelativeCommonPath(applicationName, serviceName, interfaceName))
                 .getContext();
     }
 
@@ -91,16 +96,15 @@ public class DataProcessorServiceImpl implements DataProcessorService {
     /**
      * Creates directories for the services
      *
-     * @param basePath
-     * @param dirsCreate
-     * @param applicationDefinition
-     * @param serviceDefinition
-     * @return
-     * @throws IOException
+     * @param basePath              the path in which the folder should be created
+     * @param dirsCreate            Hashmap to prevent directories to be created more than once
+     * @param applicationDefinition application
+     * @param serviceDefinition     service
+     * @return Path of the created directory
+     * @throws IOException may cause problems during creation of a directory
      */
     private String createDirectoryForService(String basePath, Map<String, String> dirsCreate, ApplicationDefinition applicationDefinition, ServiceDefinition serviceDefinition) throws IOException {
         log.info("Create directory for application {} and service {}", applicationDefinition.getName(), serviceDefinition.getPath());
-        String pathForReturnValue;
 
         if (!dirsCreate.containsKey(applicationDefinition.getName() + serviceDefinition.getPath())) {
             // create directory if not done yet
@@ -108,9 +112,7 @@ public class DataProcessorServiceImpl implements DataProcessorService {
             // remember it for later
             dirsCreate.put(applicationDefinition.getName() + serviceDefinition.getPath(), path);
         }
-        pathForReturnValue = dirsCreate.get(applicationDefinition.getName() + serviceDefinition.getPath());
-
-        return pathForReturnValue;
+        return dirsCreate.get(applicationDefinition.getName() + serviceDefinition.getPath());
     }
 
     private void processInterfaces(String path, ContextSpec.ContextBuilder contextBuilder, final ApplicationDefinition currentApplication, final ServiceDefinition currentService, ExampleFile exampleFile) {

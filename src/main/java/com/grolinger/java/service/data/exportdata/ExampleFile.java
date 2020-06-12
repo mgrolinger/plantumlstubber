@@ -63,25 +63,28 @@ public class ExampleFile {
     /**
      * Adds a String to the file
      *
-     * @param content
+     * @param content adds a string to the current content container
      */
     public void add(final String content) {
         this.content.append(content);
     }
 
+    /**
+     * Returns the current template
+     *
+     * @return template
+     */
     public Template getTemplate() {
         return template;
     }
 
     /**
      * Copies the content of a example file and syntactically closes the plantUML example.
+     * This does not influence the content container.
      *
      * @return example file content as String
      */
     public String getFullFileContent() {
-        StringBuilder copy = content;
-        // close the file
-        content.append(END.getContent());
-        return copy.toString();
+        return content.toString() + END.getContent();
     }
 }

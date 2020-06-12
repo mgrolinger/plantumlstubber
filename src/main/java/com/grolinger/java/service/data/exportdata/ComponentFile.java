@@ -115,10 +115,7 @@ public class ComponentFile {
 
                 doneApplication.add(currentApplication.getName());
             }
-        } else {
-            log.debug("{} is already defined.", currentApplication.getName());
         }
-
     }
 
     /**
