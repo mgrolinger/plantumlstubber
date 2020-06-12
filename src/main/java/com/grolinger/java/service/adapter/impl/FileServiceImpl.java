@@ -10,16 +10,16 @@ import com.grolinger.java.service.data.exportdata.ExampleFile;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 
-import java.io.*;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -92,7 +92,7 @@ public class FileServiceImpl implements FileService {
         }
 
         for (String currentFileName : filesToExport) {
-            copyFile(STATIC_INCLUDES + SLASH.getValue(),
+            StaticFileService.copyFile(STATIC_INCLUDES + SLASH.getValue(),
                     diagramType.getBasePath() + currentFileName);
         }
     }
@@ -108,35 +108,10 @@ public class FileServiceImpl implements FileService {
         Files.createDirectories(Paths.get(GLOBAL_FILE_EXPORT_PATH + subdir));
         //skin
         for (String currentFileName : filesToExport) {
-            copyFile(STATIC_INCLUDES + SLASH.getValue(), currentFileName);
+            StaticFileService.copyFile(STATIC_INCLUDES + SLASH.getValue(), currentFileName);
         }
     }
 
-    /**
-     * Copies the file from the resource folder in the jar to the specified output folder
-     *
-     * @param folder          name of the subfolder from where the file is read
-     * @param currentFileName which file is processed
-     */
-    private void copyFile(final String folder, final String currentFileName) {
-        try {
-            final String completeFileName = folder + currentFileName;
-            ClassPathResource classPathResource = new ClassPathResource(completeFileName);
-            if (classPathResource.exists()) {
-                // Get the input stream of the file
-                InputStream in = new ClassPathResource(completeFileName).getInputStream();
-                // Copy it directly to the output
-                Files.copy(in,
-                        new File(GLOBAL_FILE_EXPORT_PATH + currentFileName).toPath(),
-                        StandardCopyOption.REPLACE_EXISTING);
-            } else {
-                log.warn("File {} doesn't exist in resource folder. Skipping it.", completeFileName);
-            }
-        } catch (IOException e) {
-            // do nothing
-            log.error("An exception occurred: {}", e.getMessage());
-        }
-    }
 
     @Override
     public void writeExampleFile(final String basePath, final String applicationName, final String exampleFileContent) {
