@@ -30,6 +30,17 @@ Example:
 
 The Rest::JSON Interface /api/convert will call subsequently application with the Name ApplicationName. This application itself needs to provide this interface. There should be a configuration yaml for the application ApplicationName as well.
 
+### Note for interfaces with the same name
+If an application has e.g. two service implementations (especially "EMPTY") and both have the same interfaceName, the last one wins. E.g. you have a soap service _getVersion()_ and a rest service _/getVersion_ without any additional (service) path, the last definition will override the preceding.
+```
+...
+SOAP:
+    EMPTY: [getVersion]
+REST
+    EMPTY: [/getVersion]
+...
+```
+
 ## Swagger UI and Output
 The generator provides a swagger ui on http://localhost:19191/swagger-ui.html#/
 
@@ -61,4 +72,4 @@ You need to configure the working directory  (Java `user.dir`) in Run/Debug of t
 configuration yaml can be found, 
 e.g. `$MODULE_WORKING_DIR$` in Intellij: ![](Intellij_Config.png)
 
-_last update 17.05.2020_
+_last update 12.06.2020_
