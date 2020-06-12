@@ -16,9 +16,7 @@ import org.thymeleaf.context.Context;
 
 import java.io.IOException;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @Service
@@ -63,13 +61,12 @@ public class DataProcessorServiceImpl implements DataProcessorService {
      */
     @Override
     public void processApplication(List<ApplicationDefinition> pumlComponents, DiagramType diagramType) throws IOException {
-        Map<String, String> dirsCreate = new HashMap<>();
         ComponentFile componentFile = new ComponentFile(diagramType);
         for (ApplicationDefinition currentApplication : pumlComponents) {
             // Prepare example file for every Application
             ExampleFile exampleFile = new ExampleFile(diagramType.getTemplate(), diagramType.getTemplateContent());
             for (ServiceDefinition serviceDefinition : currentApplication.getServiceDefinitions()) {
-                fileService.createDirectory(diagramType.getBasePath(), "", dirsCreate, currentApplication.getName());
+                fileService.createDirectory(diagramType.getBasePath(), "", currentApplication.getName());
 
                 String path = "";
                 componentFile.addComponent(currentApplication, serviceDefinition);
@@ -80,7 +77,7 @@ public class DataProcessorServiceImpl implements DataProcessorService {
                         .withServiceDefinition(serviceDefinition)
                         .withOrderPrio(currentApplication.getOrderPrio());
 
-                path = createDirectoryForService(diagramType.getBasePath(), dirsCreate, currentApplication, serviceDefinition);
+                path = createDirectoryForService(diagramType.getBasePath(), currentApplication, serviceDefinition);
 
                 processInterfaces(path, contextBuilder, currentApplication, serviceDefinition, exampleFile);
             }
@@ -97,22 +94,14 @@ public class DataProcessorServiceImpl implements DataProcessorService {
      * Creates directories for the services
      *
      * @param basePath              the path in which the folder should be created
-     * @param dirsCreate            Hashmap to prevent directories to be created more than once
      * @param applicationDefinition application
      * @param serviceDefinition     service
      * @return Path of the created directory
      * @throws IOException may cause problems during creation of a directory
      */
-    private String createDirectoryForService(String basePath, Map<String, String> dirsCreate, ApplicationDefinition applicationDefinition, ServiceDefinition serviceDefinition) throws IOException {
+    private String createDirectoryForService(String basePath, ApplicationDefinition applicationDefinition, ServiceDefinition serviceDefinition) throws IOException {
         log.info("Create directory for application {} and service {}", applicationDefinition.getName(), serviceDefinition.getPath());
-
-        if (!dirsCreate.containsKey(applicationDefinition.getName() + serviceDefinition.getPath())) {
-            // create directory if not done yet
-            String path = fileService.createServiceDirectory(basePath, applicationDefinition, serviceDefinition);
-            // remember it for later
-            dirsCreate.put(applicationDefinition.getName() + serviceDefinition.getPath(), path);
-        }
-        return dirsCreate.get(applicationDefinition.getName() + serviceDefinition.getPath());
+        return fileService.createServiceDirectory(basePath, applicationDefinition, serviceDefinition);
     }
 
     private void processInterfaces(String path, ContextSpec.ContextBuilder contextBuilder, final ApplicationDefinition currentApplication, final ServiceDefinition currentService, ExampleFile exampleFile) {

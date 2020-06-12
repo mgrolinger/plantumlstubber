@@ -9,7 +9,6 @@ import com.grolinger.java.service.data.exportdata.ExampleFile;
 import org.thymeleaf.context.Context;
 
 import java.io.IOException;
-import java.util.Map;
 
 /**
  * Interface for all file based processes, e.g. to export each iuml file
@@ -64,11 +63,10 @@ public interface FileService {
      *
      * @param basePath        The absolute base path from which the repository is created
      * @param path            which
-     * @param dirsCreate      a set of already created directories to prevent directories created multiple times
      * @param applicationName for which application should the directory be created
      * @return path to the newly created directory
      */
-    String createDirectory(final String basePath, String path, Map<String, String> dirsCreate, final String applicationName);
+    String createDirectory(final String basePath, String path, final String applicationName);
 
     /**
      * Writes a single file for an application_service_interface

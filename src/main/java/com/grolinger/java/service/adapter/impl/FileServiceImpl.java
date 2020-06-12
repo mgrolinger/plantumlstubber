@@ -22,7 +22,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 import static com.grolinger.java.controller.templatemodel.Constants.PATH_SEPARATOR;
 import static com.grolinger.java.controller.templatemodel.Constants.SLASH;
@@ -150,16 +149,14 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public String createDirectory(final String basePath, String path, Map<String, String> dirsCreate, final String applicationName) {
-        if (!dirsCreate.containsKey(applicationName)) {
+    public String createDirectory(final String basePath, String path, final String applicationName) {
             path = GLOBAL_FILE_EXPORT_PATH + basePath + StringUtils.capitalize(applicationName) + SLASH.getValue();
             try {
                 Files.createDirectories(Paths.get(path));
-                dirsCreate.put(applicationName, path);
             } catch (IOException ioe) {
                 log.error("Could not create directory {}{} for application {}", basePath, path, applicationName);
             }
-        }
+
         return path;
     }
 

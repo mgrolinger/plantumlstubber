@@ -85,7 +85,7 @@ public class DataProcessorServiceImplTest {
 
         // when
         // although only two interfaces, create the directory only once
-        when(fileService.createDirectory(anyString(), anyString(), any(), anyString())).thenReturn("createDirectoryResponse");
+        when(fileService.createDirectory(anyString(), anyString(), anyString())).thenReturn("createDirectoryResponse");
         when(fileService.createServiceDirectory(anyString(), any(), any())).thenReturn("createServiceDirectoryResponse");
         when(fileService.writeInterfaceFile(anyString(), any(), any(), any(), any(), any())).thenReturn(new ExampleFile(Template.COMPONENT_V1_2020_7, TemplateContent.START));
 
@@ -96,7 +96,6 @@ public class DataProcessorServiceImplTest {
         verify(fileService).createDirectory(
                 eq(DiagramType.COMPONENT_V1_2020_7_DIAGRAM_BASE.getBasePath()),
                 eq(""),
-                anyMap(),
                 eq(appName));
         // 1 service -> 1 call
         verify(fileService).createServiceDirectory(
