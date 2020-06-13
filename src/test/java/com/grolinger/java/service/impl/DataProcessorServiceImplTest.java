@@ -2,9 +2,8 @@ package com.grolinger.java.service.impl;
 
 import com.grolinger.java.controller.templatemodel.ContextVariables;
 import com.grolinger.java.controller.templatemodel.DiagramType;
-import com.grolinger.java.controller.templatemodel.Template;
-import com.grolinger.java.controller.templatemodel.TemplateContent;
-import com.grolinger.java.service.adapter.FileService;
+import com.grolinger.java.service.adapter.exportdata.LocalExportAdapter;
+import com.grolinger.java.service.adapter.exportdata.LocalStaticAdapter;
 import com.grolinger.java.service.data.ApplicationDefinition;
 import com.grolinger.java.service.data.InterfaceDefinition;
 import com.grolinger.java.service.data.ServiceDefinition;
@@ -29,7 +28,9 @@ import static org.mockito.Mockito.*;
 
 public class DataProcessorServiceImplTest {
     @Mock
-    FileService fileService;
+    LocalExportAdapter localExportAdapter;
+    @Mock
+    LocalStaticAdapter localStaticAdapter;
     @Mock
     Logger log;
     @InjectMocks
@@ -85,25 +86,25 @@ public class DataProcessorServiceImplTest {
 
         // when
         // although only two interfaces, create the directory only once
-        when(fileService.createDirectory(anyString(), anyString(), anyString())).thenReturn("createDirectoryResponse");
-        when(fileService.createServiceDirectory(anyString(), any(), any())).thenReturn("createServiceDirectoryResponse");
-        when(fileService.writeInterfaceFile(anyString(), any(), any(), any(), any(), any())).thenReturn(new ExampleFile(Template.COMPONENT_V1_2020_7, TemplateContent.START));
+        when(localExportAdapter.createDirectory(anyString(), anyString(), anyString())).thenReturn("createDirectoryResponse");
+        when(localExportAdapter.createServiceDirectory(anyString(), any(), any())).thenReturn("createServiceDirectoryResponse");
+        when(localExportAdapter.writeInterfaceFile(anyString(), any(), any(), any(), any(), any())).thenReturn(new ExampleFile(DiagramType.COMPONENT_V1_2020_7_DIAGRAM_BASE));
 
 
         dataProcessorServiceImpl.processApplication(Collections.singletonList(applicationDefinition), DiagramType.COMPONENT_V1_2020_7_DIAGRAM_BASE);
 
         //then
-        verify(fileService).createDirectory(
+        verify(localExportAdapter).createDirectory(
                 eq(DiagramType.COMPONENT_V1_2020_7_DIAGRAM_BASE.getBasePath()),
                 eq(""),
                 eq(appName));
         // 1 service -> 1 call
-        verify(fileService).createServiceDirectory(
+        verify(localExportAdapter).createServiceDirectory(
                 eq(DiagramType.COMPONENT_V1_2020_7_DIAGRAM_BASE.getBasePath()),
                 any(ApplicationDefinition.class),
                 any(ServiceDefinition.class));
         // 2 interfaces -> 2 calls
-        verify(fileService, times(2)).writeInterfaceFile(
+        verify(localExportAdapter, times(2)).writeInterfaceFile(
                 eq("createServiceDirectoryResponse"),
                 any(ApplicationDefinition.class),
                 any(ServiceDefinition.class),

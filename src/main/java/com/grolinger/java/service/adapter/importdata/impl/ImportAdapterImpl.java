@@ -1,8 +1,8 @@
-package com.grolinger.java.service.adapter.impl;
+package com.grolinger.java.service.adapter.importdata.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-import com.grolinger.java.service.adapter.ImportService;
+import com.grolinger.java.service.adapter.importdata.ImportAdapter;
 import com.grolinger.java.service.data.ApplicationDefinition;
 import com.grolinger.java.service.data.InterfaceDefinition;
 import com.grolinger.java.service.data.ServiceDefinition;
@@ -29,7 +29,7 @@ import static com.grolinger.java.service.NameConverter.replaceUnwantedPlantUMLCh
  */
 @Slf4j
 @Service
-public class ImportServiceImpl implements ImportService {
+public class ImportAdapterImpl implements ImportAdapter {
     private static final String GLOBAL_FILE_EXPORT_PATH = System.getProperty("user.dir") + File.separator + "target" + File.separator;
 
     @Override

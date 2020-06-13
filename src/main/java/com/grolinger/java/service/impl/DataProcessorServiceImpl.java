@@ -2,7 +2,8 @@ package com.grolinger.java.service.impl;
 
 import com.grolinger.java.controller.templatemodel.DiagramType;
 import com.grolinger.java.service.DataProcessorService;
-import com.grolinger.java.service.adapter.FileService;
+import com.grolinger.java.service.adapter.exportdata.LocalExportAdapter;
+import com.grolinger.java.service.adapter.exportdata.LocalStaticAdapter;
 import com.grolinger.java.service.data.ApplicationDefinition;
 import com.grolinger.java.service.data.InterfaceDefinition;
 import com.grolinger.java.service.data.ServiceDefinition;
@@ -22,7 +23,8 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class DataProcessorServiceImpl implements DataProcessorService {
-    private final FileService fileService;
+    private final LocalExportAdapter localExportAdapter;
+    private final LocalStaticAdapter localStaticAdapter;
 
     @Override
     public Context processContextOfApplication(String colorName, String integrationType, String applicationName, String serviceName, String interfaceName, Integer orderPrio) {
@@ -64,9 +66,9 @@ public class DataProcessorServiceImpl implements DataProcessorService {
         ComponentFile componentFile = new ComponentFile(diagramType);
         for (ApplicationDefinition currentApplication : pumlComponents) {
             // Prepare example file for every Application
-            ExampleFile exampleFile = new ExampleFile(diagramType.getTemplate(), diagramType.getTemplateContent());
+            ExampleFile exampleFile = new ExampleFile(diagramType);
             for (ServiceDefinition serviceDefinition : currentApplication.getServiceDefinitions()) {
-                fileService.createDirectory(diagramType.getBasePath(), "", currentApplication.getName());
+                localExportAdapter.createDirectory(diagramType.getBasePath(), "", currentApplication.getName());
 
                 String path = "";
                 componentFile.addComponent(currentApplication, serviceDefinition);
@@ -81,13 +83,18 @@ public class DataProcessorServiceImpl implements DataProcessorService {
 
                 processInterfaces(path, contextBuilder, currentApplication, serviceDefinition, exampleFile);
             }
-            fileService.writeExampleFile(diagramType.getBasePath(), currentApplication.getName(), exampleFile.getFullFileContent());
+            localExportAdapter.writeExampleFile(diagramType.getBasePath(), currentApplication.getName(), exampleFile.getFullFileContent());
         }
-        fileService.writeComponentFile(diagramType, componentFile);
+        localExportAdapter.writeComponentFile(diagramType, componentFile);
         // Write everything connected to common.iuml and common/
-        fileService.writeDefaultCommonFile(diagramType.getBasePath(), diagramType);
+        localStaticAdapter.writeDefaultCommonFile(diagramType.getBasePath(), diagramType);
         // Write the skin files
-        fileService.writeDefaultSkinFiles();
+        localStaticAdapter.writeDefaultSkinFiles();
+    }
+
+    @Override
+    public void exportTemplate() {
+        localStaticAdapter.exportTemplate();
     }
 
     /**
@@ -101,7 +108,7 @@ public class DataProcessorServiceImpl implements DataProcessorService {
      */
     private String createDirectoryForService(String basePath, ApplicationDefinition applicationDefinition, ServiceDefinition serviceDefinition) throws IOException {
         log.info("Create directory for application {} and service {}", applicationDefinition.getName(), serviceDefinition.getPath());
-        return fileService.createServiceDirectory(basePath, applicationDefinition, serviceDefinition);
+        return localExportAdapter.createServiceDirectory(basePath, applicationDefinition, serviceDefinition);
     }
 
     private void processInterfaces(String path, ContextSpec.ContextBuilder contextBuilder, final ApplicationDefinition currentApplication, final ServiceDefinition currentService, ExampleFile exampleFile) {
@@ -111,14 +118,14 @@ public class DataProcessorServiceImpl implements DataProcessorService {
             log.info("Extracted interface: {}", currentInterface.getPath());
             if (currentInterface.containsPath()) {
                 //first create the parent dir and next replace chars
-                fileService.createParentDir(path + currentInterface.getPath());
+                localExportAdapter.createParentDir(path + currentInterface.getPath());
             }
             contextBuilder.withInterfaceDefinition(currentInterface);
             //Todo find a better solution, but for now we need to set the complete path every time we process an interface
             contextBuilder.withCommonPath(currentApplication.getPathToRoot() + currentService.getPathToRoot() + currentInterface.getPathToRoot());
 
             // Pull context to use it later for export
-            exampleFile = fileService.writeInterfaceFile(path, currentApplication, currentService, currentInterface, contextBuilder.getContext(), exampleFile);
+            exampleFile = localExportAdapter.writeInterfaceFile(path, currentApplication, currentService, currentInterface, contextBuilder.getContext(), exampleFile);
         }
 
     }

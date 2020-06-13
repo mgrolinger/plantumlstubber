@@ -1,8 +1,8 @@
 package com.grolinger.java.service.data.exportdata;
 
 import com.grolinger.java.controller.templatemodel.Constants;
+import com.grolinger.java.controller.templatemodel.DiagramType;
 import com.grolinger.java.controller.templatemodel.Template;
-import com.grolinger.java.controller.templatemodel.TemplateContent;
 import com.grolinger.java.service.data.ApplicationDefinition;
 import com.grolinger.java.service.data.InterfaceDefinition;
 import com.grolinger.java.service.data.ServiceDefinition;
@@ -13,7 +13,7 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 import static com.grolinger.java.controller.templatemodel.TemplateContent.*;
-import static com.grolinger.java.service.adapter.impl.FileServiceImpl.FILE_TYPE_IUML;
+import static com.grolinger.java.service.adapter.exportdata.impl.LocalExportAdapterImpl.FILE_TYPE_IUML;
 
 /**
  * Exporter for the example file that is generated for every application to ease
@@ -26,15 +26,14 @@ public class ExampleFile {
     private final StringBuilder content;
 
     @NotNull
-    public ExampleFile(final Template template, final TemplateContent headerContent) {
-        this.template = template;
-
+    public ExampleFile(final DiagramType diagramType) {
+        this.template = diagramType.getTemplate();
 
         content = new StringBuilder();
         content.append(START.getContent());
         content.append(DATE.getContent()).append(LocalDate.now())
                 .append(CARRIAGE_RETURN.getContent());
-        content.append(headerContent.getContent());
+        content.append(diagramType.getTemplateContent());
     }
 
     public void addInclude(final ServiceDefinition currentService, final InterfaceDefinition currentInterface) {
@@ -45,7 +44,10 @@ public class ExampleFile {
                 .append(CARRIAGE_RETURN.getContent());
     }
 
-    public void addFunction(final ApplicationDefinition currentApplication, final ServiceDefinition currentService, final InterfaceDefinition currentInterface) {
+    public void addFunction(final ApplicationDefinition currentApplication,
+                            final ServiceDefinition currentService,
+                            final InterfaceDefinition currentInterface) {
+
         content.append(Constants.FUNCTION_V2_PREFIX.getValue())
                 .append(StringUtils.capitalize(currentApplication.getName()))
                 .append(StringUtils.isEmpty(currentApplication.getName()) ? "" : Constants.NAME_SEPARATOR.getValue())
@@ -58,15 +60,6 @@ public class ExampleFile {
                 .append("\")")
                 .append(CARRIAGE_RETURN.getContent()).append(CARRIAGE_RETURN.getContent());
         log.info("Write {}_{}_{} to {}{}", currentApplication.getName(), currentService.getServiceCallName(), currentInterface.getCallName(), currentInterface.getMethodName(), FILE_TYPE_IUML);
-    }
-
-    /**
-     * Adds a String to the file
-     *
-     * @param content adds a string to the current content container
-     */
-    public void add(final String content) {
-        this.content.append(content);
     }
 
     /**

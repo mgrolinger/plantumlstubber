@@ -26,6 +26,7 @@
 - removed own Logger interface in favor for lombok
 - use plugin maven-release-plugin
 - use plugin versions-maven-plugin 
+- new REST route to export the template to specify an application
 
 ### Fixes
 - solved distorted display of individual rest methods

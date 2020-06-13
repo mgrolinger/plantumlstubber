@@ -1,7 +1,7 @@
 package com.grolinger.java.controller;
 
 import com.grolinger.java.service.DataProcessorService;
-import com.grolinger.java.service.adapter.ImportService;
+import com.grolinger.java.service.adapter.importdata.ImportAdapter;
 import com.grolinger.java.service.data.ApplicationDefinition;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -22,11 +22,11 @@ import static com.grolinger.java.controller.templatemodel.DiagramType.*;
 @RestController
 public class MultiExportController {
     private final DataProcessorService dataProcessorService;
-    private final ImportService importService;
+    private final ImportAdapter importAdapter;
 
-    private MultiExportController(@Autowired DataProcessorService dataProcessorService, @Autowired ImportService importService) {
+    private MultiExportController(@Autowired DataProcessorService dataProcessorService, @Autowired ImportAdapter importAdapter) {
         this.dataProcessorService = dataProcessorService;
-        this.importService = importService;
+        this.importAdapter = importAdapter;
     }
 
     @ApiOperation(
@@ -35,13 +35,17 @@ public class MultiExportController {
     @GetMapping("/export/components")
     public void component(Model model, @ApiParam(allowableValues = "1.2019.6,1.2020.7") @RequestParam(required = false, defaultValue = "1.2020.7") String preprocessorVersion) throws IOException {
         // Find all yaml files
-        List<ApplicationDefinition> pumlComponents = new LinkedList<>(importService.findAllServiceEndpoints());
+        List<ApplicationDefinition> pumlComponents = new LinkedList<>(importAdapter.findAllServiceEndpoints());
         if ("1.2020.7".equalsIgnoreCase(preprocessorVersion)) {
             dataProcessorService.processApplication(pumlComponents, COMPONENT_V1_2020_7_DIAGRAM_BASE);
         } else {
             dataProcessorService.processApplication(pumlComponents, COMPONENT_V1_2019_6_DIAGRAM_BASE);
         }
         log.info("Processing components completed. Using preprocessor version {} for export.", preprocessorVersion);
+        if (pumlComponents.isEmpty()) {
+            log.warn("No config was found, exporting template.");
+            dataProcessorService.exportTemplate();
+        }
     }
 
     @ApiOperation(
@@ -50,7 +54,7 @@ public class MultiExportController {
     @GetMapping("/export/sequences")
     public void sequence(Model model, @ApiParam(allowableValues = "1.2019.6,1.2020.7") @RequestParam(required = false, defaultValue = "1.2020.7") String preprocessorVersion) throws IOException {
         // Find all yaml files
-        List<ApplicationDefinition> pumlComponents = new LinkedList<>(importService.findAllServiceEndpoints());
+        List<ApplicationDefinition> pumlComponents = new LinkedList<>(importAdapter.findAllServiceEndpoints());
         if ("1.2020.7".equalsIgnoreCase(preprocessorVersion)) {
             dataProcessorService.processApplication(pumlComponents, SEQUENCE_V1_2020_7_DIAGRAM_BASE);
         } else {
@@ -59,4 +63,12 @@ public class MultiExportController {
         log.info("Processing sequences completed. Using preprocessor version {} for export.", preprocessorVersion);
     }
 
+
+    @ApiOperation(
+            value = "Exports an example template for application definitions to the local filesystem."
+    )
+    @GetMapping("/export/template")
+    public void template() {
+        dataProcessorService.exportTemplate();
+    }
 }

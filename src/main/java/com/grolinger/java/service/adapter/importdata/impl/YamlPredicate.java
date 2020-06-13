@@ -1,4 +1,4 @@
-package com.grolinger.java.service.adapter.impl;
+package com.grolinger.java.service.adapter.importdata.impl;
 
 import java.nio.file.Path;
 
