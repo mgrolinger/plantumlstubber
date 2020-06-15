@@ -13,6 +13,10 @@ public class ShutdownController implements ApplicationContextAware {
 
     private ApplicationContext context;
 
+    /**
+     * This route is used to shutdown the container, while running inside Intellij Community
+     */
+    //FIXME profile
     @PostMapping("/shutdownContext")
     public void shutdownContext() {
         ((ConfigurableApplicationContext) context).close();
