@@ -1,5 +1,8 @@
 package com.grolinger.java.controller.templatemodel;
 
+/**
+ * Defines the thymeleaf template that is used to export a file
+ */
 public enum Template {
     //1.2019.6 new preprocessor
     COMPONENT_V1_2019_6("componentExport_V1_2019_6.html"),

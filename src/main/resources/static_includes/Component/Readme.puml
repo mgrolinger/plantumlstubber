@@ -2,9 +2,9 @@
 '!define DARCULA
 skinparam linetype polyline
 
-'!define UML_STRICT
-!include common/common.iuml
+'!$UML_STRICT=%false()
 !$DETAILED=%true()
+!include common/common.iuml
 component "Consumer" as consumer
 
 '' CustomerService
