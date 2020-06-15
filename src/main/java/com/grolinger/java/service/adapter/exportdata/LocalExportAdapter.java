@@ -1,4 +1,4 @@
-package com.grolinger.java.service.adapter;
+package com.grolinger.java.service.adapter.exportdata;
 
 import com.grolinger.java.controller.templatemodel.DiagramType;
 import com.grolinger.java.service.data.ApplicationDefinition;
@@ -10,11 +10,7 @@ import org.thymeleaf.context.Context;
 
 import java.io.IOException;
 
-/**
- * Interface for all file based processes, e.g. to export each iuml file
- */
-
-public interface FileService {
+public interface LocalExportAdapter {
     /**
      * Creates a directory for a service
      *
@@ -26,21 +22,6 @@ public interface FileService {
     String createServiceDirectory(final String basePath, final ApplicationDefinition applicationDefinition, final ServiceDefinition serviceDefinition) throws IOException;
 
     /**
-     * Writes the important common.iuml file that contains a lot of the common definitions, such as functions or skinparams
-     *
-     * @param basePath    To where the file(s) will be exported
-     * @param diagramType For which diagram type (component/sequence) the specific common.iuml is exported
-     */
-    void writeDefaultCommonFile(final String basePath, final DiagramType diagramType) throws IOException;
-
-    /**
-     * Writes skin files to the export directory.
-     *
-     * @throws IOException
-     */
-    void writeDefaultSkinFiles() throws IOException;
-
-    /**
      * Writes the example file after all interface files are exported
      *
      * @param basePath        the common base path
@@ -49,6 +30,17 @@ public interface FileService {
      */
     void writeExampleFile(final String basePath, final String applicationName, final String exampleFile);
 
+    /**
+     * Writes a iuml file that represents an interface
+     *
+     * @param currentPath        the current root path for this application
+     * @param currentApplication the current application
+     * @param serviceDefinition  the current service
+     * @param currentInterface   the current interface
+     * @param context            the context for the application, service, interface
+     * @param exampleFile        the current example file for this application
+     * @return the example file with all interfaces for later export
+     */
     ExampleFile writeInterfaceFile(final String currentPath, final ApplicationDefinition currentApplication, final ServiceDefinition serviceDefinition, final InterfaceDefinition currentInterface, Context context, ExampleFile exampleFile);
 
     /**
