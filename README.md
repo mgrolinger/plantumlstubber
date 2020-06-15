@@ -59,6 +59,13 @@ You can generate two types of diagrams:
 
 * **Sequence**: A number of sequence diagrams that are useful as addition to system context diagrams. In later stages of architectural specifications these are helpful to show how systems interact.
 
+#### Example
+Using the _template_newApplication.yaml without modifying it would generate in the root folder "Component", for instance the following folders.  
+![](component_folder_result.png)
+Please note that there are a number of other sub-folders as well, such as Mailserver and Filesystem. For those are yaml files packaged in the project as well.
+
+Stepping down into the folder NewApplication (generated from the template), you will find a newApplication_example.puml. This file will use plantUML to generate the following image.
+![](component_generated_result.png)
 
 ## Requirements for using the PlantUML stubs
 * The generated files from the repository need a plantUML version >= 1.2019.6 because it uses the new V2 preprocessor or >= 1.2020.7 if you choose the newer version in the swagger ui
