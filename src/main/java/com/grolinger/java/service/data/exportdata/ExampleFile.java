@@ -33,7 +33,7 @@ public class ExampleFile {
         content.append(START.getContent());
         content.append(DATE.getContent()).append(LocalDate.now())
                 .append(CARRIAGE_RETURN.getContent());
-        content.append(diagramType.getTemplateContent());
+        content.append(diagramType.getTemplateContent().getContent());
     }
 
     public void addInclude(final ServiceDefinition currentService, final InterfaceDefinition currentInterface) {

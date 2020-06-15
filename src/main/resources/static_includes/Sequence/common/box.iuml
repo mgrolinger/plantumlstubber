@@ -1,0 +1,87 @@
+' used to display references to other sequences or other processes not shown in the current sequence
+!final procedure $referenceBox($CALLER,$COLOR,$TEXT)
+        ref#$COLOR over $CALLER : $TEXT
+!endprocedure
+
+' if you need to give a hint to a specific page in a documentation
+!final procedure $documentBox($CALLER="consumer",$DOCUMENT="n.a.",$PAGE="n.a.")
+	!ifdef SHOW_DOCUMENT_LINK
+	 rnote<<doc>> over $CALLER
+		<&document>**Documentation**
+		----
+		For details please look at
+		**$DOCUMENT**
+		on page **$PAGE**.
+		end note
+    !else
+        ' This else and space is necessary, otherwise you will get a syntax error.
+    !endif
+!endprocedure
+
+!define EXCEPTION_NOTE note right #Snow: <color:DarkRed><U+26A0> Possible errors/exceptions</color>
+
+' function that specifies the side on which of a participant a note, e.g. tBox or hintBox, should be drawn
+!final function $determine_note_placement($SIDE="right")
+    !if ($SIDE == "over")
+        !return "over"
+    !else
+        !if ($SIDE == "left")
+            !return "left of"
+        !endif
+    !endif
+    'Default is right case
+    !return "right of"
+!endfunction
+
+' This box is used to put some hints on the sequence,
+' such as what's going on or what is the next step
+!final procedure $hintBox($CALLER,$SIDE,$TEXT)
+    note <<general>> $determine_note_placement($SIDE) $CALLER: $TEXT
+!endprocedure
+!final procedure $hintBox($CALLER,$TEXT)
+     $hintBox($CALLER,"left",$TEXT)
+!endprocedure
+
+' tBox or technicalBox is used for technical/implementation hints and visible only in level DETAILED
+!final procedure $tBox($CALLER,$TEXT)
+    $technicalBox($CALLER,$TEXT)
+!endprocedure
+!final procedure $tBox($CALLER,$SIDE,$TEXT)
+    $technicalBox($CALLER,$SIDE,$TEXT)
+!endprocedure
+!final procedure $technicalBox($CALLER,$SIDE,$TEXT)
+    !if ($DETAILED)
+        note <<technical>> $determine_note_placement($SIDE) $CALLER: $TEXT
+    !endif
+!endprocedure
+!final procedure $technicalBox($CALLER,$TEXT)
+    !if ($DETAILED)
+        $technicalBox($CALLER,"left",$TEXT)
+    !endif
+!endprocedure
+
+' bBox or businessBox is used for business hints and in contrast to a tBox not visible in level DETAILED
+!final procedure $bBox($CALLER,$TEXT)
+    $businessBox($CALLER,$TEXT)
+!endprocedure
+!final procedure $bBox($CALLER,$SIDE,$TEXT)
+    $businessBox($CALLER,$SIDE,$TEXT)
+!endprocedure
+!final procedure $businessBox($CALLER,$SIDE,$TEXT)
+    !if (%not($DETAILED))
+        note <<business>> $determine_note_placement($SIDE) $CALLER: $TEXT
+    !endif
+!endprocedure
+!final procedure $businessBox($CALLER,$TEXT)
+    !if (%not($DETAILED))
+        $businessBox($CALLER,"left",$TEXT)
+    !endif
+!endprocedure
+
+' Warnings
+!final procedure $warningBox($CALLER,$SIDE,$TEXT)
+    note <<warning>>$determine_note_placement($SIDE) $CALLER: $TEXT
+!endprocedure
+!final procedure $warningBox($CALLER,$TEXT)
+    note <<warning>> left of $CALLER: $TEXT
+!endprocedure

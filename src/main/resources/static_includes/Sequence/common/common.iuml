@@ -138,89 +138,8 @@ skinparam note {
 '
 ' General Utils
 '
-!final procedure $referenceBox($CALLER,$COLOR,$TEXT)
-        ref#$COLOR over $CALLER : $TEXT
-!endprocedure
-
-!final procedure $documentBox($CALLER="consumer",$DOCUMENT="n.a.",$PAGE="n.a.")
-	!ifdef SHOW_DOCUMENT_LINK
-	 rnote<<doc>> over $CALLER
-		<&document>**Documentation**
-		----
-		For details please look at
-		**$DOCUMENT**
-		on page **$PAGE**.
-		end note
-    !else
-        ' This else and space is necessary, otherwise you will get a syntax error.
-    !endif
-!endprocedure
-
-!define EXCEPTION_NOTE note right #Snow: <color:DarkRed><U+26A0> Possible errors/exceptions</color>
-
-!final function $determine_note_placement($SIDE="right")
-    !if ($SIDE == "over")
-        !return "over"
-    !else
-        !if ($SIDE == "left")
-            !return "left of"
-        !endif
-    !endif
-    'Default is right case
-    !return "right of"
-!endfunction
-
-' generelle Hinweise
-!final procedure $hintBox($CALLER,$SIDE,$TEXT)
-    note <<general>> $determine_note_placement($SIDE) $CALLER: $TEXT
-!endprocedure
-!final procedure $hintBox($CALLER,$TEXT)
-     $hintBox($CALLER,"left",$TEXT)
-!endprocedure
-
-' Implementierungshinweise
-!final procedure $tBox($CALLER,$TEXT)
-    $technicalBox($CALLER,$TEXT)
-!endprocedure
-!final procedure $tBox($CALLER,$SIDE,$TEXT)
-    $technicalBox($CALLER,$SIDE,$TEXT)
-!endprocedure
-!final procedure $technicalBox($CALLER,$SIDE,$TEXT)
-    !if ($DETAILED)
-        note <<technical>> $determine_note_placement($SIDE) $CALLER: $TEXT
-    !endif
-!endprocedure
-!final procedure $technicalBox($CALLER,$TEXT)
-    !if ($DETAILED)
-        $technicalBox($CALLER,"left",$TEXT)
-    !endif
-!endprocedure
-
-' Fachliche Hinweise
-!final procedure $bBox($CALLER,$TEXT)
-    $businessBox($CALLER,$TEXT)
-!endprocedure
-!final procedure $bBox($CALLER,$SIDE,$TEXT)
-    $businessBox($CALLER,$SIDE,$TEXT)
-!endprocedure
-!final procedure $businessBox($CALLER,$SIDE,$TEXT)
-    !if (%not($DETAILED))
-        note <<business>> $determine_note_placement($SIDE) $CALLER: $TEXT
-    !endif
-!endprocedure
-!final procedure $businessBox($CALLER,$TEXT)
-    !if (%not($DETAILED))
-        $businessBox($CALLER,"left",$TEXT)
-    !endif
-!endprocedure
-
-' Warnings
-!final procedure $warningBox($CALLER,$SIDE,$TEXT)
-    note <<warning>>$determine_note_placement($SIDE) $CALLER: $TEXT
-!endprocedure
-!final procedure $warningBox($CALLER,$TEXT)
-    note <<warning>> left of $CALLER: $TEXT
-!endprocedure
+' all kind of boxes e.g. referenceBoxes, hinBoxes etc.
+!include box.iuml
 
 
 ' participants and their ordering in the sequence diagrams
@@ -608,9 +527,6 @@ skinparam note {
 !endfunction
 
 
-
 ' HTTP Status Codes
 !include http_statuscodes.iuml
-' BiPRO Status Codes
-'!include bipro_messageids.iuml
 @enduml

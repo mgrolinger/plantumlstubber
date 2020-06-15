@@ -97,12 +97,12 @@ public class LocalStaticAdapterImpl implements LocalStaticAdapter {
                     COMMON_PATH + "devicons" + SLASH.getValue() + "tibco.puml",
                     "Readme.puml");
             log.info("Write some common files: {}", filesToExport);
-            // FIXME: better solution than hardcoding here
+            // FIXME: better solution than hard-coding here
             Files.createDirectories(Paths.get(pathToExport + COMMON_PATH + "devicons"));
         } else {
             filesToExport = Arrays.asList(
                     COMMON_FILE,
-                    COMMON_PATH + "bipro_messageIds.iuml",
+                    COMMON_PATH + "box.iuml",
                     COMMON_PATH + "http_statuscodes.iuml");
         }
 
