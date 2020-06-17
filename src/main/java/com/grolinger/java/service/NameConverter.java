@@ -11,7 +11,7 @@ import static com.grolinger.java.controller.templatemodel.Constants.SLASH;
 public class NameConverter {
 
     private static final String PARENTHESIS = "[{}]";
-    private static final String REGEX_DOT_MINUS = "[.|\\n|\\s|-|\\\\]";
+    private static final String REGEX_DOT_MINUS = "[\\.|\\n|\\s|\\-|\\\\]";
     private static final String SLASH_BACKSLASH = "([\\\\|/])";
     private static final String DUPLICATES = "\\{2,}|_{2,}|/{2,}";
 
