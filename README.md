@@ -1,9 +1,9 @@
 # PlantUMLStubber for generating plantUML stubs
 
-This project is a springboot application that generates plantUML stubs for component diagrams and sequence diagrams. The generated files can be used to build a repository of re-usable files (services/application) that come in handy to discuss software architecture or to document an application, a service or how application are working together.
+This project is a springboot application that generates plantUML stubs for component diagrams and sequence diagrams. Those stubs contain information about applications and services. The generated files can be used to build a repository of re-usable files that come in handy to discuss software architecture or to document an application, a service or how application are working together.
 
 ## What?
-The stubber will use yaml definitions to generate files in the target/ directory. These resulting files are either puml or iuml files. The iuml files contain "todo" marker that are supposed to be filled in with information. 
+The stubber will use _yaml_ files, which contain certain information, to generate files in the _target/_ directory. These resulting files are either puml or iuml files. The iuml files contain "todo" marker that are supposed to be filled in with information. 
 
 This works like this. First you write the yaml files and let them process by this application. The result are plantuml files in the folder "Component" or "Sequence". These files need to be corrected and the marked TODOs need to be filled out with details. Over the time you will build a repository of plantuml files of application/services. 
 ![](documentation/process.png)
