@@ -5,6 +5,12 @@ This project is a springboot application that generates plantUML stubs for compo
 ## What?
 The stubber will use yaml definitions to generate files in the target/ directory. These resulting files are either puml or iuml files. The iuml files contain "todo" marker that are supposed to be filled in with information. 
 
+This works like this. First you write the yaml files and let them process by this application. The result are plantuml files in the folder "Component" or "Sequence". These files need to be corrected and the marked TODOs need to be filled out with details. Over the time you will build a repository of plantuml files of application/services. 
+
+![cached image](http://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/mgrolinger/plantumlstubber/master/documentation/process.puml)
+
+As a next step you may want to define your plantuml files e.g. to show how an application is embedded in the environment. You can reuse the generated services from your repository and use the files by including them into your current file. Then you let plantUML process your file and plantUML will do its magic. The result are the plantUML diagrams.
+
 ### YAML configuration
 To generate stubs plantumlstubber needs yaml files that contains some information, such as name of the application, the domain, what kind of interfaces this application provides.
 
@@ -61,11 +67,32 @@ You can generate two types of diagrams:
 
 #### Example
 Using the _template_newApplication.yaml without modifying it would generate in the root folder "Component", for instance the following folders.  
-![](component_folder_result.png)
+![](documentation/component_folder_result.png)
 Please note that there are a number of other sub-folders as well, such as Mailserver and Filesystem. For those are yaml files packaged in the project as well.
 
 Stepping down into the folder NewApplication (generated from the template), you will find a newApplication_example.puml. This file will use plantUML to generate the following image.
-![](component_generated_result.png)
+![](documentation/component_generated_result.png)
+
+## Building your own repository
+Over the time more and more application are prepared and are waiting to be reused. I usually have one subfolder where I keep those re-usable files (e.g. _includes_) and a second subfolder (e.g. _documentation_) where I keep my files for the specific use case.
+
+Files from the _documentation_ folder may !include files from the _include_ folder but you may want to prevent to !include within the folder. 
+Files in the _include_ folder may !include each other, but should never !include files from the _documentation_ folder.
+
+```
+$ tree
+.
+├── documentation
+│   └──  use case 1
+│       ├── use case 1.1.puml
+│       └── use case 1.2.puml
+└── includes
+    ├── Application 1
+        └── Service 1
+            └── interface1.iuml
+    ├── Application 2
+    └──  etc...
+```
 
 ## Requirements for using the PlantUML stubs
 * The generated files from the repository need a plantUML version >= 1.2019.6 because it uses the new V2 preprocessor or >= 1.2020.7 if you choose the newer version in the swagger ui
@@ -77,6 +104,6 @@ Stepping down into the folder NewApplication (generated from the template), you 
 You need to configure the working directory  (Java `user.dir`) in Run/Debug of the `PlantUMLStubber` 
 (formerly known as`ServiceGenerator`) to the root directory of the module so that the service 
 configuration yaml can be found, 
-e.g. `$MODULE_WORKING_DIR$` in Intellij: ![](Intellij_Config.png)
+e.g. `$MODULE_WORKING_DIR$` in Intellij: ![](documentation/Intellij_Config.png)
 
-_last update 15.06.2020_
+_last update 17.06.2020_

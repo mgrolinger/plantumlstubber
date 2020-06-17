@@ -1,0 +1,35 @@
+@startuml
+skinparam shadowing false
+skinparam umlstyle2 true
+skinparam rectangleDiagonalCorner 2
+!include <tupadr3/common>
+!include <tupadr3/font-awesome/server>
+skinparam ArrowColor #DarkSlateGrey
+skinparam ActorBorderColor #DarkSlateGrey
+
+title Process of generating plantUML stubs
+
+collections "YAML" as yaml #LightGreen
+FA_SERVER("plantumlstubber","PlantumlStubber") #LightBlue
+collections "P/IUML Files\nas Repository" as files #Yellow
+
+yaml -> plantumlstubber
+plantumlstubber -> files
+
+
+actor "User" as user #LightGrey
+user ..> yaml : <U+2460> Writes yaml\ndefinitions
+user ..> files: <U+2461> Adjust files and\nadd some content (Todos)
+
+collections "Component & Sequence\nplantUML files" as pumls
+user ..> pumls: <U+2462> Define your sequences
+
+component "PlantUML" as plantuml #LightBlue
+pumls .[dotted].> files : <U+2463> Re-use service definitions\n by !including them
+pumls -> plantuml: <U+2464> Let plantUML process the files
+
+
+collections "Sequence & Component\nDiagrams" as diagrams #Yellow
+plantuml -> diagrams : <U+2465> Exports diagrams e.g. as PNG
+
+@enduml
