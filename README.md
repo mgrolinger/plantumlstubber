@@ -6,8 +6,8 @@ This project is a springboot application that generates plantUML stubs for compo
 The stubber will use yaml definitions to generate files in the target/ directory. These resulting files are either puml or iuml files. The iuml files contain "todo" marker that are supposed to be filled in with information. 
 
 This works like this. First you write the yaml files and let them process by this application. The result are plantuml files in the folder "Component" or "Sequence". These files need to be corrected and the marked TODOs need to be filled out with details. Over the time you will build a repository of plantuml files of application/services. 
+![](documentation/process.png)
 
-![cached image](http://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/mgrolinger/plantumlstubber/master/documentation/process.puml)
 
 As a next step you may want to define your plantuml files e.g. to show how an application is embedded in the environment. You can reuse the generated services from your repository and use the files by including them into your current file. Then you let plantUML process your file and plantUML will do its magic. The result are the plantUML diagrams.
 
@@ -68,6 +68,7 @@ You can generate two types of diagrams:
 #### Example
 Using the _template_newApplication.yaml without modifying it would generate in the root folder "Component", for instance the following folders.  
 ![](documentation/component_folder_result.png)
+
 Please note that there are a number of other sub-folders as well, such as Mailserver and Filesystem. For those are yaml files packaged in the project as well.
 
 Stepping down into the folder NewApplication (generated from the template), you will find a newApplication_example.puml. This file will use plantUML to generate the following image.
