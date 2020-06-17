@@ -68,7 +68,7 @@ public class DataProcessorServiceImpl implements DataProcessorService {
             // Prepare example file for every Application
             ExampleFile exampleFile = new ExampleFile(diagramType);
             for (ServiceDefinition serviceDefinition : currentApplication.getServiceDefinitions()) {
-                localExportAdapter.createDirectory(diagramType.getBasePath(), "", currentApplication.getName());
+                localExportAdapter.createDirectory(diagramType.getBasePath(), "", currentApplication);
 
                 String path = "";
                 componentFile.addComponent(currentApplication, serviceDefinition);
@@ -83,7 +83,7 @@ public class DataProcessorServiceImpl implements DataProcessorService {
 
                 processInterfaces(path, contextBuilder, currentApplication, serviceDefinition, exampleFile);
             }
-            localExportAdapter.writeExampleFile(diagramType.getBasePath(), currentApplication.getName(), exampleFile.getFullFileContent());
+            localExportAdapter.writeExampleFile(diagramType.getBasePath(), currentApplication, exampleFile.getFullFileContent());
         }
         localExportAdapter.writeComponentFile(diagramType, componentFile);
         // Write everything connected to common.iuml and common/
@@ -107,7 +107,7 @@ public class DataProcessorServiceImpl implements DataProcessorService {
      * @throws IOException may cause problems during creation of a directory
      */
     private String createDirectoryForService(String basePath, ApplicationDefinition applicationDefinition, ServiceDefinition serviceDefinition) throws IOException {
-        log.info("Create directory for application {} and service {}", applicationDefinition.getName(), serviceDefinition.getPath());
+        log.info("Create directory for application {} and service {}", applicationDefinition.getPath(), serviceDefinition.getPath());
         return localExportAdapter.createServiceDirectory(basePath, applicationDefinition, serviceDefinition);
     }
 

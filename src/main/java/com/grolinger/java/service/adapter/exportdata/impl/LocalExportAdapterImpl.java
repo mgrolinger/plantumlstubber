@@ -61,8 +61,8 @@ public class LocalExportAdapterImpl implements LocalExportAdapter {
 
 
     @Override
-    public void writeExampleFile(final String basePath, final String applicationName, final String exampleFileContent) {
-        try (Writer writer = new FileWriter(GLOBAL_FILE_EXPORT_PATH + basePath + applicationName + SLASH.getValue() + applicationName + EXAMPLE_FILE_SUFFIX)) {
+    public void writeExampleFile(final String basePath, final ApplicationDefinition currentApplication, final String exampleFileContent) {
+        try (Writer writer = new FileWriter(GLOBAL_FILE_EXPORT_PATH + basePath + currentApplication.getPath() + SLASH.getValue() + currentApplication.getName() + EXAMPLE_FILE_SUFFIX)) {
             writer.write(exampleFileContent);
         } catch (IOException e) {
             // do nothing
@@ -97,12 +97,12 @@ public class LocalExportAdapterImpl implements LocalExportAdapter {
     }
 
     @Override
-    public String createDirectory(final String basePath, String path, final String applicationName) {
-        path = GLOBAL_FILE_EXPORT_PATH + basePath + StringUtils.capitalize(applicationName) + SLASH.getValue();
+    public String createDirectory(final String basePath, String path, final ApplicationDefinition application) {
+        path = GLOBAL_FILE_EXPORT_PATH + basePath + StringUtils.capitalize(application.getPath()) + SLASH.getValue();
         try {
             Files.createDirectories(Paths.get(path));
         } catch (IOException ioe) {
-            log.error("Could not create directory {}{} for application {}", basePath, path, applicationName);
+            log.error("Could not create directory {}{} for application {}", basePath, path, application.getPath());
         }
 
         return path;

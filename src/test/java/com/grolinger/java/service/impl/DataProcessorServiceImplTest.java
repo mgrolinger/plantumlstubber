@@ -86,7 +86,7 @@ public class DataProcessorServiceImplTest {
 
         // when
         // although only two interfaces, create the directory only once
-        when(localExportAdapter.createDirectory(anyString(), anyString(), anyString())).thenReturn("createDirectoryResponse");
+        when(localExportAdapter.createDirectory(anyString(), anyString(), any(ApplicationDefinition.class))).thenReturn("createDirectoryResponse");
         when(localExportAdapter.createServiceDirectory(anyString(), any(), any())).thenReturn("createServiceDirectoryResponse");
         when(localExportAdapter.writeInterfaceFile(anyString(), any(), any(), any(), any(), any())).thenReturn(new ExampleFile(DiagramType.COMPONENT_V1_2020_7_DIAGRAM_BASE));
 
@@ -97,7 +97,7 @@ public class DataProcessorServiceImplTest {
         verify(localExportAdapter).createDirectory(
                 eq(DiagramType.COMPONENT_V1_2020_7_DIAGRAM_BASE.getBasePath()),
                 eq(""),
-                eq(appName));
+                any(ApplicationDefinition.class));
         // 1 service -> 1 call
         verify(localExportAdapter).createServiceDirectory(
                 eq(DiagramType.COMPONENT_V1_2020_7_DIAGRAM_BASE.getBasePath()),

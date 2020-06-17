@@ -63,11 +63,10 @@ public class ImportAdapterImpl implements ImportAdapter {
             }
             int orderPrio = Integer.parseInt(importedServices.getOrderPrio());
             log.debug("{}, {}, {}", importedServices.getApplication(), importedServices.getSystemType(), importedServices.getOrderPrio());
-            final String applicationName = replaceUnwantedPlantUMLCharacters(importedServices.getApplication(), false);
             ApplicationDefinition pumlComponent;
             // Do we know this application already from before, reuse it.
-            if (app.containsKey(applicationName)) {
-                pumlComponent = app.get(applicationName);
+            if (app.containsKey(importedServices.getApplication())) {
+                pumlComponent = app.get(importedServices.getApplication());
             } else {
                 // we use the specified alias or the application name cleaned from some special characters that make problems in plantuml
                 String alias = StringUtils.isEmpty(importedServices.getCustomAlias()) ?
@@ -80,7 +79,7 @@ public class ImportAdapterImpl implements ImportAdapter {
                         importedServices.getCustomLabel();
 
                 pumlComponent = ApplicationDefinition.builder()
-                        .name(applicationName)
+                        .name(importedServices.getApplication())
                         .label(label)
                         .alias(alias)
                         .systemType(importedServices.getSystemType())
@@ -89,7 +88,7 @@ public class ImportAdapterImpl implements ImportAdapter {
                         .build();
             }
             mapIntegrationTypes(importedServices, pumlComponent);
-            app.put(applicationName, pumlComponent);
+            app.put(importedServices.getApplication(), pumlComponent);
         }
         // Unwrap from map
         return new LinkedList<>(app.values());

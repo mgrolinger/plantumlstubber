@@ -25,10 +25,10 @@ public interface LocalExportAdapter {
      * Writes the example file after all interface files are exported
      *
      * @param basePath        the common base path
-     * @param applicationName the name of the application for which the exmple file should be written
+     * @param currentApplication the current application for which the example file should be written
      * @param exampleFile     the content
      */
-    void writeExampleFile(final String basePath, final String applicationName, final String exampleFile);
+    void writeExampleFile(final String basePath, final ApplicationDefinition currentApplication, final String exampleFile);
 
     /**
      * Writes a iuml file that represents an interface
@@ -55,10 +55,10 @@ public interface LocalExportAdapter {
      *
      * @param basePath        The absolute base path from which the repository is created
      * @param path            which
-     * @param applicationName for which application should the directory be created
+     * @param application for which application the directory should be created
      * @return path to the newly created directory
      */
-    String createDirectory(final String basePath, String path, final String applicationName);
+    String createDirectory(final String basePath, String path, final ApplicationDefinition application);
 
     /**
      * Writes a single file for an application_service_interface
