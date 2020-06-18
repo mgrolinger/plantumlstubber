@@ -17,6 +17,30 @@ To generate stubs plantumlstubber needs yaml files that contains some informatio
 There is an example file that shows how a yaml file needs to be configured. Use _template_newApplication.yaml as starting point. There is also a rest route available to copy the template to the target folder.
 The plantumlstubber will consider all yaml files in the target/ folder.
 
+#### KeyCharacters . and /
+The  character slash ("/") is treated as separator in the applicationName, service or interface. This will create subdirectories subsequently.
+
+Taking the following example: 
+```
+applicationName: part1/part2
+...
+   REST::JSON:
+        /api/v2/: 
+            - resource
+```
+Will lead to the following directory/file structure:
+```
+$ tree
+.
+└── part1
+   └── part2
+       └── api
+           └── v2
+               └── resource.iuml
+```
+and late on a !procedure with the name: $Part1_part2_api_v2_resource(). As you may notice the application replaces the character "/" by "_". This is due to the fact how plantUML will treat different chars.  
+
+
 #### Auto-Linking two applications
 Sometimes it can be useful to draw a link between two applications or an application and its database. This can be done on the configuration yaml by fill in these two configuration keys:
 ```
