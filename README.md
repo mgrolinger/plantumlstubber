@@ -28,7 +28,7 @@ applicationName: part1/part2
         /api/v2/: 
             - resource
 ```
-Will lead to the following directory/file structure:
+Will lead to the following directory and file structure:
 ```
 $ tree
 .
@@ -38,7 +38,7 @@ $ tree
            └── v2
                └── resource.iuml
 ```
-and late on a !procedure with the name: $Part1_part2_api_v2_resource(). As you may notice the application replaces the character "/" by "_". This is due to the fact how plantUML will treat different chars.  
+Within the generated iuml file the !procedure has the name: $Part1_part2_api_v2_resource(). As you may notice, the application replaces the character "/" or "." by "_". This is due to the fact how plantUML will treat different special characters as mentioned above.  
 
 
 #### Auto-Linking two applications
