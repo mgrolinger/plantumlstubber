@@ -12,13 +12,13 @@ This works like this. First you write the yaml files and let them process by thi
 As a next step you may want to define your plantuml files e.g. to show how an application is embedded in the environment. You can reuse the generated services from your repository and use the files by including them into your current file. Then you let plantUML process your file and plantUML will do its magic. The result are the plantUML diagrams.
 
 ### YAML configuration
-To generate stubs plantumlstubber needs yaml files that contains some information, such as name of the application, the domain, what kind of interfaces this application provides.
+To generate stubs PlantUMLStubber needs yaml files that contains some information, such as name of the application, the domain, what kind of interfaces this application provides.
 
 There is an example file that shows how a yaml file needs to be configured. Use _template_newApplication.yaml as starting point. There is also a rest route available to copy the template to the target folder.
-The plantumlstubber will consider all yaml files in the target/ folder.
+The PlantUMLStubber will consider all yaml files in the target/ folder.
 
-#### KeyCharacters . and /
-The  character slash ("/") is treated as separator in the applicationName, service or interface. This will create subdirectories subsequently.
+#### Separating names by . and /
+Plantumlstubber treats the characters slash ("/") and dot (".") as separator in the applicationName, service or interface. It will create subdirectories subsequently. In general, PlantUMLStubber removes a lot of special characters due to the fact how plantuml will treat special characters. For example, if you take the variables _$part1_part2_ vs. _$part3+part4_, the first variable will work within plantuml and the latter not, as plantuml will recognize _$part3_ as variable and _+part4_ as a second word. PlantUML will show a syntax error.   
 
 Taking the following example: 
 ```
@@ -121,7 +121,7 @@ $ tree
 
 ## Requirements for using the PlantUML stubs
 * The generated files from the repository need a plantUML version >= 1.2019.6 because it uses the new V2 preprocessor or >= 1.2020.7 if you choose the newer version in the swagger ui
-* Plantuml itself requires a graphviz 2.38 installation
+* PlantUML itself requires a graphviz 2.38 installation
 * The common files may need some manual clean up if you go with the old version of plantUML due to the fact that they introduced procedures in 1.2020.7 that helps with the backwards compatibility but made my life a bit more difficult 
 
 ## Intellij Configuration
