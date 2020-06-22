@@ -451,6 +451,10 @@ skinparam note {
     !endif
 !endfunction
 
+!function $SELF_REFERENCE($COLOR="DarkSlateGrey",$TEXT="t")
+    !return '<color:'+$COLOR+'><b><U+21BB><i>'+$TEXT+'</i></b></color>'
+!endfunction
+
 ' load legend
  !include domain_legend.iuml
 @enduml
