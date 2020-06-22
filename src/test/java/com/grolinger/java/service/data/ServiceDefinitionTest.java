@@ -5,7 +5,6 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import static com.grolinger.java.controller.templatemodel.Constants.DEFAULT_ROOT_SERVICE_NAME;
-import static com.grolinger.java.controller.templatemodel.Constants.SLASH;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ServiceDefinitionTest {
@@ -18,12 +17,13 @@ public class ServiceDefinitionTest {
         final String defaultServiceName = DEFAULT_ROOT_SERVICE_NAME.getValue();
         return new Object[][]{
                 //@formatter:off
-                {null,                          defaultServiceName ,                defaultServiceName},
-                {"",                            defaultServiceName,                 defaultServiceName},
-                {Constants.EMPTY.getValue(),    defaultServiceName,                 defaultServiceName},
-                {simpleServiceName,             simpleServiceName,                  simpleServiceName},
-                {restServiceName,               "restServiceName_subservice_subs" , restServiceName},
-                {soapServiceNameWithUnwantedChars,"soapServiceName_subservice_subs",soapServiceNameWithUnwantedChars}
+                {null,                            defaultServiceName ,                defaultServiceName},
+                {"",                              defaultServiceName,                 defaultServiceName},
+                {Constants.EMPTY.getValue(),      defaultServiceName,                 defaultServiceName},
+                {simpleServiceName,               simpleServiceName,                  simpleServiceName},
+                {restServiceName,                 "restServiceName_subservice_subs" , restServiceName},
+                {"/v1/service-name/subs",         "v1_service_name_subs",             "/v1/service-name/subs"},
+                {soapServiceNameWithUnwantedChars,"soapServiceName_subservice_subs",  soapServiceNameWithUnwantedChars}
                 //@formatter:on
         };
     }
@@ -46,18 +46,19 @@ public class ServiceDefinitionTest {
     @DataProvider
     public Object[][] servicePathDataProvider() {
         final String simpleServiceName = "serviceName";
-        final String restServiceName = "restServiceName/{subservice}/subs";
         final String soapServiceNameWithUnwantedChars = "soapServiceName.subservice.subs";
         final String defaultServiceName = DEFAULT_ROOT_SERVICE_NAME.getValue();
         return new Object[][]{
                 //@formatter:off
-                {null,                              defaultServiceName, ""},
-                {"",                                defaultServiceName, ""},
-                {" ",                               defaultServiceName, ""},
-                {Constants.EMPTY.getValue(),        defaultServiceName, ""},
-                {simpleServiceName,                 simpleServiceName+SLASH.getValue(),"../"},
-                {restServiceName,                   "restServiceName/subservice/subs/","../../../" },
-                {soapServiceNameWithUnwantedChars,  "soapServiceName/subservice/subs/","../../../" }
+                {null,                                 defaultServiceName,                  ""},
+                {"",                                   defaultServiceName,                  ""},
+                {"     ",                              defaultServiceName,                  ""},
+                {Constants.EMPTY.getValue(),           defaultServiceName,                  ""},
+                {"serviceName",                        "serviceName/",                      "../"},
+                {"restServiceName/{subservice}/subs",  "restServiceName/subservice/subs/",  "../../../" },
+                {"/restServiceName/{subservice}/subs", "restServiceName/subservice/subs/",  "../../../" },
+                {"/v1/service-name/subs",              "v1/service/name/subs/",             "../../../" },
+                {soapServiceNameWithUnwantedChars,     "soapServiceName/subservice/subs/",  "../../../" }
                 //@formatter:on
         };
     }

@@ -26,6 +26,8 @@ import static com.grolinger.java.service.NameConverter.replaceUnwantedPlantUMLCh
 public class InterfaceDefinition implements CommonRootPathHandler, PathHandler {
     private static final Map<String, String> DEFAULT_MAPPER_INTEGRATION = new HashMap<>();
     private static final Map<String, String> DEFAULT_MAPPER_RESPONSE = new HashMap<>();
+    public static final String INDIVIDIAL_METHOD_SEPARATOR = "::";
+    public static final String CALL_STACK_SEPARATOR = "->";
 
     static {
         // e.g. SOAP -> SOAP::XML
@@ -110,7 +112,7 @@ public class InterfaceDefinition implements CommonRootPathHandler, PathHandler {
         // this might be empty
 
         this.isLinked = !StringUtils.isEmpty(linkToComponent);
-        this.linkToComponent = linkToComponent;
+        this.linkToComponent = NameConverter.replaceUnwantedPlantUMLCharacters(linkToComponent,false);
         if (isLinked) {
             this.linkToCustomAlias = StringUtils.isEmpty(linkToCustomAlias) ?
                     linkToComponent.toLowerCase() :
@@ -151,7 +153,7 @@ public class InterfaceDefinition implements CommonRootPathHandler, PathHandler {
             // interface::POST:GET
             String[] singleMethod = originalInterfaceName
                     .split(Constants.INTERFACE_INTEGRATION_SEPARATOR.getValue())[1]
-                    .split("->")[0]
+                    .split(CALL_STACK_SEPARATOR)[0]
                     .split(Constants.INTERFACE_METHOD_SEPARATOR.getValue());
 
             // ignore call stack information, just save the methods
@@ -167,8 +169,13 @@ public class InterfaceDefinition implements CommonRootPathHandler, PathHandler {
         return !nameParts.isEmpty();
     }
 
+    /**
+     * Checks if the original interface contains a call stack.
+     *
+     * @return {true} if the interface contains a call stack
+     */
     public boolean containsCallStack() {
-        return originalInterface.contains("->") &&
+        return originalInterface.contains(CALL_STACK_SEPARATOR) &&
                 null != callStack &&
                 0 < callStack.length;
     }
@@ -197,12 +204,12 @@ public class InterfaceDefinition implements CommonRootPathHandler, PathHandler {
      */
     private String extractInterfaceName(final String interfaceName) {
         String calledInterfaceName;
-        if (interfaceName.contains("->")) {
-            String[] currentCallStack = interfaceName.split("->");
+        if (interfaceName.contains(CALL_STACK_SEPARATOR)) {
+            String[] currentCallStack = interfaceName.split(CALL_STACK_SEPARATOR);
             calledInterfaceName = currentCallStack[0];
-            if (interfaceName.contains("::")) {
+            if (interfaceName.contains(INDIVIDIAL_METHOD_SEPARATOR)) {
                 //Fixme
-                calledInterfaceName = interfaceName.split("::")[0];
+                calledInterfaceName = interfaceName.split(INDIVIDIAL_METHOD_SEPARATOR)[0];
             }
             this.callStack = Arrays.copyOfRange(currentCallStack, 1, currentCallStack.length);
             int i = 0;
@@ -214,9 +221,9 @@ public class InterfaceDefinition implements CommonRootPathHandler, PathHandler {
                 i++;
             }
         } else {
-            if (interfaceName.contains("::")) {
+            if (interfaceName.contains(INDIVIDIAL_METHOD_SEPARATOR)) {
                 //Fixme
-                calledInterfaceName = interfaceName.split("::")[0];
+                calledInterfaceName = interfaceName.split(INDIVIDIAL_METHOD_SEPARATOR)[0];
             } else {
                 calledInterfaceName = interfaceName;
             }
@@ -225,10 +232,10 @@ public class InterfaceDefinition implements CommonRootPathHandler, PathHandler {
     }
 
     /**
-     * TODO
+     * Returns the name of the method
      *
      * @param currentInterfaceName
-     * @return
+     * @return the current method name, for rest its the last part of the interface
      */
     private String getMethodName(@NotNull final String currentInterfaceName) {
         if (currentInterfaceName.contains(SLASH.getValue())) {
@@ -247,7 +254,7 @@ public class InterfaceDefinition implements CommonRootPathHandler, PathHandler {
      * Uses the definition of the integration type in the yaml. This method checks
      * whether the integration type contains already a {INTERFACE_TYPE}::{DATA_TYPE/KIND_OF_INTEGRATION}
      *
-     * @param type something like SOAP or REST:JSON or DB::JDBC
+     * @param integrationType something like SOAP or REST:JSON or DB::JDBC
      * @return returns the polished integration type, such as SOAP becomes SOAP::XML, REST::JSON remains REST::JSON
      */
     private String getIntegrationType(@NotNull final String integrationType) {

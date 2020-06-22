@@ -41,7 +41,11 @@ public class ServiceDefinition implements CommonRootPathHandler, PathHandler {
      * @return the service parts connected by _
      */
     public String getServiceCallName() {
-        return String.join(NAME_SEPARATOR.getValue(), this.nameParts);
+        List<String> names = new LinkedList<>();
+        for (String nP : this.nameParts) {
+            names.add(NameConverter.replaceUnwantedPlantUMLCharacters(nP, false));
+        }
+        return String.join(NAME_SEPARATOR.getValue(), names);
     }
 
     @Override
@@ -58,7 +62,18 @@ public class ServiceDefinition implements CommonRootPathHandler, PathHandler {
                 this.nameParts = new ArrayList<>();
                 this.serviceLabel = DEFAULT_ROOT_SERVICE_NAME.getValue();
             } else {
-                this.nameParts = Arrays.stream(NameConverter.replaceUnwantedPlantUMLCharactersForPath(serviceName).split("/")).collect(Collectors.toList());
+                /*this.nameParts = Arrays.stream(NameConverter
+                        .replaceUnwantedPlantUMLCharactersForPath(serviceName)
+                        .split(SLASH.getValue()))
+                        .collect(Collectors.toList());
+
+                 */
+                this.nameParts = Arrays.stream(serviceName.split("[/|\\.]"))
+                        .filter(s -> !StringUtils.isEmpty(s.trim()))
+                        .map(NameConverter::replaceUnwantedPlantUMLCharactersForPath)
+                        .collect(Collectors.toList());
+                // Remove everything what's not necessary
+                this.nameParts.removeIf(String::isEmpty);
                 // Set if not yet set by builder method
                 if (StringUtils.isEmpty(this.serviceLabel)) {
                     this.serviceLabel = serviceName;

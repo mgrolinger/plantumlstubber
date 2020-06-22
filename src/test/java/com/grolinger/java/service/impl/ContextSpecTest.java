@@ -101,7 +101,7 @@ public class ContextSpecTest {
                 .originalInterfaceName("/api/rest/interface::POST:PUT->Call_sub")
                 .customAlias("customAlias")
                 .integrationType("foo::bar")
-                .linkToComponent("linkedComponent")
+                .linkToComponent("linked/Component")
                 .linkToCustomAlias("linkedAlias")
                 .build();
         Context result = new ContextSpec().builder()
@@ -126,7 +126,7 @@ public class ContextSpecTest {
         assertThat(result.getVariable(CALL_STACK)).isEqualTo(new String[]{"Call_sub"});
         assertThat(result.getVariable(CALL_STACK_INCLUDES)).isEqualTo(new String[]{"Call/sub"});
         assertThat(result.getVariable(IS_LINKED)).isEqualTo(true);
-        assertThat(result.getVariable(LINKED_TO_COMPONENT)).isEqualTo("linkedComponent");
+        assertThat(result.getVariable(LINKED_TO_COMPONENT)).isEqualTo("linked_Component");
         assertThat(result.getVariable(LINK_TO_CUSTOM_ALIAS)).isEqualTo("linkedAlias");
         assertThat(result.getVariable(API_CREATED)).isEqualTo("MINAPP_API_API_REST_INTERFACE_CREATED");
     }
@@ -138,7 +138,7 @@ public class ContextSpecTest {
                 .originalInterfaceName("soapMethod->Call_sub")
                 .customAlias("customAlias")
                 .integrationType("SOAP")
-                .linkToComponent("linkedComponent")
+                .linkToComponent("linked/Component")
                 .linkToCustomAlias("linkedAlias")
                 .build();
         Context result = new ContextSpec().builder()
@@ -162,7 +162,7 @@ public class ContextSpecTest {
         assertThat(result.getVariable(CALL_STACK)).isEqualTo(new String[]{"Call_sub"});
         assertThat(result.getVariable(CALL_STACK_INCLUDES)).isEqualTo(new String[]{"Call/sub"});
         assertThat(result.getVariable(IS_LINKED)).isEqualTo(true);
-        assertThat(result.getVariable(LINKED_TO_COMPONENT)).isEqualTo("linkedComponent");
+        assertThat(result.getVariable(LINKED_TO_COMPONENT)).isEqualTo("linked_Component");
         assertThat(result.getVariable(LINK_TO_CUSTOM_ALIAS)).isEqualTo("linkedAlias");
         assertThat(result.getVariable(API_CREATED)).isEqualTo("MINAPP_API_SOAPMETHOD_CREATED");
     }
@@ -182,9 +182,11 @@ public class ContextSpecTest {
                 .serviceName(sname)
                 .build();
 
+        final String linkToComponent = "component/withSlash";
         InterfaceDefinition interfaceDefinition = InterfaceDefinition.builder()
                 .originalInterfaceName("method.submethod::NotMappable")
                 .integrationType("SOAP")
+                .linkToComponent(linkToComponent)
                 .build();
 
         Context result = new ContextSpec().builder()
@@ -202,7 +204,9 @@ public class ContextSpecTest {
         assertThat(result.getVariable(COLOR_NAME)).isEqualTo("TEST_DOMAIN_COLOR");
         assertThat(result.getVariable(IS_ROOT_SERVICE)).isEqualTo(false);
         assertThat(result.getVariable(PATH_TO_COMMON_FILE)).isEqualTo("../../../../");
-        // We do not know how to map "NotMappable"
+        assertThat(result.getVariable(LINKED_TO_COMPONENT)).isEqualTo(linkToComponent.replace("/","_"));
+
+        // There is no result for the method "NotMappable" from from the interface
         assertThat(result.getVariable(HTTP_METHODS)).isEqualTo("");
     }
 }

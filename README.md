@@ -60,6 +60,8 @@ Example:
 
 The Rest::JSON Interface /api/convert will call subsequently application with the Name ApplicationName. This application itself needs to provide this interface. There should be a configuration yaml for the application ApplicationName as well.
 
+As the call stack definition suits to cases first to generate include-path for the files and second to generate the !procedure call for the just included file, this application cannot differentiate between e.g. rest interfaces /api/rest-interface and /api/rest/interface. PlantUMLStubber uses latter , so the application handles all special characters that may produce problems as "/". Please be aware of that.   
+
 #### Note for interfaces with the same name
 If an application has e.g. two service implementations (especially "EMPTY") and both have the same interfaceName, the last one wins. E.g. you have a soap service _getVersion()_ and a rest service _/getVersion_ without any additional (service) path, the last definition will override the preceding.
 ```
@@ -70,6 +72,7 @@ REST
     EMPTY: [/getVersion]
 ...
 ```
+
 
 ## Swagger UI and Output
 The generator provides a swagger ui on http://localhost:19191/swagger-ui.html#/
@@ -131,4 +134,4 @@ You need to configure the working directory  (Java `user.dir`) in Run/Debug of t
 configuration yaml can be found, 
 e.g. `$MODULE_WORKING_DIR$` in Intellij: ![](documentation/Intellij_Config.png)
 
-_last update 17.06.2020_
+_last update 22.06.2020_
