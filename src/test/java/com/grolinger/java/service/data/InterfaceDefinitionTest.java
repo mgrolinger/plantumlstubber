@@ -44,11 +44,12 @@ public class InterfaceDefinitionTest {
         List<String> resultFive = Collections.emptyList();
         return new Object[][]{
                 //@formatter:off
-                {one   , "method",                 resultOne,   "method",               "SOAP::XML"},
-                {two   , "/api/v1/resource/{id}",  resultTwo,   "api_v1_resource_id",   "REST::XML"},
-                {three , "/api/v1/resource/{id}/", resultThree, "api_v1_resource_id",   "REST::JSON"},
-                {four  , "/",                      resultFour,  ""                  ,   "REST::JSON"},
-                {five  , "/",                      resultFive,  ""                  ,   "FOO::BAR"}
+                {one   , "method",                 resultOne,   "method",               "SOAP::XML" , "method", false},
+                {two   , "/api/v1/resource/{id}",  resultTwo,   "api_v1_resource_id",   "REST::XML" , "id"  , true},
+                // The slash prevents a method name
+                {three , "/api/v1/resource/{id}/", resultThree, "api_v1_resource_id",   "REST::JSON",  "" , false },
+                {four  , "/",                      resultFour,  ""                  ,   "REST::JSON",  "" , false },
+                {five  , "/",                      resultFive,  ""                  ,   "FOO::BAR",    "" , false }
                 //@formatter:on
         };
     }
@@ -58,11 +59,21 @@ public class InterfaceDefinitionTest {
                          final String expName,
                          final List<String> expParts,
                          final String expCallName,
-                         final String expInteg) {
+                         final String expInteg,
+                         final String expMethod,
+                         final boolean hasCallStack) {
         assertThat(cut.getName()).isEqualTo(expName);
         assertThat(cut.getNameParts()).isEqualTo(expParts);
         assertThat(cut.getCallName()).isEqualTo(expCallName);
         assertThat(cut.getIntegrationType()).isEqualTo(expInteg);
+        assertThat(cut.getMethodName()).isEqualTo(expMethod);
+        if (hasCallStack) {
+            assertThat(cut.getCallStack()).isNotEmpty();
+            assertThat(cut.getCallStackForIncludes()).isNotEmpty();
+        }else{
+            assertThat(cut.getCallStack()).isNull();
+            assertThat(cut.getCallStackForIncludes()).isNull();
+        }
     }
 
     @DataProvider
