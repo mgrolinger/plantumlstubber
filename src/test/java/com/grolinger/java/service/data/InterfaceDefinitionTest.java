@@ -190,11 +190,17 @@ public class InterfaceDefinitionTest {
                 .build();
         List<HttpMethod> expResultThree = Collections.emptyList();
 
+        InterfaceDefinition four = InterfaceDefinition.builder()
+                .originalInterfaceName("method")
+                .integrationType("SomethingUnknown")
+                .build();
+
         return new Object[][]{
                 //@formatter:off
                 {one,   expResultOne},
                 {two ,  expResultTwo},
-                {three, expResultThree}
+                {three, expResultThree},
+                {four, expResultThree}
                 //@formatter:on
         };
     }
