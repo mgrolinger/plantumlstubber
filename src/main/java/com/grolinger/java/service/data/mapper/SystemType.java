@@ -25,7 +25,8 @@ public enum SystemType {
     EMAIL(Constants.PUML_COMPONENT_NAME,        "FA_ENVELOPE",      Constants.PUML_ENTITY_NAME),
     FOLDER(Constants.PUML_FOLDER_NAME,          "FA_FOLDER",        Constants.PUML_PARTICIPANT_NAME),
     DOCUMENTS(Constants.PUML_COLLECTIONS_NAME,  "FA_FILE_O",        Constants.PUML_COLLECTIONS_NAME),
-    JENKINS(Constants.PUML_COMPONENT_NAME,      "DEV_JENKINS",      Constants.PUML_PARTICIPANT_NAME);
+    JENKINS(Constants.PUML_COMPONENT_NAME,      "DEV_JENKINS",      Constants.PUML_PARTICIPANT_NAME),
+    TERMINAL(Constants.PUML_COMPONENT_NAME,     "DEV_TERMINAL",     Constants.PUML_PARTICIPANT_NAME);
 
     private final String umlStrict;
     private final String fontAwesome;
