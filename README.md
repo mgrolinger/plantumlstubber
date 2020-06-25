@@ -1,4 +1,4 @@
-# PlantUMLStubber for generating plantUML stubs
+# PlantUMLStubber for generating plantUML application/service stubs
 
 This project is a springboot application that generates plantUML stubs for component diagrams and sequence diagrams. Those stubs contain information about applications and services. The generated files can be used to build a repository of re-usable files that come in handy to discuss software architecture or to document an application, a service or how application are working together.
 
@@ -9,7 +9,7 @@ This works like this. First you write the yaml files and let them process by thi
 ![](documentation/process.png)
 
 
-As a next step you may want to define your plantuml files e.g. to show how an application is embedded in the environment. You can reuse the generated services from your repository and use the files by including them into your current file. Then you let plantUML process your file and plantUML will do its magic. The result are the plantUML diagrams.
+As a next step you may want to define your plantUML files, e.g. to show how an application is embedded into the environment. You can reuse the generated services from your repository and use the files by including them into your current file. Then you let plantUML process your file and plantUML will do its magic. The result are the plantUML diagrams.
 
 ### YAML configuration
 To generate stubs PlantUMLStubber needs yaml files that contains some information, such as name of the application, the domain, what kind of interfaces this application provides.
@@ -18,7 +18,7 @@ There is an example file that shows how a yaml file needs to be configured. Use 
 The PlantUMLStubber will consider all yaml files in the target/ folder.
 
 #### Separating names by . and /
-Plantumlstubber treats the characters slash ("/") and dot (".") as separator in the applicationName, service or interface. It will create subdirectories subsequently. In general, PlantUMLStubber removes a lot of special characters due to the fact how plantuml will treat special characters. For example, if you take the variables _$part1_part2_ vs. _$part3+part4_, the first variable will work within plantuml and the latter not, as plantuml will recognize _$part3_ as variable and _+part4_ as a second word. PlantUML will show a syntax error.   
+PlantUMLStubber treats the characters slash ("/") and dot (".") as separator in the applicationName, service or interface. It will create subdirectories subsequently. In general, PlantUMLStubber removes a lot of special characters due to the fact how plantuml will treat special characters. For example, if you take the variables _$part1_part2_ vs. _$part3+part4_, the first variable will work within plantUML and the latter not, as plantUML will recognize _$part3_ as variable and _+part4_ as a second word. PlantUML will show a syntax error.   
 
 Taking the following example: 
 ```
