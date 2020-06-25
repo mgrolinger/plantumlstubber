@@ -16,7 +16,7 @@
 !global $DEFAULT_BORDER_COLOR = "DarkSlateGray"
 !global $DEFAULT_INTERFACE_BORDER_COLOR = "DarkSlateGray"
 !global $DEFAULT_COMPONENT_COLOR = "DarkGrey"
-!global $DEFAULT_FONT_COLOR = "AAAAAA"
+!global $DEFAULT_FONT_COLOR = "DarkSlateGray"
 !global $DEFAULT_STEREOTYPE_FONT_COLOR = "222222"
 !global $DEFAULT_ACTOR_BORDER_COLOR = "222222"
 
@@ -27,7 +27,7 @@
 !global $WARNING_BOX_TEXT_COLOR = "222222"
 
 'Background
-!global $GENERAL_BACKGROUND_COLOR = "222222"
+!global $GENERAL_BACKGROUND_COLOR = "333333"
 skinparam BackgroundColor #$GENERAL_BACKGROUND_COLOR
 'Border
 skinparam FrameBorderColor #LightGrey
