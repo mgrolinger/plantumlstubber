@@ -62,6 +62,32 @@ The Rest::JSON Interface /api/convert will call subsequently application with th
 
 As the call stack definition suits to cases first to generate include-path for the files and second to generate the !procedure call for the just included file, this application cannot differentiate between e.g. rest interfaces /api/rest-interface and /api/rest/interface. PlantUMLStubber uses latter , so the application handles all special characters that may produce problems as "/". Please be aware of that.   
 
+#### Domain of Interfaces
+Although an application should reside within a single domain it might be necessary to assign a different domain (color) to an interface. You may do so with specifying a domain within the interface definition. Just ad a domain surrounded by <<>>, e.g. <<customer>> that will override the domain of the application.
+```
+   REST::JSON:
+        /api/: 
+            - /interface<<authentifizierung>>
+```
+
+#### HTTP Methods
+For Rest interfaces it might be interesting to specify the supported HTTP methods. The definition must be added in the interface by starting "::" and separating the single methods by ":", as you can see in the example below for ::POST:GET
+```
+   REST::JSON:
+        /api/: 
+            - /interface::POST:GET
+```
+
+#### Combining interface specifications
+Domain of Interfaces, HTTP Methods and Call Stacks can be combined into one specification like below.
+```
+   REST::JSON:
+        /api/: 
+            - /interface<<authentifizierung>>::POST:GET->App_Service_interface
+            - /interface->App_Service_secondInt::POST:GET<<authentifizierung>>
+```
+The order does not matter.
+
 #### Note for interfaces with the same name
 If an application has e.g. two service implementations (especially "EMPTY") and both have the same interfaceName, the last one wins. E.g. you have a soap service _getVersion()_ and a rest service _/getVersion_ without any additional (service) path, the last definition will override the preceding.
 ```

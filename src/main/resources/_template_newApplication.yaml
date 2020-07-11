@@ -47,8 +47,8 @@ services:
         ## this will result in subsequent !includes ../Application2/service/interface2.iuml and Plantuml-Function calls
         ## in the generated plantuml, such as $Application2_service_interface2()
         /restLess/restMore:
-            - /withCallStack/{id}::POST:GET->Filesystem_readFile
-            - /withCallStack/{id}/foo
+            - /withCallStack/{id}<<authentifizierung>>::POST:GET->Filesystem_readFile
+            - /withCallStack/{id}/foo->Filesystem_readFile<<authentifizierung>>::POST:GET
         /restLess/{id}:
             - /someInterface::GET->NewApplication_restLess_restMore_withCallStack_id
             - /name-minus/{id}

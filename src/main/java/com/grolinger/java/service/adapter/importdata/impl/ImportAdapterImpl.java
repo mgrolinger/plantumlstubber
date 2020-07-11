@@ -105,12 +105,12 @@ public class ImportAdapterImpl implements ImportAdapter {
     }
 
     /**
-     * Extracts the services from yaml file
+     * Extracts the services from yaml file and maps them hierarchically to internal structures.
      *
-     * @param importedServices
-     * @param interfacesIntegrationType
-     * @param serviceList
-     * @return
+     * @param importedServices          service definitions from the yaml
+     * @param interfacesIntegrationType type of integration
+     * @param serviceList               list of services
+     * @return list of mapped services
      */
     private List<ServiceDefinition> mapServiceDefinitions(ImportedServices importedServices, String interfacesIntegrationType, Map<String, String[]> serviceList) {
         List<ServiceDefinition> serviceDefinitions = new LinkedList<>();
@@ -126,7 +126,7 @@ public class ImportAdapterImpl implements ImportAdapter {
                     .domainColor(importedServices.getDomainColor())
                     .build();
             //Interfaces
-            List<InterfaceDefinition> interfaceDefinitionsList = mapInterfaces(importedServices, interfacesIntegrationType, interfaceNames);
+            List<InterfaceDefinition> interfaceDefinitionsList = mapInterfaces(importedServices, interfacesIntegrationType, interfaceNames, importedServices.getDomainColor());
             serviceDefinition.getInterfaceDefinitions().addAll(interfaceDefinitionsList);
             serviceDefinitions.add(serviceDefinition);
         }
@@ -136,18 +136,20 @@ public class ImportAdapterImpl implements ImportAdapter {
     /**
      * Extracts the interfaces from the yaml file
      *
-     * @param importedServices
-     * @param interfacesIntegrationType
-     * @param interfaceNames
-     * @return
+     * @param importedServices          Imported services from yaml
+     * @param interfacesIntegrationType integration such as REST::JSON or SOAP::XML
+     * @param interfaceNames            a number of interface names
+     * @param domainColor               application domain color
+     * @return list of interfaces
      */
-    private List<InterfaceDefinition> mapInterfaces(ImportedServices importedServices, String interfacesIntegrationType, String[] interfaceNames) {
+    private List<InterfaceDefinition> mapInterfaces(ImportedServices importedServices, String interfacesIntegrationType, String[] interfaceNames, String domainColor) {
         List<InterfaceDefinition> interfaceDefinitions = new LinkedList<>();
         for (String interfaceName : interfaceNames) {
             InterfaceDefinition interfaceDefinition = InterfaceDefinition.builder()
                     .originalInterfaceName(interfaceName)
                     .customAlias(importedServices.getCustomAlias())
                     .integrationType(interfacesIntegrationType)
+                    .applicationDomainColor(domainColor)
                     .linkToComponent(importedServices.getLinkToComponent())
                     .linkToCustomAlias(importedServices.getLinkToCustomAlias())
                     .build();
@@ -158,6 +160,12 @@ public class ImportAdapterImpl implements ImportAdapter {
         return interfaceDefinitions;
     }
 
+    /**
+     * Imports yaml and maps them to internal types
+     *
+     * @param path in filesystem from where the yamls are loaded
+     * @return list of mapped services/applications
+     */
     private List<ImportedServices> mapYamls(final Path path) {
         List<ImportedServices> importedServicesList = new LinkedList<>();
         ObjectMapper mapper = new ObjectMapper(new YAMLFactory());

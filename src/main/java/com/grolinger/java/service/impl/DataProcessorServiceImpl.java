@@ -30,11 +30,14 @@ public class DataProcessorServiceImpl implements DataProcessorService {
     public Context processContextOfApplication(String colorName, String integrationType, String applicationName, String serviceName, String interfaceName, Integer orderPrio) {
         // Fixme: missing all new features for multi-service
         ApplicationDefinition applicationDefinition = ApplicationDefinition.builder()
-                .name(applicationName).alias(applicationName.toLowerCase()).label(applicationName)
+                .name(applicationName)
+                .alias(applicationName.toLowerCase())
+                .label(applicationName)
                 .orderPrio(orderPrio)
                 .build();
         final InterfaceDefinition interfaceDefinition = InterfaceDefinition.builder()
                 .originalInterfaceName(interfaceName)
+                .applicationDomainColor(colorName)
                 .integrationType(integrationType)
                 .build();
         ServiceDefinition serviceDefinition = ServiceDefinition.builder()

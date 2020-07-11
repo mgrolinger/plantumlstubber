@@ -1,17 +1,19 @@
 # Release Notes
 
-## 0.5.3 (unreleased)
+## 0.5.3 (2020-07-11)
 
 ### New + Improved
-- moved package importdata
-- renamed package export to exportdata
-- added tests for DiagramType and SystemType
+
+- it is now possible to assign a different domain to an interface, which makes sense in larger applications that contain more than one domain
+- moved package _importdata_
+- renamed package export to _exportdata_
+- added numerous tests
 - multiple refactorings for readability
 - assertj for readability
 
 ### Fixes
+
 - major refactoring finally solves the common path problem or to little or to many ../ 
-- tests
 - console runner works again and has the preprocessor version as new argument
 - Export of skin and common files also works when started as jar
 

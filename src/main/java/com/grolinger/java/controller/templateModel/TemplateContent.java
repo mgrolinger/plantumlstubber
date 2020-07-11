@@ -10,9 +10,9 @@ public enum TemplateContent {
             "'!$SIMPLE=%true()\n" +
             "'!$SHOW_SQL=%false()\n" +
             "'!$SHOW_DOCUMENT_LINK=%false()\n" +
-            "'!$SHOW_EXCEPTION=%false()\n\n"),
+            "'!$SHOW_EXCEPTION=%true()\n\n"),
     COMPONENT_HEADER_VARIABLES("'!$DETAILED=%true()\n" +
-            "'!$UML_STRICT=%false()\n" +
+            "'!$UML_STRICT=%true()\n" +
             "!$SHOW_TODO=%false()\n\n\n");
 
     private final String content;

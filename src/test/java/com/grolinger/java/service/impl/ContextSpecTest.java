@@ -190,7 +190,7 @@ public class ContextSpecTest {
                 .build();
 
         Context result = new ContextSpec().builder()
-                .withColorName("test")
+                .withColorName("default")
                 .withApplication(applicationDefinition)
                 .withServiceDefinition(serviceDefinition)
                 .withInterfaceDefinition(interfaceDefinition)
@@ -201,7 +201,7 @@ public class ContextSpecTest {
         assertThat(result.getVariable(APPLICATION_LABEL)).isEqualTo(label);
         assertThat(result.getVariable(SERVICE_NAME)).isEqualTo("serviceName_v2");
         assertThat(result.getVariable(SERVICE_LABEL)).isEqualTo(sname);
-        assertThat(result.getVariable(COLOR_NAME)).isEqualTo("TEST_DOMAIN_COLOR");
+        assertThat(result.getVariable(COLOR_NAME)).isEqualTo("DEFAULT_DOMAIN_COLOR");
         assertThat(result.getVariable(IS_ROOT_SERVICE)).isEqualTo(false);
         assertThat(result.getVariable(PATH_TO_COMMON_FILE)).isEqualTo("../../../../");
         assertThat(result.getVariable(LINKED_TO_COMPONENT)).isEqualTo(linkToComponent.replace("/","_"));

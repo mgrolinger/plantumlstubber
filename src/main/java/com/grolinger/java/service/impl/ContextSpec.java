@@ -47,6 +47,7 @@ public final class ContextSpec {
 
     public static class ContextBuilderImpl implements ContextBuilder, ColorBuilder, ApplicationNameBuilder {
         private final Context context = new Context();
+
         {
             context.setVariable(DATE_CREATED, LocalDate.now());
             // set the default to true to prevent NullPointer, so called root services have only the applicationName and interfaceName set
@@ -108,7 +109,7 @@ public final class ContextSpec {
             if (StringUtils.isEmpty(label)) label = name;
             context.setVariable(APPLICATION_LABEL, label);
             // We can set the root path here as new default, it needs to be manually overridden later
-            context.setVariable(PATH_TO_COMMON_FILE,application.getPathToRoot());
+            context.setVariable(PATH_TO_COMMON_FILE, application.getPathToRoot());
 
             return this;
         }
@@ -142,6 +143,12 @@ public final class ContextSpec {
                 context.setVariable(HTTP_METHODS, interfaceDefinition.getMethodDefinition().getMethods());
             } else {
                 context.setVariable(HTTP_METHODS, "");
+            }
+            if (!StringUtils.isEmpty(interfaceDefinition.getDomainColor())) {
+                log.info("Override with interface color:{}", interfaceDefinition.getDomainColor());
+                context.setVariable(COLOR_TYPE, ColorMapper.getStereotype(interfaceDefinition.getDomainColor()));
+                context.setVariable(COLOR_NAME, ColorMapper.getDomainColor(interfaceDefinition.getDomainColor()));
+                context.setVariable(CONNECTION_COLOR, ColorMapper.getConnectionColor(interfaceDefinition.getDomainColor()));
             }
             return this;
         }

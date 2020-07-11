@@ -107,7 +107,7 @@ public class InterfaceDefinition implements CommonRootPathHandler, PathHandler {
         this.integrationType = getIntegrationType(integrationType);
 
         this.pumlFunctionType = getFunctionType(integrationType);
-
+        //
         this.responseType = getResponseType(integrationType);
         // this might be empty
 
