@@ -11,6 +11,14 @@ This works like this. First you write the yaml files and let them process by thi
 
 As a next step you may want to define your plantUML files, e.g. to show how an application is embedded into the environment. You can reuse the generated services from your repository and use the files by including them into your current file. Then you let plantUML process your file and plantUML will do its magic. The result are the plantUML diagrams.
 
+## Basic notation
+That is how I differentiate:
+
+*.iuml are files that can be included and contain a re-usable service definition. Use them with the directive !include
+*.puml are plantUML files that are self-sufficient and should not be !included in other files. These files, however, may include .iuml files
+
+This maybe your understanding as well, but the stubber will mostly generate .iuml files. The example.puml files give a hint how one can use the generated stubs.
+
 ### YAML configuration
 To generate stubs PlantUMLStubber needs yaml files that contains some information, such as name of the application, the domain, what kind of interfaces this application provides.
 
@@ -103,14 +111,6 @@ REST
 ## Swagger UI and Output
 The generator provides a swagger ui on http://localhost:19191/swagger-ui.html#/
 
-## Basic notation
-That is how I do it:
-
-*.iuml are includible files that contain a re-usable service definition. Use them with the directive !include
-*.puml are plantUML files that are self-sufficient and should not be !included in other files. These files, however, may include .iuml files
-
-This maybe your understanding as well or not, but the stubber will mostly generate .iuml files. The example.puml files give a hint how the generated stubs can be used.
-
 ### Output
 
 You can generate two types of diagrams:
@@ -160,4 +160,7 @@ You need to configure the working directory  (Java `user.dir`) in Run/Debug of t
 configuration yaml can be found, 
 e.g. `$MODULE_WORKING_DIR$` in Intellij: ![](documentation/Intellij_Config.png)
 
-_last update 22.06.2020_
+## Future Plans
+* The support of plantuml version prior to 1.2020.7 is dropped soon from this application, as the old way of functions is not really working. I use the new version exclusively and as far as I know I am the only one so...
+
+_last update 21.07.2020_

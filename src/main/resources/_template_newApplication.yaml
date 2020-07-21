@@ -13,7 +13,6 @@ customAlias:
 #   values:  application or component, database, springboot, archive, zip, user, address_book, email, folder, documents, jenkins
 systemType: application
 # what kind of interface HTTPS::XML, HTTP::JSON, SOAP::HTTP, SOAP (as synonym for (HTTP and JMS Endpoints))
-#integrationType: REST::JSON
 # Domain values:
 #    BiPRO(authentifizierung, suche, uebermittlung, bestand, taa, risikodaten, spezifisches),
 #    SID(customer, integration, resource, financial, external),
@@ -48,7 +47,7 @@ services:
         ## in the generated plantuml, such as $Application2_service_interface2()
         /restLess/restMore:
             - /withCallStack/{id}<<authentifizierung>>::POST:GET->Filesystem_readFile
-            - /withCallStack/{id}/foo->Filesystem_readFile<<authentifizierung>>::POST:GET
+            - /withCallStack/{id}/foo->Filesystem_readFile->Filesystem_writeFile<<authentifizierung>>::POST:GET
         /restLess/{id}:
             - /someInterface::GET->NewApplication_restLess_restMore_withCallStack_id
             - /name-minus/{id}

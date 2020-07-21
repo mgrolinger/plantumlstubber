@@ -42,6 +42,12 @@ public class InterfaceDefinitionTest {
                 .integrationType("foo::bar")
                 .build();
         List<String> resultFive = Collections.emptyList();
+        InterfaceDefinition six = InterfaceDefinition.builder()
+                .originalInterfaceName("/withCallStack/{id}/foo->Filesystem_readFile->Filesystem_writeFile<<authentifizierung>>::POST:GET")
+                .applicationDomainColor("authentifizierung")
+                .integrationType("rest")
+                .build();
+        List<String> resultSix = Lists.newArrayList("withCallStack", "id", "foo");
         return new Object[][]{
                 //@formatter:off
                 {one   , "method",                 resultOne,   "method",               "SOAP::XML" , "method", false},
@@ -49,7 +55,8 @@ public class InterfaceDefinitionTest {
                 // The slash prevents a method name
                 {three , "/api/v1/resource/{id}/", resultThree, "api_v1_resource_id",   "REST::JSON",  "" , false },
                 {four  , "/",                      resultFour,  ""                  ,   "REST::JSON",  "" , false },
-                {five  , "/",                      resultFive,  ""                  ,   "FOO::BAR",    "" , false }
+                {five  , "/",                      resultFive,  ""                  ,   "FOO::BAR",    "" , false },
+                {six,  "/withCallStack/{id}/foo",  resultSix,   "withCallStack_id_foo", "REST::JSON",  "foo",true }
                 //@formatter:on
         };
     }
@@ -68,11 +75,10 @@ public class InterfaceDefinitionTest {
         assertThat(cut.getIntegrationType()).isEqualTo(expInteg);
         assertThat(cut.getMethodName()).isEqualTo(expMethod);
         if (hasCallStack) {
-            assertThat(cut.getCallStack()).isNotEmpty();
-            assertThat(cut.getCallStackForIncludes()).isNotEmpty();
-        }else{
-            assertThat(cut.getCallStack()).isNull();
-            assertThat(cut.getCallStackForIncludes()).isNull();
+            assertThat(cut.getCallStack().getCallStackMethods()).isNotEmpty();
+            assertThat(cut.getCallStack().getCallStackIncludes()).isNotEmpty();
+        } else {
+            assertThat(cut.getCallStack().getCallStackMethods()).isNull();
         }
     }
 
