@@ -3,6 +3,7 @@
 ## 0.5.4 (unreleased)
 
 ### New + Improved
+* new _domain_ definition that allows an interface to have a different domain (and therefore color) than the main application
 * more tests
 
 ### Fixes
