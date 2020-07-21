@@ -3,8 +3,10 @@
 ## 0.5.4 (unreleased)
 
 ### New + Improved
+* more tests
 
 ### Fixes
+* Depending on the position of the definition methods could end up in filenames or procedure names  
 
 ### Updates
 

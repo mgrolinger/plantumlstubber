@@ -112,8 +112,9 @@ public class InterfaceDefinition implements CommonRootPathHandler, PathHandler {
 
         this.customAlias = customAlias;
 
+        // if specified, such as SOAP, Rest etc.first part in the yaml
         this.integrationType = getIntegrationType(integrationType);
-
+        // if specified, such as XML, JSON etc. second part in the yaml
         this.pumlFunctionType = getFunctionType(integrationType);
         //
         this.responseType = getResponseType(integrationType);
@@ -164,7 +165,7 @@ public class InterfaceDefinition implements CommonRootPathHandler, PathHandler {
     /**
      * Returns the name of the method
      *
-     * @param currentInterfaceName
+     * @param currentInterfaceName the name of the current interface
      * @return the current method name, for rest its the last part of the interface
      */
     private String getMethodName(@NotNull final String currentInterfaceName) {
