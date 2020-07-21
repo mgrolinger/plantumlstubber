@@ -129,7 +129,7 @@ public class InterfaceDefinitionTest {
                 .integrationType("SoAp")
                 .build();
         InterfaceDefinition two = InterfaceDefinition.builder()
-                .originalInterfaceName("/api/v1/resource/{id}::POST:GET->Call_Some_Application->And_some_other")
+                .originalInterfaceName("/api/v1/resource/{id}<<domainColor>>::POST:GET->Call_Some_Application->And_some_other")
                 .integrationType("rEsT")
                 .build();
 
@@ -147,8 +147,8 @@ public class InterfaceDefinitionTest {
                                       final String[] callStack,
                                       final String[] includesStack) {
         assertThat(cut.containsCallStack()).isEqualTo(containsCallStack);
-        assertThat(cut.getCallStack()).isEqualTo(callStack);
-        assertThat(cut.getCallStackForIncludes()).isEqualTo(includesStack);
+        assertThat(cut.getCallStack().getCallStackMethods()).isEqualTo(callStack);
+        assertThat(cut.getCallStack().getCallStackIncludes()).isEqualTo(includesStack);
     }
 
     @Test

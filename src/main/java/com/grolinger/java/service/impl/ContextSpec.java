@@ -126,15 +126,16 @@ public final class ContextSpec {
             this.withInterfaceName(interfaceDefinition.getCallName());
 
             if (interfaceDefinition.containsCallStack()) {
-                context.setVariable(CALL_STACK, interfaceDefinition.getCallStack());
-                context.setVariable(CALL_STACK_INCLUDES, interfaceDefinition.getCallStackForIncludes());
+                context.setVariable(CALL_STACK, interfaceDefinition.getCallStack().getCallStackMethods());
+                context.setVariable(CALL_STACK_INCLUDES, interfaceDefinition.getCallStack().getCallStackIncludes());
             } else {
                 context.removeVariable(CALL_STACK);
                 context.removeVariable(CALL_STACK_INCLUDES);
             }
             setIntegrationType(interfaceDefinition.getIntegrationType());
             // the functions are usually defined in common.iuml and look like this $restCall()
-            context.setVariable(CALL_INTERFACE_BY, "$" + interfaceDefinition.getPumlFunctionType().toLowerCase() + "Call");
+            context.setVariable(CALL_INTERFACE_BY, Constants.FUNCTION_V2_PREFIX.getValue() +
+                    interfaceDefinition.getPumlFunctionType().toLowerCase() + "Call");
             context.setVariable(INTERFACE_RESPONSE_TYPE, interfaceDefinition.getResponseType());
             context.setVariable(IS_LINKED, interfaceDefinition.isLinked());
             context.setVariable(LINKED_TO_COMPONENT, interfaceDefinition.getLinkToComponent());

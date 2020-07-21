@@ -1,6 +1,7 @@
 package com.grolinger.java.service.data;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.StringUtils;
 
 @Slf4j
 public enum HttpMethod {
@@ -16,6 +17,8 @@ public enum HttpMethod {
 
     public static HttpMethod match(final String method) {
         HttpMethod result = null;
+        if (StringUtils.isEmpty(method))
+            return result;
         try {
             result = valueOf(method);
         } catch (IllegalArgumentException ignore) {
