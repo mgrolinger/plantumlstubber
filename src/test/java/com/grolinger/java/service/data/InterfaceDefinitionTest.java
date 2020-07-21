@@ -47,6 +47,11 @@ public class InterfaceDefinitionTest {
                 .applicationDomainColor("authentifizierung")
                 .integrationType("rest")
                 .build();
+        InterfaceDefinition sixA = InterfaceDefinition.builder()
+                .originalInterfaceName("/withCallStack/{id}/foo::POST:GET->Filesystem_readFile->Filesystem_writeFile<<authentifizierung>>")
+                .applicationDomainColor("authentifizierung")
+                .integrationType("rest")
+                .build();
         List<String> resultSix = Lists.newArrayList("withCallStack", "id", "foo");
         return new Object[][]{
                 //@formatter:off
@@ -56,7 +61,8 @@ public class InterfaceDefinitionTest {
                 {three , "/api/v1/resource/{id}/", resultThree, "api_v1_resource_id",   "REST::JSON",  "" , false },
                 {four  , "/",                      resultFour,  ""                  ,   "REST::JSON",  "" , false },
                 {five  , "/",                      resultFive,  ""                  ,   "FOO::BAR",    "" , false },
-                {six,  "/withCallStack/{id}/foo",  resultSix,   "withCallStack_id_foo", "REST::JSON",  "foo",true }
+                {six,  "/withCallStack/{id}/foo",  resultSix,   "withCallStack_id_foo", "REST::JSON",  "foo",true },
+                {sixA,  "/withCallStack/{id}/foo",  resultSix,   "withCallStack_id_foo", "REST::JSON",  "foo",true }
                 //@formatter:on
         };
     }
