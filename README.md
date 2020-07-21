@@ -161,6 +161,6 @@ configuration yaml can be found,
 e.g. `$MODULE_WORKING_DIR$` in Intellij: ![](documentation/Intellij_Config.png)
 
 ## Future Plans
-* The support of plantuml version prior to 1.2020.7 is dropped soon from this application, as the old way of functions is not really working. I use the new version exclusively and as far as I know I am the only one so...
+* The support of plantuml version prior to 1.2020.7 will be dropped soon from this application, as the old way of functions is not really working. I use the new version exclusively and as far as I know I am the only one so...
 
 _last update 21.07.2020_
