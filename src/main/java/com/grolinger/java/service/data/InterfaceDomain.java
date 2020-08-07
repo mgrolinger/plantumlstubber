@@ -6,6 +6,9 @@ import org.springframework.util.StringUtils;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Class that helps to extract the domain information of an interface
+ */
 @UtilityClass
 public class InterfaceDomain {
 
@@ -15,7 +18,7 @@ public class InterfaceDomain {
      *
      * @param originalInterfaceName  the interface name from the yaml
      * @param applicationDomainColor default if no other "domain" is defined
-     * @return the domain name of the interface
+     * @return the domain name of the interface, {default}
      */
     public String extractDomainColor(String originalInterfaceName, String applicationDomainColor) {
         if (!StringUtils.isEmpty(originalInterfaceName)) {
@@ -31,6 +34,7 @@ public class InterfaceDomain {
 
     /**
      * Removes the domainColorDefinition from a String
+     *
      * @param originalInterfaceName interface definition
      * @return originalInterfaceName without <<string>>, e.g. /api/interface<<color>> -> /api/interface
      */

@@ -149,6 +149,11 @@ public class InterfaceDefinition implements CommonRootPathHandler, PathHandler {
         return fName;
     }
 
+    /**
+     * Checks if the  interface contains a path.
+     *
+     * @return {true} if the interface contains a path
+     */
     public boolean containsPath() {
         return !nameParts.isEmpty();
     }
@@ -211,8 +216,8 @@ public class InterfaceDefinition implements CommonRootPathHandler, PathHandler {
      * This method tries to guess from the integration type the correct type of response
      * that is later used in sequence diagrams for the response part
      * - e.g. REST::JSON -> JSON
-     *        REST -> JSON
-     *        SOAP::XML -> XML
+     * REST -> JSON
+     * SOAP::XML -> XML
      *
      * @param integrationType if the response type
      * @return the hopefully correct response
