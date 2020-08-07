@@ -73,6 +73,11 @@ public class ComponentFile {
         }
     }
 
+    /**
+     * Adds a component to the current file
+     * @param currentApplication the current application
+     * @param currentService the current service
+     */
     public void addComponent(final ApplicationDefinition currentApplication, final ServiceDefinition currentService) {
         if (!doneApplication.contains(currentApplication.getName())) {
             if (DiagramType.COMPONENT_V1_2019_6_DIAGRAM_BASE.equals(diagramType) || DiagramType.COMPONENT_V1_2020_7_DIAGRAM_BASE.equals(diagramType)) {
@@ -85,15 +90,18 @@ public class ComponentFile {
                         .append(" \"").append(currentApplication.getLabel())
                         .append("\" as ")
                         .append(currentApplication.getAlias()).append(" ")
-                        .append(ColorMapper.getStereotype(currentService.getDomainColor())).append("'").append(CARRIAGE_RETURN.getContent());
-                log.info("Feature not yet used; Color schema: {} -> {}", currentService.getDomainColor(), ColorGenerator.getColorCode(currentService.getDomainColor()));
+                        .append(ColorMapper.getStereotype(currentService.getDomainColor())).append("'")
+                        .append(CARRIAGE_RETURN.getContent());
+                log.info("Feature not yet used; Color schema: {} -> {}",
+                        currentService.getDomainColor(),
+                        ColorGenerator.getColorCode(currentService.getDomainColor()));
                 // Font-awesome
                 //TODO systeme unterscheiden
-                //Todo maybe this should be switched to a template
                 bucket2.append("  ").append(componentName).append(" = ").append(currentApplication.getSystemType().getFontAwesome()).append("(\"")
                         .append(currentApplication.getAlias()).append("\",\"")
                         .append(currentApplication.getLabel()).append("\") + '")
-                        .append(ColorMapper.getStereotype(currentService.getDomainColor())).append("'").append(CARRIAGE_RETURN.getContent());
+                        .append(ColorMapper.getStereotype(currentService.getDomainColor())).append("'")
+                        .append(CARRIAGE_RETURN.getContent());
                 doneApplication.add(currentApplication.getName());
             } else {
                 String participantName = currentApplication.getName();
