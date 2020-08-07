@@ -114,6 +114,14 @@ public class DataProcessorServiceImpl implements DataProcessorService {
         return localExportAdapter.createServiceDirectory(basePath, applicationDefinition, serviceDefinition);
     }
 
+    /**
+     * Processes an interface
+     * @param path path to
+     * @param contextBuilder the context
+     * @param currentApplication the current application
+     * @param currentService the current service
+     * @param exampleFile the example file
+     */
     private void processInterfaces(String path, ContextSpec.ContextBuilder contextBuilder, final ApplicationDefinition currentApplication, final ServiceDefinition currentService, ExampleFile exampleFile) {
         log.info("Current path: {}", path);
         for (InterfaceDefinition currentInterface : currentService.getInterfaceDefinitions()) {
