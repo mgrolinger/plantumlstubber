@@ -14,6 +14,9 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 
+/**
+ * Class that contains method definitions.
+ */
 @Slf4j
 public class MethodDefinition {
     private static final String REGEX_PATTERN = "(?=:)((:)([a-z0-9]*))+";
@@ -47,6 +50,12 @@ public class MethodDefinition {
         }
     }
 
+    /**
+     * Gets the interfaceName without method definitions, such as (GET, POST,...)
+     *
+     * @param name original name
+     * @return interface name
+     */
     public static String getInterfaceNameWithoutMethods(final String name) {
         if (containsIndividualMethods(name)) {
             Pattern pattern = Pattern.compile(REGEX_PATTERN, Pattern.CASE_INSENSITIVE);
