@@ -84,11 +84,12 @@ public class ColorGenerator {
             for (byte b : hash) {
                 color.append(b);
             }
+            // just take the first 6 chars
             color = new StringBuilder(color.toString().replaceAll("-", "").substring(0, 6));
         } else {
             color = new StringBuilder(RED);
         }
-        System.out.println(color + " - " + hash.length);
+        log.info("{} - {}", color, hash.length);
         return color.toString();
     }
 }
