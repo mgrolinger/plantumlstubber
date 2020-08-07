@@ -1,6 +1,6 @@
 # Release Notes
 
-## 0.5.4 (unreleased)
+## 0.5.4 (2020-08-07)
 
 ### New + Improved
 * new _domain_ definition that allows an interface to have a different domain (and therefore color) than the main application
@@ -10,7 +10,7 @@
 * Depending on the position of the definition methods could end up in filenames or procedure names  
 
 ### Updates
-
+- Spring boot Version 2.3.2.RELEASE
 
 ## 0.5.3 (2020-07-10)
 
