@@ -210,6 +210,9 @@ public class InterfaceDefinition implements CommonRootPathHandler, PathHandler {
     /**
      * This method tries to guess from the integration type the correct type of response
      * that is later used in sequence diagrams for the response part
+     * - e.g. REST::JSON -> JSON
+     *        REST -> JSON
+     *        SOAP::XML -> XML
      *
      * @param integrationType if the response type
      * @return the hopefully correct response
@@ -231,6 +234,14 @@ public class InterfaceDefinition implements CommonRootPathHandler, PathHandler {
         return result;
     }
 
+    /**
+     * Determines the functionType which is the first part of the identifier below the services in the yaml
+     * - e.g REST::JSON -> REST
+     * -     SOAP::XML -> SOAP
+     *
+     * @param responseType Type
+     * @return functionType or toDo; default is toDO
+     */
     private String getFunctionType(final String responseType) {
         String result = "toDo";
         if (responseType == null) {
