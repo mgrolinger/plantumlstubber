@@ -62,12 +62,6 @@ public class ServiceDefinition implements CommonRootPathHandler, PathHandler {
                 this.nameParts = new ArrayList<>();
                 this.serviceLabel = DEFAULT_ROOT_SERVICE_NAME.getValue();
             } else {
-                /*this.nameParts = Arrays.stream(NameConverter
-                        .replaceUnwantedPlantUMLCharactersForPath(serviceName)
-                        .split(SLASH.getValue()))
-                        .collect(Collectors.toList());
-
-                 */
                 this.nameParts = Arrays.stream(serviceName.split("[/|\\.]"))
                         .filter(s -> !StringUtils.isEmpty(s.trim()))
                         .map(NameConverter::replaceUnwantedPlantUMLCharactersForPath)

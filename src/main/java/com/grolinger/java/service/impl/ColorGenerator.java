@@ -50,6 +50,8 @@ public class ColorGenerator {
         put("uebermittlung", "96e8c3");
     }};
 
+    private static final String RED = "FF0000";
+
     public static String getColorCode(final String domainColor) {
         String dC = domainColor.toLowerCase();
         if (colorMap.containsKey(dC)) {
@@ -71,22 +73,22 @@ public class ColorGenerator {
     private static String generateColorFromHash(String domainColor) {
         byte[] hash = new byte[0];
         try {
-            MessageDigest digest = MessageDigest.getInstance("SHA-1");
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
             digest.update(domainColor.getBytes(StandardCharsets.US_ASCII));
             hash = digest.digest();
         } catch (NoSuchAlgorithmException exp) {
-            log.error("An error occured: {}", exp.getMessage());
+            log.error("An error occurred: {}", exp.getMessage());
         }
         StringBuilder color = new StringBuilder();
         if (hash.length >= 6) {
             for (byte b : hash) {
                 color.append(b);
             }
-            System.out.println(color + " - " + hash.length);
             color = new StringBuilder(color.toString().replaceAll("-", "").substring(0, 6));
         } else {
-            color = new StringBuilder("FF0000");
+            color = new StringBuilder(RED);
         }
+        System.out.println(color + " - " + hash.length);
         return color.toString();
     }
 }

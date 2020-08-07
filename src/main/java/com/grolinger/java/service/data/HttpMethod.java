@@ -3,6 +3,9 @@ package com.grolinger.java.service.data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 
+/**
+ * HTTP methods to display methods in component diagrams
+ */
 @Slf4j
 public enum HttpMethod {
     GET,
