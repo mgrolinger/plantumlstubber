@@ -25,6 +25,11 @@ public class ExampleFile {
     private final Template template;
     private final StringBuilder content;
 
+    /**
+     * Definition of the example file for an application and diagramType
+     *
+     * @param diagramType defines the diagram type for the example file
+     */
     @NotNull
     public ExampleFile(final DiagramType diagramType) {
         this.template = diagramType.getTemplate();
@@ -36,6 +41,12 @@ public class ExampleFile {
         content.append(diagramType.getTemplateContent().getContent());
     }
 
+    /**
+     * Adds an !include service/interface.iuml
+     *
+     * @param currentService   the current service
+     * @param currentInterface the current interface
+     */
     public void addInclude(final ServiceDefinition currentService, final InterfaceDefinition currentInterface) {
         content.append(INCLUDE.getContent())
                 .append(currentService.getPath())
@@ -44,6 +55,14 @@ public class ExampleFile {
                 .append(CARRIAGE_RETURN.getContent());
     }
 
+    /**
+     * Adds a !function call to the example file that joins all parameters by _
+     * e.g. $currentApplication_currentService_currentInterface("consumer")
+     *
+     * @param currentApplication the current application
+     * @param currentService     the current service
+     * @param currentInterface   the current interface
+     */
     public void addFunction(final ApplicationDefinition currentApplication,
                             final ServiceDefinition currentService,
                             final InterfaceDefinition currentInterface) {
@@ -59,7 +78,11 @@ public class ExampleFile {
                 .append("consumer").append(currentApplication.getAlias().toLowerCase())
                 .append("\")")
                 .append(CARRIAGE_RETURN.getContent()).append(CARRIAGE_RETURN.getContent());
-        log.info("Write {}_{}_{} to {}{}", currentApplication.getName(), currentService.getServiceCallName(), currentInterface.getCallName(), currentInterface.getMethodName(), FILE_TYPE_IUML);
+        log.info("Write {}_{}_{} to {}{}", currentApplication.getName(),
+                currentService.getServiceCallName(),
+                currentInterface.getCallName(),
+                currentInterface.getMethodName(),
+                FILE_TYPE_IUML);
     }
 
     /**
