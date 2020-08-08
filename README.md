@@ -1,15 +1,15 @@
 # PlantUMLStubber for generating plantUML application/service stubs
 
-This project is a springboot application that generates plantUML stubs for component diagrams and sequence diagrams. Those stubs contain information about applications and services. The generated files can be used to build a repository of re-usable files that come in handy to discuss software architecture or to document an application, a service or how application are working together.
+This project is a spring-boot application that generates plantUML stubs for component diagrams and sequence diagrams. Those stubs contain information about applications and services. The generated files can be used to build a repository of re-usable files that come in handy to discuss software architecture or to document an application, a service or how application are working together.
 
 ## What?
 The stubber will use _yaml_ files, which contain certain information, to generate files in the _target/_ directory. These resulting files are either puml or iuml files. The iuml files contain "todo" marker that are supposed to be filled in with information. 
 
-This works like this. First you write the yaml files and let them process by this application. The result are plantuml files in the folder "Component" or "Sequence". These files need to be corrected and the marked TODOs need to be filled out with details. Over the time you will build a repository of plantuml files of application/services. 
+This works like this. First you write the yaml files and let them process by this application. The result are plantuml files in the folder "Component" or "Sequence". These files need to be finished by filling out the marked TODOs with according details. Over the time you will build a repository of plantuml files of application/services. 
 ![](documentation/process.png)
 
 
-As a next step you may want to define your plantUML files, e.g. to show how an application is embedded into the environment. You can reuse the generated services from your repository and use the files by including them into your current file. Then you let plantUML process your file and plantUML will do its magic. The result are the plantUML diagrams.
+As a next step you may want to define your plantUML files, e.g. to show how an application embeds into the environment. You can reuse the generated services from your repository and use the files by including them into your current file. Then you let plantUML process your file and plantUML will do its magic. The result are the plantUML diagrams.
 
 ## Basic notation
 That is how I differentiate:
@@ -114,7 +114,7 @@ The generator provides a swagger ui on http://localhost:19191/swagger-ui.html#/
 ### Output
 
 You can generate two types of diagrams:
-* **Component**: Services as component diagrams, that may be used for system context diagrams (Kontextdiagramm). This diagram consist of building blocks that describe how systems interact with each other and what is in scope of an implementation and what not.
+* **Component**: Services as component diagrams, that may be used for system context diagrams (Kontextdiagramm). This diagram consists of building blocks that describe how systems interact with each other and what is in scope of an implementation and what not.
 
 * **Sequence**: A number of sequence diagrams that are useful as addition to system context diagrams. In later stages of architectural specifications these are helpful to show how systems interact.
 
@@ -122,15 +122,15 @@ You can generate two types of diagrams:
 Using the _template_newApplication.yaml without modifying it would generate in the root folder "Component", for instance the following folders.  
 ![](documentation/component_folder_result.png)
 
-Please note that there are a number of other sub-folders as well, such as Mailserver and Filesystem. For those are yaml files packaged in the project as well.
+Please note that there are a number of other sub-folders as well, such as email server and file system. For those are yaml files packaged in the project as well.
 
 Stepping down into the folder NewApplication (generated from the template), you will find a newApplication_example.puml. This file will use plantUML to generate the following image.
 ![](documentation/component_generated_result.png)
 
 ## Building your own repository
-Over the time more and more application are prepared and are waiting to be reused. I usually have one subfolder where I keep those re-usable files (e.g. _includes_) and a second subfolder (e.g. _documentation_) where I keep my files for the specific use case.
+Over the time more and more application fill up a repository and are available for reuse. I usually have one subfolder where I keep those re-usable files (e.g. _includes_) and a second subfolder (e.g. _documentation_) where I keep my files for the specific use case.
 
-Files from the _documentation_ folder may !include files from the _include_ folder but you may want to prevent to !include within the folder. 
+Files from the _documentation_ folder may !include files from the _include_ folder, but you may want to prevent to !include within the folder. 
 Files in the _include_ folder may !include each other, but should never !include files from the _documentation_ folder.
 
 ```
@@ -163,4 +163,4 @@ e.g. `$MODULE_WORKING_DIR$` in Intellij: ![](documentation/Intellij_Config.png)
 ## Future Plans
 * The support of plantuml version prior to 1.2020.7 will be dropped soon from this application, as the old way of functions is not really working. I use the new version exclusively and as far as I know I am the only one so...
 
-_last update 21.07.2020_
+_last update 08.08.2020_
