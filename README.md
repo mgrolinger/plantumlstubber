@@ -11,7 +11,7 @@ This works like this. First you write the yaml files and let them process by thi
 
 As a next step you may want to define your plantUML files, e.g. to show how an application embeds into the environment. You can reuse the generated services from your repository and use the files by including them into your current file. Then you let plantUML process your file and plantUML will do its magic. The result are the plantUML diagrams.
 
-## Basic notation
+## Configuration
 That is how I differentiate:
 
 *.iuml are files that can be included and contain a re-usable service definition. Use them with the directive !include
@@ -25,7 +25,7 @@ To generate stubs PlantUMLStubber needs yaml files that contains some informatio
 There is an example file that shows how a yaml file needs to be configured. Use _template_newApplication.yaml as starting point. There is also a rest route available to copy the template to the target folder.
 The PlantUMLStubber will consider all yaml files in the target/ folder.
 
-#### Separating names by . and /
+#### Separating names by . or /
 PlantUMLStubber treats the characters slash ("/") and dot (".") as separator in the applicationName, service or interface. It will create subdirectories subsequently. In general, PlantUMLStubber removes a lot of special characters due to the fact how plantuml will treat special characters. For example, if you take the variables _$part1_part2_ vs. _$part3+part4_, the first variable will work within plantUML and the latter not, as plantUML will recognize _$part3_ as variable and _+part4_ as a second word. PlantUML will show a syntax error.   
 
 Taking the following example: 
@@ -49,14 +49,14 @@ $ tree
 Within the generated iuml file the !procedure has the name: $Part1_part2_api_v2_resource(). As you may notice, the application replaces the character "/" or "." by "_". This is due to the fact how plantUML will treat different special characters as mentioned above.  
 
 
-#### Auto-Linking two applications
+#### Automatically link two applications
 Sometimes it can be useful to draw a link between two applications or an application and its database. This can be done on the configuration yaml by fill in these two configuration keys:
 ```
 linkToComponent: ApplicationName
 linkToCustomAlias: applicationalias
 ```
 
-#### Call Stacks
+#### Call stacks
 The configuration yaml enables call stacks, meaning the generated stubs contain already the !includes and $function calls to the other application given in the call stack. 
 Example:
 ```
@@ -70,7 +70,7 @@ The Rest::JSON Interface /api/convert will call subsequently application with th
 
 As the call stack definition suits to cases first to generate include-path for the files and second to generate the !procedure call for the just included file, this application cannot differentiate between e.g. rest interfaces /api/rest-interface and /api/rest/interface. PlantUMLStubber uses latter , so the application handles all special characters that may produce problems as "/". Please be aware of that.   
 
-#### Domain of Interfaces
+#### Domain of an interface
 Although an application should reside within a single domain it might be necessary to assign a different domain (color) to an interface. You may do so with specifying a domain within the interface definition. Just ad a domain surrounded by <<>>, e.g. <<customer>> that will override the domain of the application.
 ```
    REST::JSON:
@@ -78,7 +78,7 @@ Although an application should reside within a single domain it might be necessa
             - /interface<<authentifizierung>>
 ```
 
-#### HTTP Methods
+#### HTTP methods
 For Rest interfaces it might be interesting to specify the supported HTTP methods. The definition must be added in the interface by starting "::" and separating the single methods by ":", as you can see in the example below for ::POST:GET
 ```
    REST::JSON:
@@ -96,7 +96,7 @@ Domain of Interfaces, HTTP Methods and Call Stacks can be combined into one spec
 ```
 The order does not matter.
 
-#### Note for interfaces with the same name
+#### Important note for interfaces with the same name
 If an application has e.g. two service implementations (especially "EMPTY") and both have the same interfaceName, the last one wins. E.g. you have a soap service _getVersion()_ and a rest service _/getVersion_ without any additional (service) path, the last definition will override the preceding.
 ```
 ...
@@ -162,5 +162,7 @@ e.g. `$MODULE_WORKING_DIR$` in Intellij: ![](documentation/Intellij_Config.png)
 
 ## Future Plans
 * The support of plantuml version prior to 1.2020.7 will be dropped soon from this application, as the old way of functions is not really working. I use the new version exclusively and as far as I know I am the only one so...
+* Automatic color schemes for domain colors if the domain is not defined
+* Refactoring of SingleController, which is not working anymore, before one could use the rest api e.g. via Jenkins to generate the PlantUML files
 
-_last update 08.08.2020_
+_last update 27.09.2020_
