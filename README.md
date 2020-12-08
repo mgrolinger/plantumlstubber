@@ -3,7 +3,7 @@
 This project is a spring-boot application that generates plantUML stubs for component diagrams and sequence diagrams. Those stubs contain information about applications and services. The generated files can be used to build a repository of re-usable files that come in handy to discuss software architecture or to document an application, a service or how application are working together.
 
 ## What?
-The stubber will use _yaml_ files, which contain certain information, to generate files in the _target/_ directory. These resulting files are either puml or iuml files. The iuml files contain "todo" marker that are supposed to be filled in with information. 
+The stubber will use _yaml_ files, which contain certain information, to generate files in the _target/_ directory. These resulting files are either puml or iuml files. The iuml files contain "todo" marker that are need to be filled in with your information. 
 
 This works like this. First you write the yaml files and let them process by this application. The result are plantuml files in the folder "Component" or "Sequence". These files need to be finished by filling out the marked TODOs with according details. Over the time you will build a repository of plantuml files of application/services. 
 ![](documentation/process.png)
@@ -150,7 +150,7 @@ $ tree
 
 ## Requirements for using the PlantUML stubs
 * The generated files from the repository need a plantUML version >= 1.2019.6 because it uses the new V2 preprocessor or >= 1.2020.7 if you choose the newer version in the swagger ui
-* PlantUML itself requires a graphviz 2.38 installation
+* PlantUML itself requires a graphviz 2.38 installation or newer
 * The common files may need some manual clean up if you go with the old version of plantUML due to the fact that they introduced procedures in 1.2020.7 that helps with the backwards compatibility but made my life a bit more difficult 
 
 ## Intellij Configuration
@@ -161,8 +161,8 @@ configuration yaml can be found,
 e.g. `$MODULE_WORKING_DIR$` in Intellij: ![](documentation/Intellij_Config.png)
 
 ## Future Plans
-* The support of plantuml version prior to 1.2020.7 will be dropped soon from this application, as the old way of functions is not really working. I use the new version exclusively and as far as I know I am the only one so...
+* The support of plantuml version prior to 1.2020.7 will be dropped by the end of 2020 from this application, as the old way of functions is not really working. I use the new version exclusively and as far as I know, I am the only one using this application, so...
 * Automatic color schemes for domain colors if the domain is not defined
 * Refactoring of SingleController, which is not working anymore, before one could use the rest api e.g. via Jenkins to generate the PlantUML files
 
-_last update 27.09.2020_
+_last update 08.12.2020_
