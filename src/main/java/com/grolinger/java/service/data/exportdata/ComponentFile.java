@@ -59,7 +59,7 @@ public class ComponentFile {
                     .append("  !include <tupadr3/font-awesome/folder>").append(CARRIAGE_RETURN.getContent())
                     .append("  !include <tupadr3/devicons/jenkins>").append(CARRIAGE_RETURN.getContent())
                     .append("  !include <tupadr3/devicons/terminal>").append(CARRIAGE_RETURN.getContent())
-                    .append("  !include devicons/springboot.puml").append(CARRIAGE_RETURN.getContent())
+                    .append("  !include devicons/springBoot.puml").append(CARRIAGE_RETURN.getContent())
                     .append("  !include devicons/solr.puml").append(CARRIAGE_RETURN.getContent())
                     .append("  !include devicons/sap.puml").append(CARRIAGE_RETURN.getContent())
                     .append("  !include devicons/salesforce.puml").append(CARRIAGE_RETURN.getContent())

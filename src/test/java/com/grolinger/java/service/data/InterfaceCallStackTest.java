@@ -60,6 +60,7 @@ public class InterfaceCallStackTest {
                 {"/api/interface<<DOMAIN>>::GET:POST",                              null, null },
                 {"/api/interface<<DOMAIN>>->Call_stack->Call_stack2::GET:POST",     methods, incl },
                 {"/api/interface::GET:POST<<DOMAIN>>->Call_stack->Call_stack2",     methods, incl },
+                {"/api/interface_new::GET:POST->Call_stack->Call_stack2<<DOMAIN>>", methods, incl },
                 {"/api/interface_new::GET:POST->Call_stack->Call_stack2<<DOMAIN>>", methods, incl }
                 //@formatter:on
         };

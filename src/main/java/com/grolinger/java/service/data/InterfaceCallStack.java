@@ -9,7 +9,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Contains CallStack information of an interface
+ * Stores CallStack information of an interface
  * defined by -> in the yaml
  */
 public class InterfaceCallStack {
@@ -25,15 +25,15 @@ public class InterfaceCallStack {
      * Uses the given interface name and strips of:
      * <li>the call stack</li>: specifying subsequent calls which this interface will do on its own
      * <li>the specific rest methods</li>: specifying the methods this interface will provide
-     * An interfaceName might look like this: /api/interface::POST:GET->SomeApplication_Service_Method()
+     * A specified interface in the yaml might look like this: /api/interface::POST:GET->SomeApplication_Service_Method->OtherApplication_method
      *
      * @param originalInterfaceName The name of the interface, which may contain a call stack as well as some specific Rest methods
      */
     public InterfaceCallStack(final String originalInterfaceName) {
         // extract call stack(s) defined by ->
+        String tempInterfaceName = MethodDefinition.getInterfaceNameWithoutMethods(InterfaceDomain.removeDomainColorFromName(originalInterfaceName));
         if (originalInterfaceName.contains(Constants.CALL_STACK_SEPARATOR.getValue())) {
-            String[] currentCallStack = MethodDefinition.getInterfaceNameWithoutMethods(InterfaceDomain.removeDomainColorFromName(originalInterfaceName))
-                    .split(Constants.CALL_STACK_SEPARATOR.getValue());
+            String[] currentCallStack = tempInterfaceName.split(Constants.CALL_STACK_SEPARATOR.getValue());
 
             this.callStackMethods = removeOtherSpecifications(Arrays.copyOfRange(currentCallStack, 1, currentCallStack.length));
             int i = 0;
@@ -47,7 +47,7 @@ public class InterfaceCallStack {
             }
             containsCallStack = true;
         } else {
-            interfaceName = MethodDefinition.getInterfaceNameWithoutMethods(InterfaceDomain.removeDomainColorFromName(originalInterfaceName));
+            interfaceName = tempInterfaceName;
             callStackMethods = null;
             callStackIncludes = null;
         }
@@ -71,20 +71,4 @@ public class InterfaceCallStack {
         return callStackMethods;
     }
 
-    /**
-     * Removes the domainColorDefinition from a String
-     * @param originalInterfaceName interface definition
-     * @return originalInterfaceName without <<string>>, e.g. /api/interface<<color>> -> /api/interface
-     */
-    public String removeDomainColorFromName(String originalInterfaceName) {
-        if (!StringUtils.isEmpty(originalInterfaceName)) {
-            Pattern pattern = Pattern.compile("([<]{2})([a-z]+)([>]{2})", Pattern.CASE_INSENSITIVE);
-            Matcher matcher = pattern.matcher(originalInterfaceName);
-
-            if (matcher.find()) {
-                return originalInterfaceName.replaceAll(matcher.group(), "");
-            }
-        }
-        return originalInterfaceName;
-    }
 }

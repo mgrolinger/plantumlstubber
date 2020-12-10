@@ -19,7 +19,6 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 public class MethodDefinition {
-    private static final String REGEX_PATTERN = "(?=:)((:)([a-z0-9]*))+";
     @Getter
     private List<HttpMethod> methods;
 
@@ -31,7 +30,7 @@ public class MethodDefinition {
      */
     public MethodDefinition(final String originalInterfaceName) {
         if (containsIndividualMethods(originalInterfaceName)) {
-            Pattern pattern = Pattern.compile(REGEX_PATTERN, Pattern.CASE_INSENSITIVE);
+            Pattern pattern = Pattern.compile(CommonPattern.METHOD_PATTERN, Pattern.CASE_INSENSITIVE);
             Matcher matcher = pattern.matcher(originalInterfaceName);
             if (matcher.find()) {
                 String[] singleMethod = matcher.group(0)
@@ -58,7 +57,7 @@ public class MethodDefinition {
      */
     public static String getInterfaceNameWithoutMethods(final String name) {
         if (containsIndividualMethods(name)) {
-            Pattern pattern = Pattern.compile(REGEX_PATTERN, Pattern.CASE_INSENSITIVE);
+            Pattern pattern = Pattern.compile(CommonPattern.METHOD_PATTERN, Pattern.CASE_INSENSITIVE);
             Matcher matcher = pattern.matcher(name);
             if (matcher.find()) {
                 return name.replaceAll(matcher.group(), "");

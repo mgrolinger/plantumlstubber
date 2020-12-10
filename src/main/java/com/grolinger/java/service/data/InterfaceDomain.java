@@ -22,7 +22,7 @@ public class InterfaceDomain {
      */
     public String extractDomainColor(String originalInterfaceName, String applicationDomainColor) {
         if (!StringUtils.isEmpty(originalInterfaceName)) {
-            Pattern pattern = Pattern.compile("([<]{2})([a-z]+)([>]{2})", Pattern.CASE_INSENSITIVE);
+            Pattern pattern = Pattern.compile(CommonPattern.DOMAIN_DEFINITION_PATTERN, Pattern.CASE_INSENSITIVE);
             Matcher matcher = pattern.matcher(originalInterfaceName);
 
             if (matcher.find()) {
@@ -40,7 +40,7 @@ public class InterfaceDomain {
      */
     public String removeDomainColorFromName(String originalInterfaceName) {
         if (!StringUtils.isEmpty(originalInterfaceName)) {
-            Pattern pattern = Pattern.compile("([<]{2})([a-z]+)([>]{2})", Pattern.CASE_INSENSITIVE);
+            Pattern pattern = Pattern.compile(CommonPattern.DOMAIN_DEFINITION_PATTERN, Pattern.CASE_INSENSITIVE);
             Matcher matcher = pattern.matcher(originalInterfaceName);
 
             if (matcher.find()) {

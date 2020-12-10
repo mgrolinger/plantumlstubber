@@ -28,7 +28,7 @@ public class SwaggerConfig {
     private ApiInfo apiInfo() {
         return new ApiInfo(
                 "PlantumlStubber",
-                "Generator for PlantUML service stubs.",
+                "Generator for PlantUML application/service stubs.",
                 "API TOS",
                 "Terms of service",
                 new Contact("Michael Grolinger", "https://de.linkedin.com/in/mgrolinger", "m.grolinger+plantuml@gmail.com"),
