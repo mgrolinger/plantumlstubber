@@ -53,10 +53,10 @@ public class ApplicationDefinition implements CommonRootPathHandler, PathHandler
         }
 
         public ApplicationDefinitionBuilder systemType(final String importedSystemType) {
-            if (StringUtils.isEmpty(importedSystemType)) {
-                this.systemType = SystemType.COMPONENT;
-            } else {
+            if (StringUtils.hasText(importedSystemType)) {
                 this.systemType = SystemType.getFrom(importedSystemType.toLowerCase());
+            } else {
+                this.systemType = SystemType.COMPONENT;
             }
             return this;
         }

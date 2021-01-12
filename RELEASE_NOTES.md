@@ -1,19 +1,24 @@
 # Release Notes
 
-## 0.5.5 (unreleased)
+## 0.5.5 (2021-01-12)
 
 ### New + Improved
 * documentation improved
 * introduced maven prerequisite version
 
 ### Fixes
+* fixed usage of Spring obsolete methods
+* removed old non-working SingleController
+* the project is now buildable with jdk 1.8 or 15
+* excluded jackson dependency from databind as it is coming with spring-boot
 
 ### Updates
-* spring-boot             2.3.2 -> 2.4.0
-* jackson-dataformat-yaml 2.11.0 -> 2.12.0
+* spring-boot             2.3.2 -> 2.4.1
 * springfox-swagger-ui    2.9.2 -> 3.0.0
 * springfox-swagger2      2.9.2 -> 3.0.0
 * testng                  7.1.0 -> 7.3.0
+* assertj-core            3.16.1 -> 3.18.1
+* jackson                 2.11.3 -> 2.12.1
 
 ## 0.5.4 (2020-08-07)
 

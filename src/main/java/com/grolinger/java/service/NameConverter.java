@@ -24,7 +24,7 @@ public class NameConverter {
      */
     public static String replaceUnwantedPlantUMLCharacters(final String name, final boolean replaceDotsOnly) {
         String newName = "";
-        if (!StringUtils.isEmpty(name)) {
+        if (StringUtils.hasText(name)) {
             newName = removeParenthesisFromName(name);
             newName = replaceStringsByNameSeparator(newName, NAME_SEPARATOR);
             if (!replaceDotsOnly) {
@@ -44,7 +44,7 @@ public class NameConverter {
      */
     public static String replaceUnwantedPlantUMLCharactersForPath(final String name) {
         String newName = "";
-        if (!StringUtils.isEmpty(name)) {
+        if (StringUtils.hasText(name)) {
             newName = removeParenthesisFromName(name);
             newName = replaceStringsByNameSeparator(newName, SLASH);
         }

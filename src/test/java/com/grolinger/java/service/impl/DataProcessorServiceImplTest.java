@@ -11,12 +11,17 @@ import com.grolinger.java.service.data.exportdata.ExampleFile;
 import com.grolinger.java.service.data.mapper.ColorMapper;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.slf4j.Logger;
+import org.springframework.test.context.event.annotation.AfterTestClass;
+import org.springframework.test.context.event.annotation.BeforeTestClass;
 import org.springframework.util.StringUtils;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import org.thymeleaf.context.Context;
+import org.thymeleaf.spring5.SpringTemplateEngine;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -27,18 +32,25 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 public class DataProcessorServiceImplTest {
+    private SpringTemplateEngine springTemplateEngine = Mockito.mock(SpringTemplateEngine.class);
     @Mock
-    LocalExportAdapter localExportAdapter;
+    private LocalExportAdapter localExportAdapter;
     @Mock
-    LocalStaticAdapter localStaticAdapter;
+    private LocalStaticAdapter localStaticAdapter;
     @Mock
-    Logger log;
+    private Logger log;
     @InjectMocks
     DataProcessorServiceImpl dataProcessorServiceImpl;
+    private AutoCloseable closeable;
 
     @BeforeMethod
-    public void setUp() {
-        MockitoAnnotations.initMocks(this);
+    public void openMocks() {
+        closeable = MockitoAnnotations.openMocks(this);
+    }
+
+    @AfterMethod
+    public void releaseMocks() throws Exception {
+        closeable.close();
     }
 
     @Test

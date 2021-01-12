@@ -58,18 +58,18 @@ public class ServiceDefinition implements CommonRootPathHandler, PathHandler {
      */
     public static class ServiceDefinitionBuilder {
         public ServiceDefinition.ServiceDefinitionBuilder serviceName(final String serviceName) {
-            if (StringUtils.isEmpty(serviceName) || EMPTY.getValue().equalsIgnoreCase(serviceName)) {
+            if (!StringUtils.hasText(serviceName) || EMPTY.getValue().equalsIgnoreCase(serviceName)) {
                 this.nameParts = new ArrayList<>();
                 this.serviceLabel = DEFAULT_ROOT_SERVICE_NAME.getValue();
             } else {
                 this.nameParts = Arrays.stream(serviceName.split("[/|\\.]"))
-                        .filter(s -> !StringUtils.isEmpty(s.trim()))
+                        .filter(s -> StringUtils.hasText(s.trim()))
                         .map(NameConverter::replaceUnwantedPlantUMLCharactersForPath)
                         .collect(Collectors.toList());
                 // Remove everything what's not necessary
                 this.nameParts.removeIf(String::isEmpty);
                 // Set if not yet set by builder method
-                if (StringUtils.isEmpty(this.serviceLabel)) {
+                if (!StringUtils.hasText(this.serviceLabel)) {
                     this.serviceLabel = serviceName;
                 }
             }
