@@ -161,8 +161,7 @@ configuration yaml can be found,
 e.g. `$MODULE_WORKING_DIR$` in Intellij: ![](documentation/Intellij_Config.png)
 
 ## Future Plans
-* The support of plantuml version prior to 1.2020.7 will be dropped by the end of 2020 from this application, as the old way of functions is not really working. I use the new version exclusively and as far as I know, I am the only one using this application, so...
+* The support of plantuml version prior to 1.2020.7 will be dropped the latest by the end of March 2021 from this application, as the old way of functions is not really working. I use the new version exclusively and as far as I know, I am the only one using this application, so...
 * Automatic color schemes for domain colors if the domain is not defined
-* Refactoring of SingleController, which is not working anymore, before one could use the rest api e.g. via Jenkins to generate the PlantUML files
 
-_last update 08.12.2020_
+_last update 12.01.2021_

@@ -1,5 +1,14 @@
 # Release Notes
 
+## 0.5.6 (unreleased)
+
+### New + Improved
+
+### Fixes
+
+### Updates
+
+
 ## 0.5.5 (2021-01-12)
 
 ### New + Improved
@@ -81,7 +90,7 @@
 
 ### Fixes
 - alias and application name run apart, which leads to misbehavior of components
-- component template had wrong variable definition 
+- the component template had wrong variable definition 
 - banner.txt updated
 
 ## unreleased (yyyy-MM-dd)
