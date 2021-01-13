@@ -2,11 +2,8 @@ package com.grolinger.java.service.data;
 
 import com.grolinger.java.controller.templatemodel.Constants;
 import lombok.Getter;
-import org.springframework.util.StringUtils;
 
 import java.util.Arrays;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Stores CallStack information of an interface

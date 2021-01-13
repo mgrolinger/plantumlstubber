@@ -113,8 +113,7 @@ public class LocalExportAdapterImpl implements LocalExportAdapter {
 
         //write a pseudo common
         Files.createDirectories(Paths.get(GLOBAL_FILE_EXPORT_PATH + diagramType.getBasePath() + COMMON_PATH));
-        final String fileName = (DiagramType.COMPONENT_V1_2019_6_DIAGRAM_BASE.equals(diagramType) ||
-                DiagramType.COMPONENT_V1_2020_7_DIAGRAM_BASE.equals(diagramType)) ?
+        final String fileName = (DiagramType.COMPONENT_V1_2020_7_DIAGRAM_BASE.equals(diagramType)) ?
                 COMPONENT_DEFINITION_FILE :
                 PARTICIPANT_DEFINITION_FILE;
         try (Writer writer = new FileWriter(GLOBAL_FILE_EXPORT_PATH + diagramType.getBasePath() + COMMON_PATH + fileName)) {

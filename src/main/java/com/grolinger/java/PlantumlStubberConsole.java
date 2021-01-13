@@ -42,39 +42,14 @@ public class PlantumlStubberConsole implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        if (args.length % 2 != 0) {
-            throw new IllegalArgumentException("App requires tuples of 2 arguments: diagram <type> (COMP | SEQ) preprocessor (1.2019.6 | 1.2020.7)");
-        }
         String diagramType = extractDiagramType(args);
-        String preprocessorVersion = extractPreprocessorVersion(args);
         if (CommandArg.COMP.name().equalsIgnoreCase(diagramType)) {
-            this.multiExportController.component(null, preprocessorVersion);
+            this.multiExportController.component(null);
         } else if ((CommandArg.SEQ.name().equalsIgnoreCase(diagramType))) {
-            this.multiExportController.sequence(null, preprocessorVersion);
+            this.multiExportController.sequence(null);
         } else {
             throw new IllegalArgumentException("No diagram type matched. Please review the command line arguments. App exiting...");
         }
-    }
-
-    /**
-     * tries to extract the preprocessor version from 3rd and 4th argument
-     *
-     * @param args console arguments
-     * @return 1.2019.6|1.2020.7
-     */
-    private String extractPreprocessorVersion(String[] args) {
-        String preprocessorVersion = "1.2020.7";
-        if (args.length >= 4) {
-            if ("preprocessor".equalsIgnoreCase(args[2])
-                    && args[3].startsWith("1.")) {
-                //todo search args
-                preprocessorVersion = args[3];
-                log.info("Using preprocessor version {}", preprocessorVersion);
-            } else {
-                log.info("Using default preprocessor version {}", preprocessorVersion);
-            }
-        }
-        return preprocessorVersion;
     }
 
     /**

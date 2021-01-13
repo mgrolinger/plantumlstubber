@@ -5,6 +5,10 @@
 ### New + Improved
 
 ### Fixes
+* case-sensitive packages where not imported correctly
+
+### Removed
+* Removed the support for old 1.2019.6 preprocessor templates 
 
 ### Updates
 

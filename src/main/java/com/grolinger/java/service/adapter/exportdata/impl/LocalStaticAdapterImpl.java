@@ -2,6 +2,8 @@ package com.grolinger.java.service.adapter.exportdata.impl;
 
 import com.grolinger.java.controller.templatemodel.DiagramType;
 import com.grolinger.java.service.adapter.exportdata.LocalStaticAdapter;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
@@ -25,16 +27,13 @@ import static com.grolinger.java.controller.templatemodel.Constants.SLASH;
  */
 @Component
 @Slf4j
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class LocalStaticAdapterImpl implements LocalStaticAdapter {
     // FIXME move to config class
     public static final String STATIC_INCLUDES = "static_includes";
     private static final String COMMON_FILE = "common" + SLASH.getValue() + "common.iuml";
     private static final String GLOBAL_FILE_EXPORT_PATH = System.getProperty("user.dir") + SLASH.getValue() + "target" + SLASH.getValue();
     private static final String COMMON_PATH = "common" + SLASH.getValue();
-
-    private LocalStaticAdapterImpl() {
-        //hide
-    }
 
     /**
      * Copies the file from the resource folder in the jar to the specified output folder
@@ -85,8 +84,7 @@ public class LocalStaticAdapterImpl implements LocalStaticAdapter {
         final String pathToExport = GLOBAL_FILE_EXPORT_PATH + basePath;
         Files.createDirectories(Paths.get(pathToExport + COMMON_PATH));
         log.info("Exporting base path {}", pathToExport);
-        if (DiagramType.COMPONENT_V1_2019_6_DIAGRAM_BASE.equals(diagramType) ||
-                DiagramType.COMPONENT_V1_2020_7_DIAGRAM_BASE.equals(diagramType)) {
+        if (DiagramType.COMPONENT_V1_2020_7_DIAGRAM_BASE.equals(diagramType)) {
             filesToExport = Arrays.asList(
                     COMMON_FILE,
                     COMMON_PATH + "domain_legend.iuml",
