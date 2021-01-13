@@ -3,7 +3,7 @@
 This project is a spring-boot application that generates plantUML stubs for component diagrams and sequence diagrams. Those stubs contain information about applications and services. The generated files can be used to build a repository of re-usable files that come in handy to discuss software architecture or to document an application, a service or how application are working together.
 
 ## What?
-The stubber will use _yaml_ files, which contain certain information, to generate files in the _target/_ directory. These resulting files are either puml or iuml files. The iuml files contain "todo" marker that are need to be filled in with your information. 
+The stubber will use _yaml_ files, which contain certain information, to generate files in the _target/_ directory. These resulting files are either _.puml_ or _.iuml_ files. The _.iuml_ files contain "todo" marker that are need to be filled in with your information. 
 
 This works like this. First you write the yaml files and let them process by this application. The result are plantuml files in the folder "Component" or "Sequence". These files need to be finished by filling out the marked TODOs with according details. Over the time you will build a repository of plantuml files of application/services. 
 ![](documentation/process.png)
@@ -14,10 +14,10 @@ As a next step you may want to define your plantUML files, e.g. to show how an a
 ## Configuration
 That is how I differentiate:
 
-*.iuml are files that can be included and contain a re-usable service definition. Use them with the directive !include
-*.puml are plantUML files that are self-sufficient and should not be !included in other files. These files, however, may include .iuml files
+* _.iuml_ are files that can be included and contain a re-usable service definition. Use them with the directive !include
+* _.puml_ are plantUML files that are self-sufficient and should not be !included in other files. These files, however, may include .iuml files
 
-This maybe your understanding as well, but the stubber will mostly generate .iuml files. The example.puml files give a hint how one can use the generated stubs.
+This maybe your understanding as well, but the stubber will mostly generate _.iuml_ files. The example.puml files give a hint how one can use the generated stubs.
 
 ### YAML configuration
 To generate stubs PlantUMLStubber needs yaml files that contains some information, such as name of the application, the domain, what kind of interfaces this application provides.
@@ -46,7 +46,7 @@ $ tree
            └── v2
                └── resource.iuml
 ```
-Within the generated iuml file the !procedure has the name: $Part1_part2_api_v2_resource(). As you may notice, the application replaces the character "/" or "." by "_". This is due to the fact how plantUML will treat different special characters as mentioned above.  
+Within the generated _.iuml_ file the !procedure has the name: $Part1_part2_api_v2_resource(). As you may notice, the application replaces the character "/" or "." by "_". This is due to the fact how plantUML will treat different special characters as mentioned above.  
 
 
 #### Automatically link two applications
@@ -68,7 +68,7 @@ Example:
 
 The Rest::JSON Interface /api/convert will call subsequently application with the Name ApplicationName. This application itself needs to provide this interface. There should be a configuration yaml for the application ApplicationName as well.
 
-As the call stack definition suits to cases first to generate include-path for the files and second to generate the !procedure call for the just included file, this application cannot differentiate between e.g. rest interfaces /api/rest-interface and /api/rest/interface. PlantUMLStubber uses latter , so the application handles all special characters that may produce problems as "/". Please be aware of that.   
+As the call stack definition suits to two cases, first to generate include-path for the files, and second to generate the !procedure call for the just included file, this application cannot differentiate between e.g. rest interfaces /api/rest-interface and /api/rest/interface. PlantUMLStubber uses the latter, so the application handles all special characters that may produce problems as "/". Please be aware of that.   
 
 #### Domain of an interface
 Although an application should reside within a single domain it might be necessary to assign a different domain (color) to an interface. You may do so with specifying a domain within the interface definition. Just ad a domain surrounded by <<>>, e.g. <<customer>> that will override the domain of the application.
@@ -128,7 +128,7 @@ Stepping down into the folder NewApplication (generated from the template), you 
 ![](documentation/component_generated_result.png)
 
 ## Building your own repository
-Over the time more and more application fill up a repository and are available for reuse. I usually have one subfolder where I keep those re-usable files (e.g. _includes_) and a second subfolder (e.g. _documentation_) where I keep my files for the specific use case.
+Over the time more and more application fill up a repository and are available for re-use. I usually have one subfolder where I keep those re-usable files (e.g. _includes_) and a second subfolder (e.g. _documentation_) where I keep my files for the specific use case.
 
 Files from the _documentation_ folder may !include files from the _include_ folder, but you may want to prevent to !include within the folder. 
 Files in the _include_ folder may !include each other, but should never !include files from the _documentation_ folder.
@@ -149,9 +149,8 @@ $ tree
 ```
 
 ## Requirements for using the PlantUML stubs
-* The generated files from the repository need a plantUML version >= 1.2019.6 because it uses the new V2 preprocessor or >= 1.2020.7 if you choose the newer version in the swagger ui
+* The generated files from the repository need a plantUML version >= 1.2020.7
 * PlantUML itself requires a graphviz 2.38 installation or newer
-* The common files may need some manual clean up if you go with the old version of plantUML due to the fact that they introduced procedures in 1.2020.7 that helps with the backwards compatibility but made my life a bit more difficult 
 
 ## Intellij Configuration
 
@@ -161,7 +160,7 @@ configuration yaml can be found,
 e.g. `$MODULE_WORKING_DIR$` in Intellij: ![](documentation/Intellij_Config.png)
 
 ## Future Plans
-* The support of plantuml version prior to 1.2020.7 will be dropped the latest by the end of March 2021 from this application, as the old way of functions is not really working. I use the new version exclusively and as far as I know, I am the only one using this application, so...
+* The support of plantuml version prior to 1.2020.7 is dropped with the upcoming version 0.5.6, as the old way of functions is not really working.
 * Automatic color schemes for domain colors if the domain is not defined
 
-_last update 12.01.2021_
+_last update 13.01.2021_
