@@ -11,7 +11,7 @@
 * Removed the support for old 1.2019.6 preprocessor templates 
 
 ### Updates
-* spring-boot             2.4.1 -> 2.4.2
+* spring-boot             2.4.1 -> 2.4.3
 
 ## 0.5.5 (2021-01-12)
 
