@@ -407,7 +407,7 @@ skinparam note {
 !endprocedure
 
 ' creates a ghost component (greyish)
-!unquoted procedure $CREATE_COMPONENT_GHOST($NAME,$ALIAS,$_COLOR_NAME="LightGrey")
+!unquoted procedure $CREATE_GHOST_COMPONENT($NAME,$ALIAS,$_COLOR_NAME="LightGrey")
     !if ($UML_STRICT == %true())
         component "$NAME" as $ALIAS <<dottedborder>> #$_COLOR_NAME
     !else
@@ -419,12 +419,27 @@ skinparam note {
     interface "$INTEGRATION_TYPE($_INTEGRATION_TYPE)\n<font size=10>$_NAME</font>" as $_ALIAS #$_COLOR_NAME
 !endprocedure
 
+' creates a ghost interface (greyish)
+!unquoted procedure $CREATE_GHOST_INTERFACE($NAME,$ALIAS,$_COLOR_NAME="LightGrey")
+    interface "$_NAME" as $_ALIAS #$_COLOR_NAME#$_COLOR_NAME
+!endprocedure
+
+
 ' creates a database
 !unquoted procedure $CREATE_DATABASE($_NAME,$_ALIAS,$_COLOR_NAME="LightGrey")
     !if ($UML_STRICT == %true())
         database "$_NAME" as $_ALIAS #$_COLOR_NAME
     !else
         FA_DATABASE($_ALIAS,$_NAME,database) #$_COLOR_NAME
+    !endif
+!endprocedure
+
+' creates a ghost database (greyish)
+!unquoted procedure $CREATE_GHOST_DATABASE($NAME,$ALIAS,$_COLOR_NAME="LightGrey")
+    !if ($UML_STRICT == %true())
+        database "$_NAME" as $_ALIAS #$_COLOR_NAME#$_COLOR_NAME
+    !else
+        rectangle "<color:$_COLOR_NAME><database></color>\r<color:$_COLOR_NAME>$NAME</color>" as $ALIAS <<dottedborder>>
     !endif
 !endprocedure
 
