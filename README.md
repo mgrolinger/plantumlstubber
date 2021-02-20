@@ -160,7 +160,7 @@ configuration yaml can be found,
 e.g. `$MODULE_WORKING_DIR$` in Intellij: ![](documentation/Intellij_Config.png)
 
 ## Future Plans
-* The support of plantuml version prior to 1.2020.7 is dropped with the upcoming version 0.5.6, as the old way of functions is not really working.
+
 * Automatic color schemes for domain colors if the domain is not defined
 
 _last update 13.01.2021_
