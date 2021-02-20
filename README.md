@@ -163,4 +163,4 @@ e.g. `$MODULE_WORKING_DIR$` in Intellij: ![](documentation/Intellij_Config.png)
 
 * Automatic color schemes for domain colors if the domain is not defined
 
-_last update 13.01.2021_
+_last update 20.02.2021_
