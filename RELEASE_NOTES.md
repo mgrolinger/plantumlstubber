@@ -3,6 +3,7 @@
 ## 0.5.6 (unreleased)
 
 ### New + Improved
+* moved Code from Java 8 to 11
 
 ### Fixes
 * case-sensitive packages where not imported correctly
@@ -12,6 +13,9 @@
 
 ### Updates
 * spring-boot             2.4.1 -> 2.4.3
+* commons-lang3           3.10 -> 3.12.0
+* testng                  7.3.0 -> 7.4.0
+* lombok                  1.18.12 -> 1.18.18
 
 ## 0.5.5 (2021-01-12)
 

@@ -1,10 +1,11 @@
 package com.grolinger.java.service.data;
 
 
-import com.google.common.collect.Lists;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+import org.testng.collections.Lists;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -188,7 +189,7 @@ public class InterfaceDefinitionTest {
                 .originalInterfaceName("/api/v1/resource/{id}::POST:GET->Call_Some_Application")
                 .integrationType("rEsT")
                 .build();
-        List<HttpMethod> expResultOne = Lists.asList(HttpMethod.POST, new HttpMethod[]{HttpMethod.GET});
+        List<HttpMethod> expResultOne = Arrays.asList(HttpMethod.POST, HttpMethod.GET);
 
         InterfaceDefinition two = InterfaceDefinition.builder()
                 .originalInterfaceName("method")

@@ -105,7 +105,7 @@ public class InterfaceDefinition implements CommonRootPathHandler, PathHandler {
         // split names is required to know the path to subdirectories to the interface file, the for the name of  the procedure in plantuml etc.
         final String[] splitName = NameConverter.replaceUnwantedPlantUMLCharactersForPath(this.name).split(SLASH.getValue());
         this.nameParts = Arrays.stream(splitName)
-                .filter(s -> !StringUtils.isEmpty(s))
+                .filter(StringUtils::hasText)
                 .collect(Collectors.toList());
 
         this.callName = extractFormattedName(this.name);
@@ -120,10 +120,10 @@ public class InterfaceDefinition implements CommonRootPathHandler, PathHandler {
         this.responseType = getResponseType(integrationType);
         // this might be empty
 
-        this.isLinked = !StringUtils.isEmpty(linkToComponent);
+        this.isLinked = StringUtils.hasText(linkToComponent);
         this.linkToComponent = NameConverter.replaceUnwantedPlantUMLCharacters(linkToComponent, false);
         if (isLinked) {
-            this.linkToCustomAlias = StringUtils.isEmpty(linkToCustomAlias) ?
+            this.linkToCustomAlias = !StringUtils.hasText(linkToCustomAlias) ?
                     linkToComponent.toLowerCase() :
                     linkToCustomAlias;
         }
