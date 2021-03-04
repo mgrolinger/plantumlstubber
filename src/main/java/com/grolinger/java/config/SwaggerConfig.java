@@ -1,37 +1,39 @@
 package com.grolinger.java.config;
 
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Contact;
+import io.swagger.v3.oas.models.info.Info;
+import io.swagger.v3.oas.models.info.License;
+import org.springdoc.core.GroupedOpenApi;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import springfox.documentation.builders.PathSelectors;
-import springfox.documentation.builders.RequestHandlerSelectors;
-import springfox.documentation.service.ApiInfo;
-import springfox.documentation.service.Contact;
-import springfox.documentation.spi.DocumentationType;
-import springfox.documentation.spring.web.plugins.Docket;
-import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
-import java.util.Collections;
 
 @Configuration
-@EnableSwagger2
 public class SwaggerConfig {
     @Bean
-    public Docket api() {
-        return new Docket(DocumentationType.SWAGGER_2)
-                .select()
-                .apis(RequestHandlerSelectors.basePackage("com.grolinger.java.controller"))
-                .paths(PathSelectors.any())
-                .build()
-                .apiInfo(apiInfo());
+    public GroupedOpenApi api() {
+        return GroupedOpenApi.builder()
+                .group("")
+                .pathsToMatch("/export/**")
+                .build();
     }
 
-    private ApiInfo apiInfo() {
-        return new ApiInfo(
-                "PlantumlStubber",
-                "Generator for PlantUML application/service stubs.",
-                "API TOS",
-                "Terms of service",
-                new Contact("Michael Grolinger", "https://de.linkedin.com/in/mgrolinger", "m.grolinger+plantuml@gmail.com"),
-                "Apache V2.0", "http://www.apache.org/licenses/LICENSE-2.0", Collections.emptyList());
+    @Bean
+    public OpenAPI apiInfo(@Value("${app.name}") String title, @Value("${app.version}") String appVersion) {
+        return new OpenAPI()
+                .info(new Info()
+                        .title(title)
+                        .version(appVersion)
+                        .description("Generator for PlantUML application/service stubs.")
+                        .license(new License()
+                                .name("Apache V2.0")
+                                .url("http://www.apache.org/licenses/LICENSE-2.0"))
+                        .contact(new Contact()
+                                .name("Michael Grolinger")
+                                .url("https://de.linkedin.com/in/mgrolinger")
+                                .email("m.grolinger+plantuml@gmail.com"))
+                );
     }
 }

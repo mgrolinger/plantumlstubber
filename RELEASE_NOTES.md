@@ -3,7 +3,8 @@
 ## 0.5.6 (unreleased)
 
 ### New + Improved
-* moved Code from Java 8 to 11
+* moved Code from Java 8 -> 11
+* migrated from springfox 2 -> springdoc-openapi-ui 
 
 ### Fixes
 * case-sensitive packages where not imported correctly

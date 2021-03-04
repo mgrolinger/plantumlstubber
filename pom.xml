@@ -24,7 +24,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>11</java.version>
 
-        <swagger.version>3.0.0</swagger.version>
+        <openapi.version>1.5.5</openapi.version>
         <jackson.version>2.12.1</jackson.version>
         <lombok.version>1.18.18</lombok.version>
         <commons.version>3.12.0</commons.version>
@@ -91,14 +91,9 @@
         </dependency>
         <!-- Swagger IO-->
         <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger2</artifactId>
-            <version>${swagger.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger-ui</artifactId>
-            <version>${swagger.version}</version>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-ui</artifactId>
+            <version>${openapi.version}</version>
         </dependency>
 
         <dependency>

@@ -3,7 +3,7 @@ package com.grolinger.java.controller;
 import com.grolinger.java.service.DataProcessorService;
 import com.grolinger.java.service.adapter.importdata.ImportAdapter;
 import com.grolinger.java.service.data.ApplicationDefinition;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ui.Model;
@@ -14,7 +14,8 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.grolinger.java.controller.templatemodel.DiagramType.*;
+import static com.grolinger.java.controller.templatemodel.DiagramType.COMPONENT_V1_2020_7_DIAGRAM_BASE;
+import static com.grolinger.java.controller.templatemodel.DiagramType.SEQUENCE_V1_2020_7_DIAGRAM_BASE;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -23,8 +24,8 @@ public class MultiExportController {
     private final DataProcessorService dataProcessorService;
     private final ImportAdapter importAdapter;
 
-    @ApiOperation(
-            value = "Exports component stubs and example files to the local filesystem."
+    @Operation(
+            summary = "Exports component stubs and example files to the local filesystem."
     )
     @GetMapping("/export/components")
     public void component(Model model) throws IOException {
@@ -39,8 +40,8 @@ public class MultiExportController {
         }
     }
 
-    @ApiOperation(
-            value = "Exports component stubs and example files to the local filesystem."
+    @Operation(
+            summary = "Exports component stubs and example files to the local filesystem."
     )
     @GetMapping("/export/sequences")
     public void sequence(Model model) throws IOException {
@@ -51,8 +52,8 @@ public class MultiExportController {
     }
 
 
-    @ApiOperation(
-            value = "Exports an example template for application definitions to the local filesystem."
+    @Operation(
+            summary = "Exports an example template for application definitions to the local filesystem."
     )
     @GetMapping("/export/template")
     public void template() {
