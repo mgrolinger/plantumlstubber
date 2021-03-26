@@ -8,7 +8,7 @@ public interface CommonRootPathHandler {
     /**
      * "Calculates" the path to the root directory to be able to descent into the common directory.
      * All generated iuml files load the common.iuml file that contains a number of commonly used
-     * !functions and !procedures and also loads participants or components depending on the typ of
+     * !functions and !procedures and also loads participants or components depending on the type of
      * diagram
      *
      * @return {@code ../../} default | a number of {@code ../} depending on how many slashes are in the service's name
@@ -21,9 +21,7 @@ public interface CommonRootPathHandler {
         // 1 from number of directories to go up in the hierarchy
         if (isInterface()) size--;
 
-        for (int i = 0; i < size; i++) {
-            cp.append(DIR_UP.getValue());
-        }
+        cp.append(String.valueOf(DIR_UP.getValue()).repeat(Math.max(0, size)));
         return cp.toString();
     }
 

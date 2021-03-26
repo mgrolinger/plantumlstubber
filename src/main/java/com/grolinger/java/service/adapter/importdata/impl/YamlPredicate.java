@@ -10,6 +10,7 @@ class YamlPredicate {
     }
 
     static boolean isYamlFile(Path path) {
-        return path.toAbsolutePath().toString().toLowerCase().contains(".yaml");
+        return path.toAbsolutePath().toString().toLowerCase().contains(".yaml") ||
+                path.toAbsolutePath().toString().toLowerCase().contains(".yml");
     }
 }

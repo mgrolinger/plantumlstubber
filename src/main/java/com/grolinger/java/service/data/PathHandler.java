@@ -36,5 +36,5 @@ public interface PathHandler {
     /**
      * @return {true} if this is an interface or {false} if this is not an interface
      */
-    boolean isInterface();
+    boolean isInterface() ;
 }

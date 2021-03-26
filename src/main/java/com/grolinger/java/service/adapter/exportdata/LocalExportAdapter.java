@@ -15,9 +15,10 @@ public interface LocalExportAdapter {
      * Creates a directory for a service
      *
      * @param basePath          the path from where the repository is starting
+     * @param applicationDefinition the definition for the application
      * @param serviceDefinition the service definition
      * @return returns the path of the created directory
-     * @throws IOException
+     * @throws IOException the reason why creating the directory didn't work
      */
     String createServiceDirectory(final String basePath, final ApplicationDefinition applicationDefinition, final ServiceDefinition serviceDefinition) throws IOException;
 
@@ -65,7 +66,7 @@ public interface LocalExportAdapter {
      *
      * @param diagramType   either component|sequence
      * @param componentFile the content of the file
-     * @throws IOException
+     * @throws IOException the reason why the component file couldn't be written
      */
     void writeComponentFile(final DiagramType diagramType, ComponentFile componentFile) throws IOException;
 }
