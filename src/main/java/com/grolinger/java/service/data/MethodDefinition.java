@@ -75,10 +75,10 @@ public class MethodDefinition {
      * @return true if the name contains something like interface::POST:GET or interface::DELETE
      */
     private static boolean containsIndividualMethods(final String originalInterfaceName) {
-        if (StringUtils.isEmpty(originalInterfaceName))
+        if (!StringUtils.hasText(originalInterfaceName))
             return false;
         return originalInterfaceName.contains(Constants.INTERFACE_INTEGRATION_SEPARATOR.getValue()) &&
                 2 == originalInterfaceName.split(Constants.INTERFACE_INTEGRATION_SEPARATOR.getValue()).length &&
-                !(StringUtils.isEmpty(originalInterfaceName.split(Constants.INTERFACE_INTEGRATION_SEPARATOR.getValue())[1]));
+                (StringUtils.hasText(originalInterfaceName.split(Constants.INTERFACE_INTEGRATION_SEPARATOR.getValue())[1]));
     }
 }
