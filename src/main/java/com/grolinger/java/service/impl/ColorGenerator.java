@@ -16,7 +16,7 @@ import java.util.Map;
 @Slf4j
 @NoArgsConstructor
 public class ColorGenerator {
-    private static final Map<String, String> colorMap = new HashMap<String, String>() {{
+    private static final Map<String, String> colorMap = new HashMap<>() {{
         // SID
         put("customer", "Orange");
         put("external", "D4D4CD");
@@ -33,7 +33,7 @@ public class ColorGenerator {
         put("uebermittlung", "96e8c3");
     }};
 
-    private static final Map<String, String> connectionColorMap = new HashMap<String, String>() {{
+    private static final Map<String, String> connectionColorMap = new HashMap<>() {{
         // SID
         put("customer", "Orange");
         put("external", "DimGrey");
