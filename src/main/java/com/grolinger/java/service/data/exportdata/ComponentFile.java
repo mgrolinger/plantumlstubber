@@ -17,7 +17,7 @@ import static com.grolinger.java.controller.templatemodel.Constants.COMPONENT_SU
 import static com.grolinger.java.controller.templatemodel.TemplateContent.*;
 
 /**
- * Exporter for the automatic component/participant initialization from
+ * Exporter for the automatic component/participant initialization for
  * either component_definition.iuml or participant_definition.iuml
  */
 @Slf4j
@@ -39,7 +39,8 @@ public class ComponentFile {
                 .append(CARRIAGE_RETURN.getContent());
 
         if (DiagramType.COMPONENT_V1_2020_7_DIAGRAM_BASE.equals(diagramType)) {
-            // Component diagrams need two buckets
+            // Component diagrams need two buckets, the first is handling all the initialization stuff in the
+            // plantuml style, the second bucket for the font-awesome definitions
             bucket1 = new StringBuilder();
             bucket1.append("!if ($UML_STRICT == %true())")
                     .append(CARRIAGE_RETURN.getContent());
@@ -92,9 +93,11 @@ public class ComponentFile {
                         .append(currentApplication.getAlias()).append(" ")
                         .append(ColorMapper.getStereotype(currentService.getDomainColor())).append("'")
                         .append(CARRIAGE_RETURN.getContent());
-                log.info("Feature not yet used; Color schema: {} -> {}",
+                log.info("Feature not yet used; Color schema: {} -> {}, connections {}",
                         currentService.getDomainColor(),
-                        ColorGenerator.getColorCode(currentService.getDomainColor()));
+                        ColorGenerator.getColorCode(currentService.getDomainColor()),
+                        ColorGenerator.getConnectionColorCode(currentService.getDomainColor())
+                );
                 // Font-awesome
                 //TODO systeme unterscheiden
                 bucket2.append("  ").append(componentName).append(" = ").append(currentApplication.getSystemType().getFontAwesome()).append("(\"")
@@ -102,7 +105,6 @@ public class ComponentFile {
                         .append(currentApplication.getLabel()).append("\") + '")
                         .append(ColorMapper.getStereotype(currentService.getDomainColor())).append("'")
                         .append(CARRIAGE_RETURN.getContent());
-                doneApplication.add(currentApplication.getName());
             } else {
                 String participantName = currentApplication.getName();
                 // Generate default
@@ -121,8 +123,8 @@ public class ComponentFile {
                         .append(Constants.FUNCTION_V2_PREFIX.getValue()).append(participantName.toUpperCase()).append("_ORDER_PRIO")
                         .append(CARRIAGE_RETURN.getContent()).append(CARRIAGE_RETURN.getContent());
 
-                doneApplication.add(currentApplication.getName());
             }
+            doneApplication.add(currentApplication.getName());
         }
     }
 
