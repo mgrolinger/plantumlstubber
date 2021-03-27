@@ -21,7 +21,7 @@ public class InterfaceDomain {
      * @return the domain name of the interface, {default}
      */
     public String extractDomainColor(String originalInterfaceName, String applicationDomainColor) {
-        if (!StringUtils.isEmpty(originalInterfaceName)) {
+        if (StringUtils.hasText(originalInterfaceName)) {
             Pattern pattern = Pattern.compile(CommonPattern.DOMAIN_DEFINITION_PATTERN, Pattern.CASE_INSENSITIVE);
             Matcher matcher = pattern.matcher(originalInterfaceName);
 
@@ -29,7 +29,7 @@ public class InterfaceDomain {
                 return matcher.group(2).trim().toLowerCase();
             }
         }
-        return StringUtils.isEmpty(applicationDomainColor) ? "default" : applicationDomainColor.trim().toLowerCase();
+        return StringUtils.hasText(applicationDomainColor) ? applicationDomainColor.trim().toLowerCase() : "default";
     }
 
     /**
@@ -39,7 +39,7 @@ public class InterfaceDomain {
      * @return originalInterfaceName without <<string>>, e.g. /api/interface<<color>> -> /api/interface
      */
     public String removeDomainColorFromName(String originalInterfaceName) {
-        if (!StringUtils.isEmpty(originalInterfaceName)) {
+        if (StringUtils.hasText(originalInterfaceName)) {
             Pattern pattern = Pattern.compile(CommonPattern.DOMAIN_DEFINITION_PATTERN, Pattern.CASE_INSENSITIVE);
             Matcher matcher = pattern.matcher(originalInterfaceName);
 
