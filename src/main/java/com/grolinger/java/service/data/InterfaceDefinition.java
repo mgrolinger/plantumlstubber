@@ -36,7 +36,7 @@ public class InterfaceDefinition implements CommonRootPathHandler, PathHandler {
         DEFAULT_MAPPER_INTEGRATION.put("REST", "::JSON");
         DEFAULT_MAPPER_INTEGRATION.put("SOAP", "::XML");
         // e.g. a SOAP request gets a XML response, a db call a result set
-        DEFAULT_MAPPER_RESPONSE.put("DB", "Resultset");
+        DEFAULT_MAPPER_RESPONSE.put("DB", "ResultSet");
         DEFAULT_MAPPER_RESPONSE.put("SOAP", "XML");
         DEFAULT_MAPPER_RESPONSE.put("REST", "JSON");
         DEFAULT_MAPPER_RESPONSE.put("HTTP", "HTML");
