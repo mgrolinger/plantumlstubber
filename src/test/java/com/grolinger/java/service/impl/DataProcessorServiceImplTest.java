@@ -30,7 +30,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 public class DataProcessorServiceImplTest {
-    private SpringTemplateEngine springTemplateEngine = Mockito.mock(SpringTemplateEngine.class);
+    private final SpringTemplateEngine springTemplateEngine = Mockito.mock(SpringTemplateEngine.class);
     @Mock
     private LocalExportAdapter localExportAdapter;
     @Mock
@@ -49,21 +49,6 @@ public class DataProcessorServiceImplTest {
     @AfterMethod
     public void releaseMocks() throws Exception {
         closeable.close();
-    }
-
-    @Test
-    public void testProcessContextOfApplication() {
-        final String colorName = "colorName";
-        final String applicationName = "applicationName";
-        final String serviceName = "serviceName";
-        final String interfaceName = "interfaceName";
-        Context result = dataProcessorServiceImpl.processContextOfApplication(colorName, "integrationType", applicationName, serviceName, interfaceName, Integer.valueOf(12));
-        assertThat(result).isNotNull();
-        assertThat(result.getVariable(ContextVariables.COLOR_NAME)).isEqualTo(ColorMapper.getDomainColor(colorName));
-        assertThat(result.getVariable(ContextVariables.APPLICATION_NAME)).isEqualTo(StringUtils.capitalize(applicationName));
-        assertThat(result.getVariable(ContextVariables.SERVICE_NAME)).isEqualTo(serviceName);
-        assertThat(result.getVariable(ContextVariables.INTERFACE_NAME)).isEqualTo(interfaceName);
-        assertThat(result.getVariable(ContextVariables.SEQUENCE_PARTICIPANT_ORDER)).isEqualTo(12);
     }
 
     @Test

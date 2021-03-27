@@ -13,20 +13,6 @@ import java.util.List;
 public interface DataProcessorService {
 
     /**
-     * Processes the application specified from the interface
-     *
-     * @param colorName
-     * @param integrationType
-     * @param applicationName
-     * @param serviceName
-     * @param interfaceName
-     * @param orderPrio
-     * @return
-     * @deprecated since 01.08.2020
-     */
-    Context processContextOfApplication(String colorName, String integrationType, String applicationName, String serviceName, String interfaceName, Integer orderPrio);
-
-    /**
      * Processes the application list previously loaded from the filesystem.
      *
      * @param applicationList imported specifications

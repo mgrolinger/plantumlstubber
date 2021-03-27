@@ -26,35 +26,6 @@ public class DataProcessorServiceImpl implements DataProcessorService {
     private final LocalExportAdapter localExportAdapter;
     private final LocalStaticAdapter localStaticAdapter;
 
-    @Override
-    public Context processContextOfApplication(String colorName, String integrationType, String applicationName, String serviceName, String interfaceName, Integer orderPrio) {
-        // Fixme: missing all new features for multi-service
-        ApplicationDefinition applicationDefinition = ApplicationDefinition.builder()
-                .name(applicationName)
-                .alias(applicationName.toLowerCase())
-                .label(applicationName)
-                .orderPrio(orderPrio)
-                .build();
-        final InterfaceDefinition interfaceDefinition = InterfaceDefinition.builder()
-                .originalInterfaceName(interfaceName)
-                .applicationDomainColor(colorName)
-                .integrationType(integrationType)
-                .build();
-        ServiceDefinition serviceDefinition = ServiceDefinition.builder()
-                .serviceName(serviceName)
-                .domainColor(colorName)
-                .interfaceDefinitions(Collections.singletonList(interfaceDefinition))
-                .build();
-
-        return new ContextSpec().builder()
-                .withColorName(colorName)
-                .withApplication(applicationDefinition)
-                .withServiceDefinition(serviceDefinition)
-                .withInterfaceDefinition(interfaceDefinition)
-                .withOrderPrio(orderPrio)
-                .getContext();
-    }
-
     /**
      * Processes all applications that are defined by a list of {@link ApplicationDefinition},
      * {@link ServiceDefinition} and {@link InterfaceDefinition}. The result is exported as diagrams
@@ -116,11 +87,12 @@ public class DataProcessorServiceImpl implements DataProcessorService {
 
     /**
      * Processes an interface
-     * @param path path to
-     * @param contextBuilder the context
+     *
+     * @param path               path to
+     * @param contextBuilder     the context
      * @param currentApplication the current application
-     * @param currentService the current service
-     * @param exampleFile the example file
+     * @param currentService     the current service
+     * @param exampleFile        the example file
      */
     private void processInterfaces(String path, ContextSpec.ContextBuilder contextBuilder, final ApplicationDefinition currentApplication, final ServiceDefinition currentService, ExampleFile exampleFile) {
         log.info("Current path: {}", path);
