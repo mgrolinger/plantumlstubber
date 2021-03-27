@@ -20,14 +20,13 @@ public enum HttpMethod {
 
     public static HttpMethod match(final String method) {
         HttpMethod result = null;
-        if (StringUtils.isEmpty(method))
-            return result;
-        try {
-            result = valueOf(method);
-        } catch (IllegalArgumentException ignore) {
-            //ignore
-            log.warn("No value found for {}", method);
-        }
+        if (StringUtils.hasText(method))
+            try {
+                result = valueOf(method);
+            } catch (IllegalArgumentException ignore) {
+                //ignore
+                log.warn("No value found for {}", method);
+            }
         return result;
     }
 }
