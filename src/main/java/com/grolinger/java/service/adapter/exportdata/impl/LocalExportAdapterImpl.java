@@ -8,9 +8,9 @@ import com.grolinger.java.service.data.ServiceDefinition;
 import com.grolinger.java.service.data.exportdata.ComponentFile;
 import com.grolinger.java.service.data.exportdata.ExampleFile;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 
@@ -47,11 +47,11 @@ public class LocalExportAdapterImpl implements LocalExportAdapter {
     public String createServiceDirectory(final String basePath, final ApplicationDefinition applicationDefinition, final ServiceDefinition serviceDefinition) throws IOException {
         String path;
         String applicationPart = "";
-        if (null != applicationDefinition.getPath()) {
+        if (StringUtils.hasText(applicationDefinition.getPath())) {
             applicationPart = applicationDefinition.getPath() + PATH_SEPARATOR.getValue();
         }
         String servicePart = "";
-        if (null != serviceDefinition.getPath()) {
+        if (StringUtils.hasText(serviceDefinition.getPath())) {
             servicePart = serviceDefinition.getPath();
         }
         path = GLOBAL_FILE_EXPORT_PATH + basePath + applicationPart + servicePart;
