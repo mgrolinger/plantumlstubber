@@ -19,7 +19,7 @@ public class PlantumlStubber {
     public static void main(String[] args) {
         //TODO JCommander etc
         SpringApplication.run(PlantumlStubber.class, args);
-        log.info("Swagger accessible via http://localhost:{}/swagger-ui.html#/", port);
+        log.info("GUI accessible via http://localhost:{}/swagger-ui.html#/", port);
     }
 
 }
