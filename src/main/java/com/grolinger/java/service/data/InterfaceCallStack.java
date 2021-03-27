@@ -59,6 +59,12 @@ public class InterfaceCallStack {
         return containsCallStack;
     }
 
+    /**
+     * Removing specifications such as domain and methods
+     *
+     * @param callStackMethods call stack methods
+     * @return call stack
+     */
     private String[] removeOtherSpecifications(String[] callStackMethods) {
         int position = 0;
         for (String callStackMethod : callStackMethods) {
