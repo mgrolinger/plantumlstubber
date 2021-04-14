@@ -2,6 +2,12 @@
 
 This project is a spring-boot application that generates plantUML stubs for component diagrams and sequence diagrams. Those stubs contain information about applications and services. The generated files can be used to build a repository of re-usable files that come in handy to discuss software architecture or to document an application, a service or how application are working together.
 
+[![Java CI with Maven](https://github.com/mgrolinger/plantumlstubber/actions/workflows/maven.yml/badge.svg)](https://github.com/mgrolinger/plantumlstubber/actions/workflows/maven.yml)
+[![CodeQL](https://github.com/mgrolinger/plantumlstubber/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/mgrolinger/plantumlstubber/actions/workflows/codeql-analysis.yml)
+
+
+
+
 ## What?
 The stubber will use _yaml_ files, which contain certain information, to generate files in the _target/_ directory. These resulting files are either _.puml_ or _.iuml_ files. The _.iuml_ files contain "todo" marker that are need to be filled in with your information. 
 
