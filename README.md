@@ -18,12 +18,12 @@ This works like this. First you write the yaml files and let them process by thi
 As a next step you may want to define your plantUML files, e.g. to show how an application embeds into the environment. You can reuse the generated services from your repository and use the files by including them into your current file. Then you let plantUML process your file and plantUML will do its magic. The result are the plantUML diagrams.
 
 ## Configuration
-That is how I differentiate:
+That is how I personally differentiate:
 
-* _.iuml_ are files that can be included and contain a re-usable service definition. Use them with the directive !include
+* _.iuml_ are files that can be included and contain a re-usable service definition. Use them with the directive _!include_
 * _.puml_ are plantUML files that are self-sufficient and should not be !included in other files. These files, however, may include .iuml files
 
-This maybe your understanding as well, but the stubber will mostly generate _.iuml_ files. The example.puml files give a hint how one can use the generated stubs.
+The stubber will mostly generate _.iuml_ files. The example.puml files give a hint how you can use the generated stubs.
 
 ### YAML configuration
 To generate stubs PlantUMLStubber needs yaml files that contains some information, such as name of the application, the domain, what kind of interfaces this application provides.
@@ -77,7 +77,7 @@ The Rest::JSON Interface /api/convert will call subsequently application with th
 As the call stack definition suits to two cases, first to generate include-path for the files, and second to generate the !procedure call for the just included file, this application cannot differentiate between e.g. rest interfaces /api/rest-interface and /api/rest/interface. PlantUMLStubber uses the latter, so the application handles all special characters that may produce problems as "/". Please be aware of that.   
 
 #### Domain of an interface
-Although an application should reside within a single domain it might be necessary to assign a different domain (color) to an interface. You may do so with specifying a domain within the interface definition. Just ad a domain surrounded by <<>>, e.g. <<customer>> that will override the domain of the application.
+Although an application should reside within a single domain, it might be necessary to assign a different domain (color) to an interface. You may do so with specifying a domain within the interface definition. Just ad a domain surrounded by <<>>, e.g. <<customer>> that will override the domain of the application.
 ```
    REST::JSON:
         /api/: 
@@ -165,8 +165,11 @@ You need to configure the working directory  (Java `user.dir`) in Run/Debug of t
 configuration yaml can be found, 
 e.g. `$MODULE_WORKING_DIR$` in Intellij: ![](documentation/Intellij_Config.png)
 
+## Known issues
+* A Rest-API or method containing a hyphen do not work very well. The challenge is that plantuml will identify a string "foo-bar" not as one but two separate stings. This, however, does not work well when the PlantUMLStubber generates a method name from this. That's why I decided to transform a hyphen to an underscore. Underscores on the other hand will result in a subdirectory. Taking the example from the beginning: "foo-bar" will be "foo/bar.iuml" rather than "foo-bar.iuml", as you would expect. This was also a consequence of introducing the _callstack_ feature, which is described above.  
+
 ## Future Plans
 
 * Automatic color schemes for domain colors if the domain is not defined
 
-_last update 20.02.2021_
+_last update 23.04.2021_
