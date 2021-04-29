@@ -106,9 +106,9 @@ The order does not matter.
 If an application has e.g. two service implementations (especially "EMPTY") and both have the same interfaceName, the last one wins. E.g. you have a soap service _getVersion()_ and a rest service _/getVersion_ without any additional (service) path, the last definition will override the preceding.
 ```
 ...
-SOAP:
+SOAP::XML:
     EMPTY: [getVersion]
-REST
+REST::JSON:
     EMPTY: [/getVersion]
 ...
 ```
