@@ -9,7 +9,7 @@ This project is a spring-boot application that generates plantUML stubs for comp
 
 
 ## What?
-The stubber will use _yaml_ files, which contain certain information, to generate files in the _target/_ directory. These resulting files are either _.puml_ or _.iuml_ files. The _.iuml_ files contain "todo" marker that are need to be filled in with your information. 
+This application will use _yaml_ files, which contain certain information, to generate files in the _target/_ directory. These resulting files are either _.puml_ or _.iuml_ files. The _.iuml_ files contain "todo" marker that are need to be filled in with your information. 
 
 This works like this. First you write the yaml files and let them process by this application. The result are plantuml files in the folder "Component" or "Sequence". These files need to be finished by filling out the marked TODOs with according details. Over the time you will build a repository of plantuml files of application/services. 
 ![](documentation/process.png)
@@ -166,10 +166,10 @@ configuration yaml can be found,
 e.g. `$MODULE_WORKING_DIR$` in Intellij: ![](documentation/Intellij_Config.png)
 
 ## Known issues
-* A Rest-API or method containing a hyphen do not work very well. The challenge is that plantuml will identify a string "foo-bar" not as one but two separate stings. This, however, does not work well when the PlantUMLStubber generates a method name from this. That's why I decided to transform a hyphen to an underscore. Underscores on the other hand will result in a subdirectory. Taking the example from the beginning: "foo-bar" will be "foo/bar.iuml" rather than "foo-bar.iuml", as you would expect. This was also a consequence of introducing the _callstack_ feature, which is described above.  
+* A Rest-API or method containing a hyphen does not work very well. The challenge is that plantuml will identify a string "foo-bar" not as one but two separate stings. This, however, does not work well when the PlantUMLStubber generates a method name from this. That's why I decided to transform a hyphen to an underscore. Underscores on the other hand will result in a subdirectory. Taking the example from the beginning: "foo-bar" will be "foo/bar.iuml" rather than "foo-bar.iuml", as you would expect. This was also a consequence of introducing the _callstack_ feature, which is described above.  
 
 ## Future Plans
 
 * Automatic color schemes for domain colors if the domain is not defined
 
-_last update 23.04.2021_
+_last update 29.04.2021_
