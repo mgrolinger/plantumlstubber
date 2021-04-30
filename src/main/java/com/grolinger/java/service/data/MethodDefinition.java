@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public class MethodDefinition {
     @Getter
-    private List<HttpMethod> methods;
+    private final List<HttpMethod> methods;
 
     /**
      * Extracts the HttpMethods from the originalInterfaceName that may look like this:
@@ -30,23 +30,33 @@ public class MethodDefinition {
      */
     public MethodDefinition(final String originalInterfaceName) {
         if (containsIndividualMethods(originalInterfaceName)) {
-            Pattern pattern = Pattern.compile(CommonPattern.METHOD_PATTERN, Pattern.CASE_INSENSITIVE);
-            Matcher matcher = pattern.matcher(originalInterfaceName);
-            if (matcher.find()) {
-                String[] singleMethod = matcher.group(0)
-                        .split(Constants.INTERFACE_INTEGRATION_SEPARATOR.getValue())[1]
-                        .split(Constants.INTERFACE_METHOD_SEPARATOR.getValue());
-
-                // ignore call stack information, just save the methods
-                methods = Arrays.stream(singleMethod)
-                        .map(HttpMethod::match)
-                        .filter(Objects::nonNull)
-                        .collect(Collectors.toList());
-            }
-
+            methods = getHttpMethods(originalInterfaceName);
         } else {
             methods = new LinkedList<>();
         }
+    }
+
+    /**
+     * Extracts the methods, such as HTTP-GET or HTTP-POST into the
+     *
+     * @param originalInterfaceName the original string from the yaml
+     * @return List of all HttpMethods that could be identified
+     */
+    private List<HttpMethod> getHttpMethods(String originalInterfaceName) {
+        Pattern pattern = Pattern.compile(CommonPattern.METHOD_PATTERN, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(originalInterfaceName);
+        if (matcher.find()) {
+            String[] singleMethod = matcher.group(0)
+                    .split(Constants.INTERFACE_INTEGRATION_SEPARATOR.getValue())[1]
+                    .split(Constants.INTERFACE_METHOD_SEPARATOR.getValue());
+
+            // ignore call stack information, just save the methods
+            return Arrays.stream(singleMethod)
+                    .map(HttpMethod::match)
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.toList());
+        }
+        return null;
     }
 
     /**

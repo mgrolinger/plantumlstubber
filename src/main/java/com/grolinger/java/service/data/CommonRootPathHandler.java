@@ -14,7 +14,7 @@ public interface CommonRootPathHandler {
      * @return {@code ../../} default | a number of {@code ../} depending on how many slashes are in the service's name
      */
     default String getPathToRoot() {
-        // Default has already on dir up (../) because of the application's directory itself
+        // the default value is one directory up (../) because of the application's directory itself
         StringBuilder cp = new StringBuilder();
         int size = (getNameParts() == null) ? 0 : getNameParts().size();
         // The last part of the interface is a file and therefore we need to subtract

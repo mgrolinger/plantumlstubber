@@ -29,6 +29,7 @@ import static com.grolinger.java.service.NameConverter.replaceUnwantedPlantUMLCh
 public class InterfaceDefinition implements CommonRootPathHandler, PathHandler {
     private static final Map<String, String> DEFAULT_MAPPER_INTEGRATION = new HashMap<>();
     private static final Map<String, String> DEFAULT_MAPPER_RESPONSE = new HashMap<>();
+    public static final String TO_DO = "ToDo";
 
     static {
         // e.g. SOAP -> SOAP::XML
@@ -218,12 +219,13 @@ public class InterfaceDefinition implements CommonRootPathHandler, PathHandler {
      * - e.g. REST::JSON -> JSON
      * REST -> JSON
      * SOAP::XML -> XML
+     * FOO -> ToDo
      *
      * @param integrationType if the response type
-     * @return the hopefully correct response
+     * @return the hopefully correct response, if nothing could be identified this method returns {ToDo}
      */
     private String getResponseType(final String integrationType) {
-        String result = "ToDo";
+        String result = TO_DO;
         if (integrationType == null) {
             return result;
         }
@@ -248,11 +250,12 @@ public class InterfaceDefinition implements CommonRootPathHandler, PathHandler {
      * @return functionType or toDo; default is toDO
      */
     private String getFunctionType(final String responseType) {
-        String result = "toDo";
+        String result = TO_DO;
         if (responseType == null) {
             return result;
         }
         String[] split = responseType.split(Constants.INTERFACE_INTEGRATION_SEPARATOR.getValue());
+
         if (split.length > 0) {
             result = split[0];
         }
