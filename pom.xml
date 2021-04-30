@@ -14,19 +14,19 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.4.4</version>
+        <version>2.4.5</version>
         <!--relativePath/-->
     </parent>
 
     <properties>
-        <spring-boot.version>2.4.4</spring-boot.version>
+        <spring-boot.version>2.4.5</spring-boot.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>11</java.version>
 
         <openapi.version>1.5.5</openapi.version>
         <jackson.version>2.12.1</jackson.version>
-        <lombok.version>1.18.18</lombok.version>
+        <lombok.version>1.18.20</lombok.version>
         <commons.version>3.12.0</commons.version>
         <testng.version>7.4.0</testng.version>
         <javax-validation.version>2.0.1.Final</javax-validation.version>

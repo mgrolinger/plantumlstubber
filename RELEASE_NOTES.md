@@ -13,10 +13,10 @@
 * Removed the support for old 1.2019.6 preprocessor templates 
 
 ### Updates
-* spring-boot             2.4.1 -> 2.4.3
+* spring-boot             2.4.1 -> 2.4.5
 * commons-lang3           3.10 -> 3.12.0
 * testng                  7.3.0 -> 7.4.0
-* lombok                  1.18.12 -> 1.18.18
+* lombok                  1.18.12 -> 1.18.20
 
 ## 0.5.5 (2021-01-12)
 
