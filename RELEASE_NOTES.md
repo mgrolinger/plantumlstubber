@@ -17,6 +17,8 @@
 * commons-lang3           3.10 -> 3.12.0
 * testng                  7.3.0 -> 7.4.0
 * lombok                  1.18.12 -> 1.18.20
+* springdoc               1.5.5 -> 1.5.8
+* jackson-dataformat-yaml 2.12.1 -> 2.12.3
 
 ## 0.5.5 (2021-01-12)
 
