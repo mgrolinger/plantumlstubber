@@ -19,7 +19,7 @@ import static com.grolinger.java.controller.templatemodel.DiagramType.SEQUENCE_V
 
 @RequiredArgsConstructor
 @Slf4j
-@RestController
+@RestController("/export")
 public class MultiExportController {
     private final DataProcessorService dataProcessorService;
     private final ImportAdapter importAdapter;
@@ -27,7 +27,7 @@ public class MultiExportController {
     @Operation(
             summary = "Exports component stubs and example files to the local filesystem."
     )
-    @GetMapping("/export/components")
+    @GetMapping("/components")
     public void component(Model model) throws IOException {
         // Find all yaml files
         List<ApplicationDefinition> pumlComponents = new LinkedList<>(importAdapter.findAllServiceEndpoints());
@@ -43,7 +43,7 @@ public class MultiExportController {
     @Operation(
             summary = "Exports component stubs and example files to the local filesystem."
     )
-    @GetMapping("/export/sequences")
+    @GetMapping("/sequences")
     public void sequence(Model model) throws IOException {
         // Find all yaml files
         List<ApplicationDefinition> pumlComponents = new LinkedList<>(importAdapter.findAllServiceEndpoints());
@@ -55,7 +55,7 @@ public class MultiExportController {
     @Operation(
             summary = "Exports an example template for application definitions to the local filesystem."
     )
-    @GetMapping("/export/template")
+    @GetMapping("/template")
     public void template() {
         dataProcessorService.exportTemplate();
     }

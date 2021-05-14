@@ -4,7 +4,8 @@
 
 ### New + Improved
 * moved Code from Java 8 -> 11
-* migrated from springfox 2 -> springdoc-openapi-ui 
+* migrated from springfox 2 -> springdoc-openapi-ui
+* added password to route /shutdown 
 
 ### Fixes
 * case-sensitive packages where not imported correctly
