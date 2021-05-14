@@ -37,24 +37,28 @@ public class ImportAdapterImpl implements ImportAdapter {
         List<Path> collect = new LinkedList<>();
         // TODO either open file chooser or use args from console
 
-        try (Stream<Path> input = Files.walk(Paths.get(GLOBAL_FILE_EXPORT_PATH))) {
-            collect = input
-                    .filter(Objects::nonNull)
-                    .filter(Files::isRegularFile)
-                    .filter(YamlPredicate::isYamlFile)
-                    .collect(Collectors.toList());
-        } catch (IOException ioe) {
-            log.error("Failed to find yaml files", ioe);
-        }
+        collect = getFileList(collect);
 
         if (collect.isEmpty()) {
             log.warn("No Yaml file found. Please check working directory in run configuration.");
         }
 
+        Map<String, ApplicationDefinition> app = mapFilesToDefinitions(collect);
+        // Unwrap from map
+        return new LinkedList<>(app.values());
+    }
+
+    /**
+     * Reads the files listed in collect from the filesystem path and maps it to the internal data modek
+     * @param collect File List
+     * @return map with application_service as key and the definitions as value
+     */
+    private Map<String, ApplicationDefinition> mapFilesToDefinitions(List<Path> collect) {
         List<ImportedServices> services = new LinkedList<>();
         for (Path filesToMap : collect) {
-            services.addAll(mapYamls(filesToMap));
+            services.addAll(readYamlFilesFromFilesystem(filesToMap));
         }
+
         Map<String, ApplicationDefinition> app = new HashMap<>();
 
         for (ImportedServices importedServices : services) {
@@ -90,8 +94,23 @@ public class ImportAdapterImpl implements ImportAdapter {
             mapIntegrationTypes(importedServices, pumlComponent);
             app.put(importedServices.getApplication(), pumlComponent);
         }
-        // Unwrap from map
-        return new LinkedList<>(app.values());
+        return app;
+    }
+
+    /**
+     * Walks the target/ directory and searches for yaml-files containing definitions of plantuml services
+     */
+    private List<Path> getFileList(List<Path> collect) {
+        try (Stream<Path> input = Files.walk(Paths.get(GLOBAL_FILE_EXPORT_PATH))) {
+            collect = input
+                    .filter(Objects::nonNull)
+                    .filter(Files::isRegularFile)
+                    .filter(YamlPredicate::isYamlFile)
+                    .collect(Collectors.toList());
+        } catch (IOException ioe) {
+            log.error("Failed to find yaml files", ioe);
+        }
+        return collect;
     }
 
     private void mapIntegrationTypes(ImportedServices importedServices, ApplicationDefinition pumlComponent) {
@@ -166,7 +185,7 @@ public class ImportAdapterImpl implements ImportAdapter {
      * @param path in filesystem from where the yamls are loaded
      * @return list of mapped services/applications
      */
-    private List<ImportedServices> mapYamls(final Path path) {
+    private List<ImportedServices> readYamlFilesFromFilesystem(final Path path) {
         List<ImportedServices> importedServicesList = new LinkedList<>();
         ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
         try {
