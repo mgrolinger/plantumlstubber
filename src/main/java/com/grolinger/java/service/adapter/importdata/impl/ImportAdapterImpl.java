@@ -43,17 +43,15 @@ public class ImportAdapterImpl implements ImportAdapter {
             log.warn("No Yaml file found. Please check working directory in run configuration.");
         }
 
-        Map<String, ApplicationDefinition> app = mapFilesToDefinitions(collect);
-        // Unwrap from map
-        return new LinkedList<>(app.values());
+        return mapFilesToDefinitions(collect);
     }
 
     /**
-     * Reads the files listed in collect from the filesystem path and maps it to the internal data modek
+     * Reads the files listed in collect from the filesystem path and maps it to the internal data model
      * @param collect File List
      * @return map with application_service as key and the definitions as value
      */
-    private Map<String, ApplicationDefinition> mapFilesToDefinitions(List<Path> collect) {
+    private List<ApplicationDefinition> mapFilesToDefinitions(List<Path> collect) {
         List<ImportedServices> services = new LinkedList<>();
         for (Path filesToMap : collect) {
             services.addAll(readYamlFilesFromFilesystem(filesToMap));
@@ -65,62 +63,59 @@ public class ImportAdapterImpl implements ImportAdapter {
             if (importedServices == null || importedServices.getServices() == null) {
                 continue;
             }
-            int orderPrio = Integer.parseInt(importedServices.getOrderPrio());
-            log.debug("{}, {}, {}", importedServices.getApplication(), importedServices.getSystemType(), importedServices.getOrderPrio());
-            ApplicationDefinition pumlComponent;
-            // Do we know this application already from before, reuse it.
-            if (app.containsKey(importedServices.getApplication())) {
-                pumlComponent = app.get(importedServices.getApplication());
-            } else {
-                // we use the specified alias or the application name cleaned from some special characters that make problems in plantuml
-                String alias = StringUtils.isEmpty(importedServices.getCustomAlias()) ?
-                        replaceUnwantedPlantUMLCharacters(importedServices.getApplication().toLowerCase(), false)
-                                .replaceAll("_", "") :
-                        importedServices.getCustomAlias();
-                // we use the specified label or the application name cleaned from some special characters that make problems in plantuml
-                String label = StringUtils.isEmpty(importedServices.getCustomLabel()) ?
-                        replaceUnwantedPlantUMLCharacters(importedServices.getApplication(), false) :
-                        importedServices.getCustomLabel();
 
-                pumlComponent = ApplicationDefinition.builder()
-                        .name(importedServices.getApplication())
-                        .label(label)
-                        .alias(alias)
-                        .systemType(importedServices.getSystemType())
-                        .orderPrio(orderPrio)
-                        .serviceDefinitions(new LinkedList<>())
-                        .build();
-            }
-            mapIntegrationTypes(importedServices, pumlComponent);
+            log.debug("{}, {}, {}", importedServices.getApplication(), importedServices.getSystemType(), importedServices.getOrderPrio());
+            ApplicationDefinition pumlComponent = mapToApplicationDefinition(importedServices, app);
+
+
+            // Save if needed in some other round
             app.put(importedServices.getApplication(), pumlComponent);
         }
-        return app;
+        return new LinkedList<>(app.values());
+    }
+
+    private ApplicationDefinition mapToApplicationDefinition(ImportedServices importedServices, Map<String, ApplicationDefinition> app){
+        // Do we know this application already from before, reuse it.
+        if (app.containsKey(importedServices.getApplication())) {
+            return app.get(importedServices.getApplication());
+        }
+
+        int orderPrio = Integer.parseInt(importedServices.getOrderPrio());
+        // we use the specified alias or the application name cleaned from some special characters that make problems in plantuml
+        String alias = StringUtils.isEmpty(importedServices.getCustomAlias()) ?
+                replaceUnwantedPlantUMLCharacters(importedServices.getApplication().toLowerCase(), false)
+                        .replaceAll("_", "") :
+                importedServices.getCustomAlias();
+        // we use the specified label or the application name cleaned from some special characters that make problems in plantuml
+        String label = StringUtils.isEmpty(importedServices.getCustomLabel()) ?
+                replaceUnwantedPlantUMLCharacters(importedServices.getApplication(), false) :
+                importedServices.getCustomLabel();
+
+        return ApplicationDefinition.builder()
+                .name(importedServices.getApplication())
+                .label(label)
+                .alias(alias)
+                .systemType(importedServices.getSystemType())
+                .orderPrio(orderPrio)
+                .serviceDefinitions(getServiceDefinitions(importedServices))
+                .build();
     }
 
     /**
-     * Walks the target/ directory and searches for yaml-files containing definitions of plantuml services
+     * Generates the service definitions from the imported files
+     * @param importedServices definitions from the yaml file
+     * @return list of service definitions
      */
-    private List<Path> getFileList(List<Path> collect) {
-        try (Stream<Path> input = Files.walk(Paths.get(GLOBAL_FILE_EXPORT_PATH))) {
-            collect = input
-                    .filter(Objects::nonNull)
-                    .filter(Files::isRegularFile)
-                    .filter(YamlPredicate::isYamlFile)
-                    .collect(Collectors.toList());
-        } catch (IOException ioe) {
-            log.error("Failed to find yaml files", ioe);
-        }
-        return collect;
-    }
-
-    private void mapIntegrationTypes(ImportedServices importedServices, ApplicationDefinition pumlComponent) {
+    private List<ServiceDefinition> getServiceDefinitions(ImportedServices importedServices) {
+        List<ServiceDefinition> result = new LinkedList<>();
         // Iterate over Services.<REST|SOAP|...>
         for (String interfacesIntegrationType : importedServices.getServices().keySet()) {
             Map<String, String[]> serviceList = importedServices.getServices().get(interfacesIntegrationType);
             // Iterate over the services itself
             List<ServiceDefinition> serviceDefinitions = mapServiceDefinitions(importedServices, interfacesIntegrationType, serviceList);
-            pumlComponent.getServiceDefinitions().addAll(serviceDefinitions);
+            result.addAll(serviceDefinitions);
         }
+        return result;
     }
 
     /**
@@ -201,4 +196,19 @@ public class ImportAdapterImpl implements ImportAdapter {
         return importedServicesList;
     }
 
+    /**
+     * Walks the target/ directory and searches for yaml-files containing definitions of plantuml services
+     */
+    private List<Path> getFileList(List<Path> collect) {
+        try (Stream<Path> input = Files.walk(Paths.get(GLOBAL_FILE_EXPORT_PATH))) {
+            collect = input
+                    .filter(Objects::nonNull)
+                    .filter(Files::isRegularFile)
+                    .filter(YamlPredicate::isYamlFile)
+                    .collect(Collectors.toList());
+        } catch (IOException ioe) {
+            log.error("Failed to find yaml files", ioe);
+        }
+        return collect;
+    }
 }

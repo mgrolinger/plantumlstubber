@@ -2,7 +2,7 @@
 # Usually this is used as Name in a component "name" as alias <<domainColor>>,
 # as well as the name of the exported folder, beware of any special characters.
 # You may customize by: component "customLabel" as customAlias <<domainColor>>
-application: newApplication
+application: NewApplication
 # customLabel defines the visual name of an component
 #    e.g. customLabel foo would result in component "foo" as
 customLabel: New Application \n with CR
