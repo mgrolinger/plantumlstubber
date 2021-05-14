@@ -24,8 +24,8 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>11</java.version>
 
-        <openapi.version>1.5.5</openapi.version>
-        <jackson.version>2.12.1</jackson.version>
+        <openapi.version>1.5.8</openapi.version>
+        <jackson.version>2.12.3</jackson.version>
         <lombok.version>1.18.20</lombok.version>
         <commons.version>3.12.0</commons.version>
         <testng.version>7.4.0</testng.version>
@@ -95,7 +95,13 @@
             <artifactId>springdoc-openapi-ui</artifactId>
             <version>${openapi.version}</version>
         </dependency>
-
+        <!-- functional sugar-->
+        <dependency>
+            <groupId>io.vavr</groupId>
+            <artifactId>vavr</artifactId>
+            <version>0.10.3</version>
+        </dependency>
+        <!-- Test -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
