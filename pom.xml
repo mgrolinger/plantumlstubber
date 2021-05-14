@@ -205,9 +205,9 @@
     </distributionManagement>
     <!-- local releases -->
     <scm>
-        <connection>scm:git:file://.</connection>
-        <developerConnection>scm:git:file://.</developerConnection>
-        <url>scm:git:file://.</url>
+        <connection>scm:git:${project.scm.url}</connection>
+        <developerConnection>scm:git:${project.scm.url}</developerConnection>
+        <url>https://github.com/mgrolinger/plantumlstubber.git</url>
         <tag>HEAD</tag>
     </scm>
 </project>
