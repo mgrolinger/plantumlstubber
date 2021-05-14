@@ -1,6 +1,16 @@
 # Release Notes
 
-## 0.5.6 (unreleased)
+## 0.5.7 (unreleased)
+
+### New + Improved
+
+### Fixes
+
+### Removed
+
+### Updates
+
+## 0.5.6 (2021-05-14)
 
 ### New + Improved
 * moved Code from Java 8 -> 11
