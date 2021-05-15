@@ -53,7 +53,7 @@ public class DataProcessorServiceImpl implements DataProcessorService {
 
                 path = createDirectoryForService(diagramType.getBasePath(), currentApplication, serviceDefinition);
 
-                processInterfaces(path, contextBuilder, currentApplication, serviceDefinition, exampleFile);
+                exampleFile = processInterfaces(path, contextBuilder, currentApplication, serviceDefinition, exampleFile);
             }
             localExportAdapter.writeExampleFile(diagramType.getBasePath(), currentApplication, exampleFile.getFullFileContent());
         }
@@ -92,7 +92,7 @@ public class DataProcessorServiceImpl implements DataProcessorService {
      * @param currentService     the current service
      * @param exampleFile        the example file
      */
-    private void processInterfaces(String path, ContextSpec.ContextBuilder contextBuilder, final ApplicationDefinition currentApplication, final ServiceDefinition currentService, ExampleFile exampleFile) {
+    private ExampleFile processInterfaces(String path, ContextSpec.ContextBuilder contextBuilder, final ApplicationDefinition currentApplication, final ServiceDefinition currentService, ExampleFile exampleFile) {
         log.info("Current path: {}", path);
         for (InterfaceDefinition currentInterface : currentService.getInterfaceDefinitions()) {
             // ignore call stack information
@@ -103,11 +103,21 @@ public class DataProcessorServiceImpl implements DataProcessorService {
             }
             contextBuilder.withInterfaceDefinition(currentInterface);
             //Todo find a better solution, but for now we need to set the complete path every time we process an interface
-            contextBuilder.withCommonPath(currentApplication.getPathToRoot() + currentService.getPathToRoot() + currentInterface.getPathToRoot());
+            contextBuilder.withCommonPath(
+                    currentApplication.getPathToRoot() +
+                    currentService.getPathToRoot() +
+                    currentInterface.getPathToRoot());
 
             // Pull context to use it later for export
-            exampleFile = localExportAdapter.writeInterfaceFile(path, currentApplication, currentService, currentInterface, contextBuilder.getContext(), exampleFile);
+            exampleFile = localExportAdapter.writeInterfaceFile(path,
+                    currentApplication,
+                    currentService,
+                    currentInterface,
+                    contextBuilder.getContext(),
+                    exampleFile);
         }
+        // Return the example file to be completed with all other interfaces
+        return exampleFile;
 
     }
 }
