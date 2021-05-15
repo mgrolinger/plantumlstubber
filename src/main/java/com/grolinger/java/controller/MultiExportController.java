@@ -30,7 +30,7 @@ public class MultiExportController {
     @GetMapping("/components")
     public void component(Model model) throws IOException {
         // Find all yaml files
-        List<ApplicationDefinition> pumlComponents = new LinkedList<>(importAdapter.findAllServiceEndpoints());
+        List<ApplicationDefinition> pumlComponents = importAdapter.findAllServiceEndpoints();
         dataProcessorService.processApplication(pumlComponents, COMPONENT_V1_2020_7_DIAGRAM_BASE);
 
         log.info("Processing components completed. Using preprocessor version {} for export.", "1.2020.07");
@@ -41,12 +41,12 @@ public class MultiExportController {
     }
 
     @Operation(
-            summary = "Exports component stubs and example files to the local filesystem."
+            summary = "Exports sequence stubs and example files to the local filesystem."
     )
     @GetMapping("/sequences")
     public void sequence(Model model) throws IOException {
         // Find all yaml files
-        List<ApplicationDefinition> pumlComponents = new LinkedList<>(importAdapter.findAllServiceEndpoints());
+        List<ApplicationDefinition> pumlComponents = importAdapter.findAllServiceEndpoints();
         dataProcessorService.processApplication(pumlComponents, SEQUENCE_V1_2020_7_DIAGRAM_BASE);
         log.info("Processing sequences completed. Using preprocessor version {} for export.", "1.2020.07");
     }
