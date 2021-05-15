@@ -16,7 +16,7 @@ public class OpenAPIConfig {
     public GroupedOpenApi api() {
         return GroupedOpenApi.builder()
                 .group("")
-                .pathsToMatch("/export/**")
+                .pathsToMatch("/export/**","/shutdown")
                 .build();
     }
 
