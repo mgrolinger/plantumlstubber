@@ -171,5 +171,6 @@ e.g. `$MODULE_WORKING_DIR$` in Intellij: ![](documentation/Intellij_Config.png)
 ## Future Plans
 
 * Automatic color schemes for domain colors if the domain is not defined
+* Get rid of FA_SERVER and other macros and use their sprites directly, incl. more supported types
 
-_last update 29.04.2021_
+_last update 17.05.2021_
