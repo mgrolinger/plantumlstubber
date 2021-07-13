@@ -1,3 +1,5 @@
+This repository moved to https://codeberg.org/mgrolinger/plantumlstubber
+
 # PlantUMLStubber for generating plantUML application/service stubs
 
 This project is a spring-boot application that generates plantUML stubs for component diagrams and sequence diagrams. Those stubs contain information about applications and services. The generated files can be used to build a repository of re-usable files that come in handy to discuss software architecture or to document an application, a service or how application are working together.
@@ -173,4 +175,4 @@ e.g. `$MODULE_WORKING_DIR$` in Intellij: ![](documentation/Intellij_Config.png)
 * Automatic color schemes for domain colors if the domain is not defined
 * Get rid of FA_SERVER and other macros and use their sprites directly, incl. more supported types
 
-_last update 17.05.2021_
+_last update 13.07.2021_
