@@ -1,4 +1,7 @@
-This repository moved to https://codeberg.org/mgrolinger/plantumlstubber
+# This repository moved to: https://codeberg.org/mgrolinger/plantumlstubber
+The repository will not be updated here as it moved to a new code hosting place.
+
+
 
 # PlantUMLStubber for generating plantUML application/service stubs
 
